@@ -1,0 +1,57 @@
+jobbit-back/HELP.md
+jobbit-back/target/
+!.mvn/wrapper/maven-wrapper.jar
+!jobbit-back/**/src/main/**/target/
+!jobbit-back/**/src/test/**/target/
+
+### STS ###
+jobbit-back/.apt_generated
+jobbit-back/.classpath
+jobbit-back/.factorypath
+jobbit-back/.project
+jobbit-back/.settings
+jobbit-back/.springBeans
+jobbit-back/.sts4-cache
+
+### IntelliJ IDEA ###
+jobbit-back/.idea
+jobbit-back/*.iws
+jobbit-back/*.iml
+jobbit-back/*.ipr
+
+### NetBeans ###
+jobbit-back//nbproject/private/
+jobbit-back//nbbuild/
+jobbit-back//dist/
+jobbit-back//nbdist/
+jobbit-back//.nb-gradle/
+jobbit-back/build/
+!jobbit-back/**/src/main/**/build/
+!jobbit-back/**/src/test/**/build/
+
+### VS Code ###
+jobbit-back/.vscode/
+
+jobbit-client/.DS_Store
+jobbit-client/node_modules
+jobbit-client/dist
+
+
+# local env files
+jobbit-client/.env.local
+jobbit-client/.env.*.local
+
+# Log files
+jobbit-client/npm-debug.log*
+jobbit-client/yarn-debug.log*
+jobbit-client/yarn-error.log*
+jobbit-client/pnpm-debug.log*
+
+# Editor directories and files
+jobbit-client/.idea
+jobbit-client/.vscode
+jobbit-client/*.suo
+jobbit-client/*.ntvs*
+jobbit-client/*.njsproj
+jobbit-client/*.sln
+jobbit-client/*.sw?
