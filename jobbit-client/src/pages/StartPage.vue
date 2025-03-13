@@ -3,8 +3,8 @@
     <header class="header">
       <h1 class="logo">JobbIT - find your IT-way</h1>
       <div class="buttons">
-        <button class="button registration">Реєстрація</button>
-        <button class="button authorization">Авторизація</button>
+        <router-link to="/register" class="button registration">Реєстрація</router-link>
+        <router-link to="/login" class="button authorization">Авторизація</router-link>
       </div>
     </header>
 
@@ -81,7 +81,8 @@ export default {
   display: flex;
 }
 
-.button {
+.button,
+router-link {
   padding: 10px 20px;
   margin: 0 10px;
   background-color: #4caf50;
@@ -90,9 +91,11 @@ export default {
   border-radius: 4px;
   border: 1px solid rgb(48, 48, 48);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
 }
 
-.button:hover {
+.button:hover,
+router-link:hover {
   background-color: #3c963f;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

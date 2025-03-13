@@ -55,3 +55,6 @@ jobbit-client/*.ntvs*
 jobbit-client/*.njsproj
 jobbit-client/*.sln
 jobbit-client/*.sw?
+jobbit-back/.gitattributes
+jobbit-back/.gitignore
+jobbit-client/.gitignore
