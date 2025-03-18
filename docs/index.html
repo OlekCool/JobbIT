@@ -9,6 +9,15 @@
     <meta name="keywords" content="Інформаційна система, IT, пошук, fullstack, job, вакансії, web-додаток" />
     <meta name="author" content="Oleksandr Borovyk" />
 
+    <meta property="og:title" content="Система пошуку вакансій та найму кандидатів" />
+    <meta
+      property="og:description"
+      content="Кандидати можуть шукати вакансії та відгукуватися на них, рекрутери - створювати вакансії, переглядати тих, хто відгукнувся,  приймати рішення щодо запрошення на співбесіду"
+    />
+    <meta property="og:image" content="https://OlekCool.github.io/JobbIT/assets/images/view.png" />
+    <meta property="og:url" content="https://OlekCool.github.io/JobbIT/" />
+    <meta property="og:type" content="website" />
+
     <title>About JobbIT</title>
 
     <link rel="stylesheet" href="reset.css" />
@@ -19,98 +28,122 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png" />
     <link rel="manifest" href="assets/favicon/site.webmanifest" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "JobbIT",
+        "url": "https://OlekCool.github.io/JobbIT/",
+        "author": {
+          "@type": "Person",
+          "name": "Oleksandr Borovyk"
+        },
+        "description": "Інформаційна система для пошуку IT-вакансій та рекрутингу кандидатів на посади",
+        "image": "https://OlekCool.github.io/JobbIT/assets/images/view.png"
+      }
+    </script>
   </head>
   <body>
-    <div class="header">
-      <div class="logo"><img src="assets/images/logo-sumdu.svg" /></div>
-      <div class="navigation">
-        <div class="author-nav"><a href="#author">Автор</a></div>
-        <div class="goal-nav"><a href="#about-project">Мета</a></div>
-        <div class="tasks-nav"><a href="#tasks">Задачі</a></div>
-      </div>
+    <header class="header" role="banner">
+      <div class="logo"><img src="assets/images/logo-sumdu.svg" alt="Логотип СумДУ" /></div>
+      <nav class="navigation" role="navigation" aria-label="Головна навігація по сторінці">
+        <div class="author-nav"><a href="#author" aria-current="page" tabindex="1">Автор</a></div>
+        <div class="goal-nav"><a href="#about-project" tabindex="2">Мета</a></div>
+        <div class="tasks-nav"><a href="#tasks" tabindex="3">Задачі</a></div>
+      </nav>
       <div class="git-link">
-        <a href="https://github.com/OlekCool/JobbIT">Project Git</a>
+        <a
+          href="https://github.com/OlekCool/JobbIT"
+          aria-label="Посилання на Github репозиторій"
+          role="button"
+          role="listitem"
+          tabindex="4"
+          >Project Git</a
+        >
       </div>
-    </div>
+    </header>
 
-    <div class="author" id="author">
-      <div class="titles">
-        <p class="title-ua">Назва проекту українською</p>
-        <p class="title-en">Назва проекту англійською</p>
-      </div>
-      <div class="my-photo">
-        <img src="assets/images/itsme.jpg" />
-      </div>
-      <div class="contacts">
-        <div class="pib">Олександр Боровик</div>
-        <div class="email">oleksandr.borovyk@student.sumdu.edu.ua</div>
-      </div>
-    </div>
+    <main class="container" role="main">
+      <section class="author" id="author" aria-labelledby="author-title">
+        <div class="titles">
+          <h1 class="title-ua" id="author-title">Назва проекту українською</h1>
+          <h2 class="title-en">Назва проекту англійською</h2>
+        </div>
+        <div class="my-photo">
+          <img src="assets/images/itsme.jpg" alt="Фото автора" />
+        </div>
+        <div class="contacts" role="contentinfo">
+          <p class="pib">Олександр Боровик</p>
+          <p class="email" tabindex="5">oleksandr.borovyk@student.sumdu.edu.ua</p>
+        </div>
+      </section>
 
-    <div class="about-project" id="about-project">
-      <div class="info-about">
-        <p>Мета проекту</p>
-        <div class="what-is-it">
-          <p>Lorem ipsum dolor sit amet</p>
-        </div>
-        <div class="research-goal">
-          <p>Lorem ipsum dolor sit amet</p>
-        </div>
-        <div class="expected-results">
-          <p>Lorem ipsum dolor sit amet</p>
-        </div>
-        <div class="keywords-project">
-          <p>Lorem ipsum dolor sit amet</p>
-        </div>
-      </div>
+      <section class="about-project" id="about-project" aria-labelledby="about-title">
+        <section class="info-about">
+          <h2 id="about-title" tabindex="6">Мета проекту</h2>
+          <div class="what-is-it">
+            <p>Lorem ipsum dolor sit amet</p>
+          </div>
+          <div class="research-goal">
+            <p>Lorem ipsum dolor sit amet</p>
+          </div>
+          <div class="expected-results">
+            <p>Lorem ipsum dolor sit amet</p>
+          </div>
+          <div class="keywords-project">
+            <p>Lorem ipsum dolor sit amet</p>
+          </div>
+        </section>
 
-      <div class="used-technologies">
-        <div class="tech">
-          <p>Використані технології</p>
-          <ul>
-            <li>tech1</li>
-            <li>tech2</li>
-            <li>tech3</li>
-            <li>tech4</li>
-            <li>tech5</li>
-          </ul>
-        </div>
+        <aside class="used-technologies" aria-label="Використані технології">
+          <div class="tech">
+            <h3 tabindex="7">Використані технології</h3>
+            <ul role="list">
+              <li role="listitem">tech1</li>
+              <li role="listitem">tech2</li>
+              <li role="listitem">tech3</li>
+              <li role="listitem">tech4</li>
+              <li role="listitem">tech5</li>
+            </ul>
+          </div>
 
-        <div class="ide">
-          <p>Використані IDE</p>
-          <ul>
-            <li>ide1</li>
-            <li>ide2</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+          <div class="ide">
+            <h3 tabindex="8">Використані IDE</h3>
+            <ul role="list">
+              <li role="listitem">ide1</li>
+              <li role="listitem">ide2</li>
+            </ul>
+          </div>
+        </aside>
+      </section>
 
-    <div class="tasks" id="tasks">
-      <p>Виконані та заплановані задачі:</p>
+      <section class="tasks" id="tasks" aria-labelledby="tasks-title">
+        <h2 id="tasks-title" tabindex="9">Виконані та заплановані задачі:</h2>
 
-      <div class="tasks-part">
-        <div class="task">
-          <div class="number-task">1</div>
-          <p>Task1</p>
+        <div class="tasks-part">
+          <div class="task">
+            <div class="number-task">1</div>
+            <p>Task1</p>
+          </div>
+          <div class="task">
+            <div class="number-task">2</div>
+            <p>Task2</p>
+          </div>
+          <div class="task">
+            <div class="number-task">3</div>
+            <p>Task3</p>
+          </div>
+          <div class="task">
+            <div class="number-task">4</div>
+            <p>Task4</p>
+          </div>
+          <div class="task">
+            <div class="number-task">5</div>
+            <p>Task5</p>
+          </div>
         </div>
-        <div class="task">
-          <div class="number-task">2</div>
-          <p>Task2</p>
-        </div>
-        <div class="task">
-          <div class="number-task">3</div>
-          <p>Task3</p>
-        </div>
-        <div class="task">
-          <div class="number-task">4</div>
-          <p>Task4</p>
-        </div>
-        <div class="task">
-          <div class="number-task">5</div>
-          <p>Task5</p>
-        </div>
-      </div>
-    </div>
+      </section>
+    </main>
   </body>
 </html>
