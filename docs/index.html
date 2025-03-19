@@ -20,8 +20,8 @@
 
     <title>About JobbIT</title>
 
-    <link rel="stylesheet" href="reset.css" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="assets/reset.css" />
+    <link rel="stylesheet" href="assets/styles.css" />
 
     <link rel="shortcut icon" href="assets/images/logo-sumdu.svg" type="image/x-icon" />
     <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png" />
@@ -44,6 +44,7 @@
       }
     </script>
   </head>
+
   <body>
     <header class="header" role="banner">
       <div class="logo"><img src="assets/images/logo-sumdu.svg" alt="Логотип СумДУ" /></div>
@@ -114,7 +115,9 @@
               У результаті роботи повинен вийти працююча інформаційна веб-система, з бекенд та фронтенд частиною,з
               використанням бази даних, з використанням системи контролю версій під час розробки.
             </p>
-            <img src="assets/images/startpage.png" alt="Фото стартової сторінки додатку" />
+            <div class="photo-back">
+              <img src="assets/images/startpage.png" alt="Фото стартової сторінки додатку" />
+            </div>
           </div>
           <div class="keywords-project">
             <h3 tabindex="10">Ключові слова до проекту:</h3>
@@ -124,7 +127,7 @@
 
         <aside class="used-technologies" aria-label="Використані технології">
           <div class="tech">
-            <h3 tabindex="11">Використані технології</h3>
+            <h2 tabindex="11">Використані технології</h2>
             <ul role="list">
               <li role="listitem">Maven</li>
               <li role="listitem">Java</li>
@@ -141,7 +144,7 @@
           </div>
 
           <div class="ide">
-            <h3 tabindex="12">Використані IDE</h3>
+            <h2 tabindex="12">Використані IDE</h2>
             <ul role="list">
               <li role="listitem">IntelliJ IDEA</li>
               <li role="listitem">Visual Studio Code</li>
@@ -152,27 +155,27 @@
       </section>
 
       <section class="tasks" id="tasks" aria-labelledby="tasks-title">
-        <h2 id="tasks-title" tabindex="9">Виконані та заплановані задачі:</h2>
+        <h2 id="tasks-title" tabindex="13">Виконані та заплановані задачі:</h2>
 
         <div class="tasks-part">
-          <div class="task">
+          <div class="task" tabindex="14">
             <div class="number-task">1</div>
             <p>Досліджено питання актуальності розробки системи пошуку вакансій та найму кандидатів</p>
           </div>
-          <div class="task">
+          <div class="task" tabindex="15">
             <div class="number-task">2</div>
             <p>Проаналізовано існуючі програмні рішення щодо моєї теми</p>
           </div>
-          <div class="task">
+          <div class="task" tabindex="16">
             <div class="number-task">3</div>
             <p>Обрано технології, які застосовуються при розробці інформаційної системи</p>
           </div>
-          <div class="task">
-            <div class="number-task">4</div>
+          <div class="task" tabindex="17">
+            <div class="number-task did-not">4</div>
             <p>Виконується проектування системи, розробка діаграм</p>
           </div>
-          <div class="task">
-            <div class="number-task">5</div>
+          <div class="task" tabindex="18">
+            <div class="number-task did-not">5</div>
             <p>Готова програмна реалізація додатку</p>
           </div>
         </div>
