@@ -195,8 +195,8 @@ h2#about-title {
 
 .photo-back img {
   width: 58vw;
+  height: auto;
   border-radius: 0.6vw;
-  height: 58vh;
 }
 
 /* technologies section */
@@ -230,10 +230,13 @@ h2#about-title {
 h2#tasks-title {
   text-align: center;
   font-size: 1.4vw;
-  margin-bottom: 4.4vh;
+  margin-bottom: 4vh;
 }
 
 .tasks-part {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
   width: 44vw;
   margin: 0 auto;
 }
@@ -264,4 +267,47 @@ h2#tasks-title {
 .did-not {
   background-color: #e5ff51;
   box-shadow: 0.1vw 0.1vh #9eb134;
+}
+
+@media screen and (max-width: 768px) {
+  header {
+    align-items: center;
+    padding: 1vh 5vw;
+    max-height: unset;
+    min-width: 100vw;
+  }
+
+  .logo img {
+    max-width: 12vw;
+  }
+
+  nav {
+    width: 12vw;
+    height: auto;
+    margin: 0;
+    margin-right: 6vw;
+  }
+
+  nav div {
+    width: 70%;
+    margin: 1vh auto;
+    margin-right: 1.2vw;
+  }
+
+  main {
+    margin-top: 10vh;
+  }
+
+  .photo-back {
+    width: 90%;
+    height: auto;
+  }
+
+  .photo-back img {
+    max-width: 53.2vw;
+  }
+
+  h2#tasks-title {
+    margin-bottom: 2vh;
+  }
 }
