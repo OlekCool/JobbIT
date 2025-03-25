@@ -3,8 +3,8 @@
     <header class="header">
       <h1 class="logo">JobbIT - find your IT-way</h1>
       <div class="buttons">
-        <router-link to="/register" class="button registration">Реєстрація</router-link>
-        <router-link to="/login" class="button authorization">Авторизація</router-link>
+        <router-link to="/auth/register" class="button registration">Реєстрація</router-link>
+        <router-link to="/auth/login" class="button authorization">Авторизація</router-link>
       </div>
     </header>
 
@@ -47,11 +47,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "StartPage",
-};
-</script>
+<script setup></script>
 
 <style scoped>
 /* Header section */

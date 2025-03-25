@@ -3,6 +3,7 @@ jobbit-back/target/
 !.mvn/wrapper/maven-wrapper.jar
 !jobbit-back/**/src/main/**/target/
 !jobbit-back/**/src/test/**/target/
+.idea
 
 ### STS ###
 jobbit-back/.apt_generated

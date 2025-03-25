@@ -7,10 +7,36 @@ import MainCandidatePage from "@/pages/MainCandidatePage.vue";
 
 const routes = [
   { path: "/", name: "StartPage", component: StartPage },
-  { path: "/register", name: "RegistrationPage", component: RegistrationPage },
-  { path: "/login", name: "LoginPage", component: LoginPage },
-  { path: "/recruiter-dash", name: "MainRecruiterPage", component: MainRecruiterPage },
-  { path: "/candidate-dash", name: "MainCandidatePage", component: MainCandidatePage },
+  { path: "/auth/register", name: "RegistrationPage", component: RegistrationPage },
+  { path: "/auth/login", name: "LoginPage", component: LoginPage },
+
+  {
+    path: "/recruiter-dash",
+    name: "MainRecruiterPage",
+    component: MainRecruiterPage,
+    beforeEnrer: (to, from, next) => {
+      const role = localStorage.getItem("userRole");
+      if (role === "RECRUITER") {
+        next();
+      } else {
+        next("/login");
+      }
+    },
+  },
+
+  {
+    path: "/candidate-dash",
+    name: "MainCandidatePage",
+    component: MainCandidatePage,
+    beforeEnrer: (to, from, next) => {
+      const role = localStorage.getItem("userRole");
+      if (role === "CANDIDATE") {
+        next();
+      } else {
+        next("/login");
+      }
+    },
+  },
 ];
 
 const router = createRouter({

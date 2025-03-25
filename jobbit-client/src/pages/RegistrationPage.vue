@@ -4,9 +4,11 @@
       <h2 class="registration-title">РЕЄСТРАЦІЯ</h2>
 
       <div class="form-group">
-        <label for="login">Ваш логін</label>
-        <input type="text" id="login" v-model="login" />
+        <label for="email">Ваш email</label>
+        <input type="text" id="email" v-model="email" />
       </div>
+
+      <p v-if="emailError" class="error">{{ emailError }}</p>
 
       <div class="form-group">
         <label for="password">Ваш пароль</label>
@@ -18,40 +20,76 @@
         <input type="password" id="confirmPassword" v-model="confirmPassword" />
       </div>
 
+      <p v-if="passwordError" class="error">{{ passwordError }}</p>
+
       <div class="radio-group">
-        <label> <input type="radio" value="candidate" v-model="role" checked /> Кандидат </label>
-        <label> <input type="radio" value="recruiter" v-model="role" /> Рекрутер </label>
+        <label> <input type="radio" value="CANDIDATE" v-model="role" checked /> Кандидат </label>
+        <label> <input type="radio" value="RECRUITER" v-model="role" /> Рекрутер </label>
       </div>
 
       <div class="buttons">
-        <router-link to="/login" class="register-button" type="submit">РЕЄСТРАЦІЯ</router-link>
+        <button class="register-button" type="submit">РЕЄСТРАЦІЯ</button>
         <router-link to="/" class="back-button" type="button">Назад</router-link>
       </div>
     </form>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      login: "",
-      password: "",
-      confirmPassword: "",
-      role: "",
-    };
-  },
-  methods: {
-    handleSubmit() {
-      const data = {
-        login: this.login,
-        password: this.password,
-        confirmPassword: this.confirmPassword,
-        role: this.role,
-      };
-      console.log(data);
-    },
-  },
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import AuthService from "@/services/AuthService";
+
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+const role = ref("CANDIDATE");
+
+const emailError = ref("");
+const passwordError = ref("");
+
+const router = useRouter();
+
+const validatePasswords = () => {
+  emailError.value = "";
+  passwordError.value = "";
+
+  if (password.value !== confirmPassword.value) {
+    passwordError.value = "Паролі не співпадають!";
+    return false;
+  }
+
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/g;
+  const passwordPattern = /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g;
+
+  if (!emailPattern.test(email.value)) {
+    emailError.value = "Email має бути коректним";
+    return false;
+  } else if (!passwordPattern.test(password.value)) {
+    passwordError.value =
+      "Пароль має містити хоча б 8 символів, хоча б одну велику та малу літеру, цифру і спец.символ (!@#$%^&*)";
+    return false;
+  }
+
+  passwordError.value = "";
+  return true;
+};
+
+const handleSubmit = async () => {
+  if (!validatePasswords()) return;
+
+  try {
+    const response = await AuthService.register(email.value, password.value, role.value);
+
+    if (response.status === 200) {
+      console.log("Success registration frontend", response.data);
+      router.push("/auth/login");
+    } else {
+      console.error("Unexpected response:", response);
+    }
+  } catch (error) {
+    console.error("Помилка реєстрації", error.response?.data || error.message);
+  }
 };
 </script>
 
@@ -133,5 +171,10 @@ input[type="password"] {
 .register-button:hover {
   background-color: #3c963f;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.error {
+  color: red;
+  font-size: 14px;
 }
 </style>

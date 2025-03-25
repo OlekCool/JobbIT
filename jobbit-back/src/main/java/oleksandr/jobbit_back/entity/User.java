@@ -1,13 +1,11 @@
 package oleksandr.jobbit_back.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
-@ToString
 public class User {
 
     @Id
@@ -15,29 +13,25 @@ public class User {
     private Integer id;
 
     @Column(unique = true)
-    private String username;
-
-    private String userPassword;
-
-    @Column(unique = true)
     private String email;
 
-    private Date registrationDate;
+    @Column(nullable = false)
+    private String userPassword;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_type_id", referencedColumnName = "userTypeId")
-    private UserType userTypeId;
+    private LocalDate registrationDate;
+
+    @Enumerated(EnumType.STRING)
+    private Role userRole;
 
     public User() {
     }
 
-    public User(Integer id, String username, String userPassword, String email, Date registrationDate, UserType userTypeId) {
+    public User(Integer id, String email, String userPassword, LocalDate registrationDate, Role userRole) {
         this.id = id;
-        this.username = username;
-        this.userPassword = userPassword;
         this.email = email;
+        this.userPassword = userPassword;
         this.registrationDate = registrationDate;
-        this.userTypeId = userTypeId;
+        this.userRole = userRole;
     }
 
     public Integer getId() {
@@ -48,12 +42,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUserPassword() {
@@ -64,27 +58,19 @@ public class User {
         this.userPassword = userPassword;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Date getRegistrationDate() {
+    public LocalDate getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(Date registrationDate) {
+    public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
     }
 
-    public UserType getUserTypeId() {
-        return userTypeId;
+    public Role getUserRole() {
+        return userRole;
     }
 
-    public void setUserTypeId(UserType userTypeId) {
-        this.userTypeId = userTypeId;
+    public void setUserRole(Role userRole) {
+        this.userRole = userRole;
     }
 }

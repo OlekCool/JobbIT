@@ -4,8 +4,8 @@
       <h2 class="login-title">АВТОРИЗАЦІЯ</h2>
 
       <div class="form-group">
-        <label for="login">Ваш логін</label>
-        <input type="text" id="login" v-model="login" />
+        <label for="email">Ваш email</label>
+        <input type="text" id="email" v-model="email" />
       </div>
 
       <div class="form-group form-group-last">
@@ -13,7 +13,9 @@
         <input type="password" id="password" v-model="password" />
       </div>
 
-      <router-link to="/" class="login-button" type="submit">АВТОРИЗАЦІЯ</router-link>
+      <p v-if="loginError" class="error">{{ loginError }}</p>
+
+      <button class="login-button" type="submit">АВТОРИЗАЦІЯ</button>
 
       <div class="buttons">
         <button class="forgot-button" type="button">Забули пароль?</button>
@@ -23,23 +25,35 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      login: "",
-      password: "",
-    };
-  },
-  methods: {
-    handleSubmit() {
-      const data = {
-        login: this.login,
-        password: this.password,
-      };
-      console.log(data);
-    },
-  },
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import AuthService from "@/services/AuthService";
+
+const email = ref("");
+const password = ref("");
+const loginError = ref("");
+const router = useRouter();
+
+const handleSubmit = async () => {
+  try {
+    const response = await AuthService.login(email.value, password.value);
+
+    if (response.status === 200) {
+      localStorage.setItem("authToken", response.data.token);
+      localStorage.setItem("userRole", response.data.role);
+      console.log("Логін успішний", response.data);
+
+      if (response.data.role === "CANDIDATE") {
+        router.push("/candidate-dash");
+      } else if (response.data.role === "RECRUITER") {
+        router.push("/recruiter-dash");
+      }
+    }
+  } catch (error) {
+    loginError.value = "Невірний email або пароль";
+    console.error("Помилка авторизації", error.response?.data || error.message);
+  }
 };
 </script>
 
@@ -133,5 +147,10 @@ input[type="password"] {
 .back-button:hover,
 .forgot-button:hover {
   text-decoration: underline;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
 }
 </style>

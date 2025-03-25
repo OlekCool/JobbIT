@@ -1,22 +1,29 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:8080/auth/';
+const API_URL = "http://localhost:8080/auth/";
 
 class AuthService {
-  register(username, email, password, userType) {
-    return axios.post(API_URL + 'register', {
-      username,
-      email,
-      password,
-      userType,
-    });
+  register(email, password, role) {
+    return axios.post(
+      API_URL + "register",
+      {
+        email,
+        password,
+        role,
+      },
+      { withCredentials: true }
+    );
   }
 
-  login(username, password) {
-    return axios.post(API_URL + 'login', {
-      username,
-      password,
-    });
+  login(email, password) {
+    return axios.post(
+      API_URL + "login",
+      {
+        email,
+        password,
+      },
+      { withCredentials: true }
+    );
   }
 }
 

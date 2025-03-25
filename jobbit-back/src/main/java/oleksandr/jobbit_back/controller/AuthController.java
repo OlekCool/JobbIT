@@ -1,12 +1,17 @@
 package oleksandr.jobbit_back.controller;
 
+import oleksandr.jobbit_back.dto.LoginRequest;
+import oleksandr.jobbit_back.dto.RegisterRequest;
 import oleksandr.jobbit_back.entity.User;
 import oleksandr.jobbit_back.service.UserService;
+import oleksandr.jobbit_back.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -14,33 +19,38 @@ import java.util.Map;
 public class AuthController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user, @RequestBody String userTypeName) {
-        try {
-            User registeredUser = userService.registerUser(user, userTypeName);
-            return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+    @Transactional
+    public ResponseEntity<String> registerUser(@RequestBody RegisterRequest registerRequest) {
+        userService.register(registerRequest);
+        return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody Map<String, String> credentials) {
-        String username = credentials.get("username");
-        String password = credentials.get("password");
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest) {
 
-        User user = userService.authenticateUser(username, password);
+        User user = userService.findByEmail(loginRequest.getEmail());
 
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getUserPassword())) {
+            throw new RuntimeException("Invalid credentials");
         }
+
+        String token = jwtUtil.generateToken(user.getEmail());
+
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+        response.put("role", user.getUserRole().toString());
+
+        return ResponseEntity.ok(response);
     }
 }
