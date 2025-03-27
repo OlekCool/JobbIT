@@ -1,7 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import StartPage from "@/pages/StartPage.vue";
-import RegistrationPage from "@/pages/RegistrationPage.vue";
-import LoginPage from "@/pages/LoginPage.vue";
+import RegistrationPage from "@/pages/auth/RegistrationPage.vue";
+import LoginPage from "@/pages/auth/LoginPage.vue";
+import ForgotPassword from "@/pages/auth/ForgotPassword.vue";
+import SendOTP from "@/pages/auth/SendOTP.vue";
+import NewPassword from "@/pages/auth/NewPassword.vue";
 import MainRecruiterPage from "@/pages/MainRecruiterPage.vue";
 import MainCandidatePage from "@/pages/MainCandidatePage.vue";
 
@@ -9,6 +12,9 @@ const routes = [
   { path: "/", name: "StartPage", component: StartPage },
   { path: "/auth/register", name: "RegistrationPage", component: RegistrationPage },
   { path: "/auth/login", name: "LoginPage", component: LoginPage },
+  { path: "/auth/forgotpassword", name: "ForgotPassword", component: ForgotPassword },
+  { path: "/auth/sendotp", name: "SendOTP", component: SendOTP },
+  { path: "/auth/newpassword", name: "NewPassword", component: NewPassword },
 
   {
     path: "/recruiter-dash",

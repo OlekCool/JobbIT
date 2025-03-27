@@ -29,7 +29,7 @@
 
       <div class="buttons">
         <button class="register-button" type="submit">РЕЄСТРАЦІЯ</button>
-        <router-link to="/" class="back-button" type="button">Назад</router-link>
+        <router-link to="/" class="back-button" type="button">На головну</router-link>
       </div>
     </form>
   </div>

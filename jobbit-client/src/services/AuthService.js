@@ -25,6 +25,27 @@ class AuthService {
       { withCredentials: true }
     );
   }
+
+  sendEmail(email) {
+    return axios.post(API_URL + "sendemail", {
+      email,
+    });
+  }
+
+  sendOtpCode(email, otpCode) {
+    return axios.post(API_URL + "sendotpcode", {
+      email,
+      otpCode,
+    });
+  }
+
+  changePassword(email, password, repeatPassword) {
+    return axios.put(API_URL + "changepassword", {
+      email,
+      password,
+      repeatPassword,
+    });
+  }
 }
 
 export default new AuthService();
