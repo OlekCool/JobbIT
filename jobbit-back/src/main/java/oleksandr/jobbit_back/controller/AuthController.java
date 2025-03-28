@@ -8,7 +8,6 @@ import oleksandr.jobbit_back.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -30,7 +29,6 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @Transactional
     public ResponseEntity<String> registerUser(@RequestBody RegisterRequest registerRequest) {
         userService.register(registerRequest);
         return ResponseEntity.ok("User registered successfully");
@@ -39,7 +37,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest) {
 
-        User user = userService.findByEmail(loginRequest.getEmail());
+        User user = userService.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("No such user"));
 
         if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getUserPassword())) {
             throw new RuntimeException("Invalid credentials");

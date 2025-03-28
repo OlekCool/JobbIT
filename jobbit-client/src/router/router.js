@@ -20,7 +20,7 @@ const routes = [
     path: "/recruiter-dash",
     name: "MainRecruiterPage",
     component: MainRecruiterPage,
-    beforeEnrer: (to, from, next) => {
+    beforeEnter: (to, from, next) => {
       const role = localStorage.getItem("userRole");
       if (role === "RECRUITER") {
         next();
@@ -34,7 +34,7 @@ const routes = [
     path: "/candidate-dash",
     name: "MainCandidatePage",
     component: MainCandidatePage,
-    beforeEnrer: (to, from, next) => {
+    beforeEnter: (to, from, next) => {
       const role = localStorage.getItem("userRole");
       if (role === "CANDIDATE") {
         next();

@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -13,12 +14,12 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-
-    private static final String SECRET_KEY = "yZufvdBO5JRWPeE6H06h+FerQMRiQP369ePu6BFk1SfZE9sdtFYEu2TYy8KMJVYOCSqqUcvMGPPKcgQkcnVy2g==";
+    //put your secret_key for jwt authentication
+    private static final String SECRET_KEY = "";
     private final SecretKey key;
     private final JwtParser jwtParser;
 
-    public JwtUtil() {
+    public JwtUtil(Environment environment) {
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
         this.jwtParser = Jwts.parser().verifyWith(key).build();
     }

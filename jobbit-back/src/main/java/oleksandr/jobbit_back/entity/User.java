@@ -2,6 +2,7 @@ package oleksandr.jobbit_back.entity;
 
 import jakarta.persistence.*;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Entity
@@ -12,13 +13,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "The email can't be empty")
     @Column(unique = true)
+    @Email(message = "Enter a valid email")
     private String email;
 
-    @Column(nullable = false)
+    @NotBlank(message = "The password can't be empty")
     private String userPassword;
 
     private LocalDate registrationDate;
+
+    @OneToOne(mappedBy = "user")
+    private ForgotPassword forgotPassword;
 
     @Enumerated(EnumType.STRING)
     private Role userRole;
