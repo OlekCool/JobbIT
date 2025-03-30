@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
@@ -47,7 +49,7 @@ public class ForgotPasswordController {
 
         ForgotPassword fp = new ForgotPassword();
         fp.setOtp(otp);
-        fp.setExpirationTime(new Date(System.currentTimeMillis() + 90 * 1000));
+        fp.setExpirationTime(new Date(System.currentTimeMillis() + 600 * 1000));
         fp.setUser(user);
 
         emailService.sendSimpleMessage(mailBody);
@@ -74,14 +76,11 @@ public class ForgotPasswordController {
     }
 
     @PostMapping("/newpassword/{email}")
-    public ResponseEntity<String> changePasswordHandler(@RequestBody ChangePassword changePassword,
-                                                        @PathVariable String email) {
-        if (!Objects.equals(changePassword.password(), changePassword.repeatPassword())) {
-            return new ResponseEntity<>("Please enter the same passwords", HttpStatus.EXPECTATION_FAILED);
-        }
-
+    public ResponseEntity<String> changePasswordHandler(@PathVariable String email,
+                                                        @RequestBody ChangePassword changePassword) {
         String encodedPassword = passwordEncoder.encode(changePassword.password());
         userService.updatePassword(email, encodedPassword);
+        userService.updatePasswordChangingData(email, LocalDateTime.now());
 
         return ResponseEntity.ok("Password has been changed successfully");
     }

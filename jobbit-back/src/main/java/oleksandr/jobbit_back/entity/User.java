@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -29,15 +30,25 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role userRole;
 
+    private LocalDateTime lastPasswordChanged;
+
+    private Boolean verified;
+
+    private String verificationToken;
+
     public User() {
     }
 
-    public User(Integer id, String email, String userPassword, LocalDate registrationDate, Role userRole) {
+    public User(Integer id, String email, String userPassword, LocalDate registrationDate,
+                Role userRole, LocalDateTime lastPasswordChanged, Boolean verified, String verificationToken) {
         this.id = id;
         this.email = email;
         this.userPassword = userPassword;
         this.registrationDate = registrationDate;
         this.userRole = userRole;
+        this.lastPasswordChanged = lastPasswordChanged;
+        this.verified = verified;
+        this.verificationToken = verificationToken;
     }
 
     public Integer getId() {
@@ -78,5 +89,29 @@ public class User {
 
     public void setUserRole(Role userRole) {
         this.userRole = userRole;
+    }
+
+    public LocalDateTime getLastPasswordChanged() {
+        return lastPasswordChanged;
+    }
+
+    public void setLastPasswordChanged(LocalDateTime lastPasswordChanged) {
+        this.lastPasswordChanged = lastPasswordChanged;
+    }
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
     }
 }

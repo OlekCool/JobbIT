@@ -83,6 +83,7 @@ const handleSubmit = async () => {
 
     if (response.status === 200) {
       console.log("Success registration frontend", response.data);
+      alert("На вашу пошту надіслано лінк для підтвердження акаунта.");
       router.push("/auth/login");
     } else {
       console.error("Unexpected response:", response);

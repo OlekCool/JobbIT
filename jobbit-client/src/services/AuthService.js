@@ -3,7 +3,7 @@ import axios from "axios";
 const API_URL = "http://localhost:8080/auth/";
 
 class AuthService {
-  register(email, password, role) {
+  async register(email, password, role) {
     return axios.post(
       API_URL + "register",
       {
@@ -15,7 +15,7 @@ class AuthService {
     );
   }
 
-  login(email, password) {
+  async login(email, password) {
     return axios.post(
       API_URL + "login",
       {
@@ -26,22 +26,16 @@ class AuthService {
     );
   }
 
-  sendEmail(email) {
-    return axios.post(API_URL + "sendemail", {
-      email,
-    });
+  async sendEmail(email) {
+    return axios.post(`${API_URL}forgotpassword/verifyMail/${email}`);
   }
 
-  sendOtpCode(email, otpCode) {
-    return axios.post(API_URL + "sendotpcode", {
-      email,
-      otpCode,
-    });
+  async sendOtpCode(otp, email) {
+    return axios.post(`${API_URL}sendotp/${otp}/${email}`);
   }
 
-  changePassword(email, password, repeatPassword) {
-    return axios.put(API_URL + "changepassword", {
-      email,
+  async changePassword(email, password, repeatPassword) {
+    return axios.post(`${API_URL}newpassword/${email}`, {
       password,
       repeatPassword,
     });

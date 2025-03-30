@@ -5,18 +5,18 @@
 
       <div class="your-password">
         <label for="password">Ваш пароль</label>
-        <input type="password" id="password" v-model="password" />
+        <input type="password" id="password" v-model="newPassword" />
       </div>
 
       <div class="your-password repeat">
         <label for="password">Повтор вашого паролю</label>
-        <input type="password" id="repeat-password" v-model="newPassword" />
+        <input type="password" id="repeat-password" v-model="repeatPassword" />
       </div>
 
-      <p class="error">{{ error }}</p>
+      <p class="error">{{ errorChange }}</p>
 
       <div class="buttons">
-        <router-link to="/auth/login" class="change-button" type="button">Змінити пароль</router-link>
+        <button to="/auth/login" class="change-button" type="submit">Змінити пароль</button>
       </div>
     </form>
   </div>
@@ -24,16 +24,42 @@
 
 <script setup>
 import { ref } from "vue";
-// import { useRouter } from "vue-router";
-// import AuthService from "@/services/AuthService";
+import { useRouter } from "vue-router";
+import AuthService from "@/services/AuthService";
 
-const email = "someemail@xxxxx.xxx";
-const password = ref("");
+const email = ref(localStorage.getItem("email"));
 const newPassword = ref("");
-const error = ref("");
+const repeatPassword = ref("");
+const errorChange = ref("");
+
+const router = useRouter();
 
 const handleSubmit = async () => {
-  // do frontend-logic for changing password for account
+  const passwordPattern = /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g;
+
+  if (!passwordPattern.test(newPassword.value)) {
+    errorChange.value = "Пароль має містити хоча б 8 символів, хоча б одну велику та малу літеру, цифру і спец.символ";
+    console.error("Помилка валідації нового паролю", errorChange.value);
+    return;
+  }
+
+  if (newPassword.value !== repeatPassword.value) {
+    errorChange.value = "Пароль і повтор паролю не співпали";
+    console.error("Помилка валідації нового паролю", errorChange.value);
+    return;
+  }
+
+  try {
+    const response = await AuthService.changePassword(email.value, newPassword.value, repeatPassword.value);
+
+    if (response.status === 200) {
+      console.log("Successful change of password", response.data);
+      router.push("/auth/login");
+    }
+  } catch (error) {
+    errorChange.value = "Помилка на стороні серверу";
+    console.error("Помилка обробки OTP коду", error.response?.data || error.message);
+  }
 };
 </script>
 

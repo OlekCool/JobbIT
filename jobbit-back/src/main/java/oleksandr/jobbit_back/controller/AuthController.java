@@ -6,6 +6,7 @@ import oleksandr.jobbit_back.entity.User;
 import oleksandr.jobbit_back.service.UserService;
 import oleksandr.jobbit_back.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -50,5 +51,19 @@ public class AuthController {
         response.put("role", user.getUserRole().toString());
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<String> verifyAccount(@RequestParam String token) {
+        User user = userService.findByVerificationToken(token);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Невірний токен!");
+        }
+
+        user.setVerified(true);
+        user.setVerificationToken(null);
+        userService.verifyUser(user.getEmail());
+
+        return ResponseEntity.ok("Акаунт підтверджено! Тепер ви можете увійти.");
     }
 }

@@ -8,10 +8,10 @@
         <input type="text" id="email" v-model="email" />
       </div>
 
-      <p class="error">{{ error }}</p>
+      <p class="error">{{ errorForgot }}</p>
 
       <div class="buttons">
-        <router-link to="/auth/sendotp" class="sendemail-button" type="button">Надіслати</router-link>
+        <button to="/auth/sendotp" class="sendemail-button" type="submit">Надіслати</button>
         <router-link to="/auth/login" class="back-button" type="button">Назад</router-link>
       </div>
     </form>
@@ -20,14 +20,27 @@
 
 <script setup>
 import { ref } from "vue";
-// import { useRouter } from "vue-router";
-// import AuthService from "@/services/AuthService";
+import { useRouter } from "vue-router";
+import AuthService from "@/services/AuthService";
 
-const email = ref("someemail@xxxxx.xxx");
-const error = ref("");
+const email = ref("");
+const errorForgot = ref("");
+
+const router = useRouter();
 
 const handleSubmit = async () => {
-  // do frontend-logic for sending email
+  try {
+    const response = await AuthService.sendEmail(email.value);
+
+    if (response.status === 200) {
+      localStorage.setItem("email", email.value);
+      console.log("OTP code was sent to email", response.data);
+      router.push("/auth/sendotp");
+    }
+  } catch (error) {
+    errorForgot.value = "Email повинен бути валідним та існувати в базі користувачів";
+    console.error("Помилка надсилання OTP коду", error.response?.data || error.message);
+  }
 };
 </script>
 

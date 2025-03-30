@@ -21,10 +21,6 @@ public class RegisterRequest {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -33,7 +29,4 @@ public class RegisterRequest {
         return role;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }

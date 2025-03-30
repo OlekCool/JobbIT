@@ -7,6 +7,7 @@ import SendOTP from "@/pages/auth/SendOTP.vue";
 import NewPassword from "@/pages/auth/NewPassword.vue";
 import MainRecruiterPage from "@/pages/MainRecruiterPage.vue";
 import MainCandidatePage from "@/pages/MainCandidatePage.vue";
+import VerifyPage from "@/pages/auth/VerifyPage.vue";
 
 const routes = [
   { path: "/", name: "StartPage", component: StartPage },
@@ -15,6 +16,7 @@ const routes = [
   { path: "/auth/forgotpassword", name: "ForgotPassword", component: ForgotPassword },
   { path: "/auth/sendotp", name: "SendOTP", component: SendOTP },
   { path: "/auth/newpassword", name: "NewPassword", component: NewPassword },
+  { path: "/auth/verify", name: "VerifyPage", component: VerifyPage },
 
   {
     path: "/recruiter-dash",

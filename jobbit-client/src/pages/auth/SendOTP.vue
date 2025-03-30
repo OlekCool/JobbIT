@@ -8,10 +8,10 @@
         <input type="text" id="email" v-model="otpCode" />
       </div>
 
-      <p class="error">{{ error }}</p>
+      <p class="error">{{ errorOtp }}</p>
 
       <div class="buttons">
-        <router-link to="/auth/newpassword" class="check-button" type="button">Перевірити</router-link>
+        <button to="/auth/newpassword" class="check-button" type="submit">Перевірити</button>
         <router-link to="/auth/forgotpassword" class="back-button" type="button">Назад</router-link>
       </div>
     </form>
@@ -20,15 +20,34 @@
 
 <script setup>
 import { ref } from "vue";
-// import { useRouter } from "vue-router";
-// import AuthService from "@/services/AuthService";
+import { useRouter } from "vue-router";
+import AuthService from "@/services/AuthService";
 
-const email = "someemail@xxxxx.xxx";
+const email = ref(localStorage.getItem("email"));
 const otpCode = ref("");
-const error = ref("");
+const errorOtp = ref("");
+
+const router = useRouter();
 
 const handleSubmit = async () => {
-  // do frontend-logic for sending otp-code to email
+  if (!/^\d+$/.test(otpCode.value)) {
+    errorOtp.value = "OTP повинен містити тільки цифри!";
+    console.error("Помилка формату OTP:", errorOtp.value);
+    return;
+  }
+
+  try {
+    const otpInt = Number(otpCode.value);
+    const response = await AuthService.sendOtpCode(otpInt, email.value);
+
+    if (response.status === 200) {
+      console.log("Successful checking OTP code", response.data);
+      router.push("/auth/newpassword");
+    }
+  } catch (error) {
+    errorOtp.value = "Невірний OTP, або ж строк коду закінчився (10 хвилин)";
+    console.error("Помилка обробки OTP коду", error.response?.data || error.message);
+  }
 };
 </script>
 
