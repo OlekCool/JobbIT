@@ -4,6 +4,9 @@ jobbit-back/target/
 !jobbit-back/**/src/main/**/target/
 !jobbit-back/**/src/test/**/target/
 .idea
+.env
+!jobbit-back/src/main/resources/application.yml
+jobbit-back/src/main/resources/application.yml
 
 ### STS ###
 jobbit-back/.apt_generated

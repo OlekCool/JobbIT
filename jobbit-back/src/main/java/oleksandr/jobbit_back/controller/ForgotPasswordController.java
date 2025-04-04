@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.Random;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class ForgotPasswordController {
 
     private final UserService userService;

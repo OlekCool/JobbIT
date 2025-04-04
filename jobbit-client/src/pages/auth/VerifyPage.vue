@@ -29,7 +29,7 @@ onMounted(async () => {
   }
 
   try {
-    const response = await axios.get(`http://localhost:8080/auth/verify?token=${token}`);
+    const response = await axios.get(`http://localhost:8080/api/auth/verify?token=${token}`);
     verified.value = true;
     loading.value = false;
     console.log(response);

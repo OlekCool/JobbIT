@@ -15,7 +15,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     //put your secret_key for jwt authentication
-    private static final String SECRET_KEY = "";
+    private static final String SECRET_KEY = "yZufvdBO5JRWPeE6H06h+FerQMRiQP369ePu6BFk1SfZE9sdtFYEu2TYy8KMJVYOCSqqUcvMGPPKcgQkcnVy2g==";
     private final SecretKey key;
     private final JwtParser jwtParser;
 

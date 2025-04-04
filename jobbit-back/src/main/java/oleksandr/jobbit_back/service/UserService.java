@@ -27,7 +27,6 @@ public class UserService {
         this.emailService = emailService;
     }
 
-    @Transactional
     public void register(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
             throw new RuntimeException("Email already in use");
