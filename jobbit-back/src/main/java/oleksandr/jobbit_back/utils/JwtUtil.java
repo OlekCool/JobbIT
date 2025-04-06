@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import oleksandr.jobbit_back.entity.Role;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -24,9 +25,10 @@ public class JwtUtil {
         this.jwtParser = Jwts.parser().verifyWith(key).build();
     }
 
-    public String generateToken(String email) {
+    public String generateToken(String email, Role role) {
         return Jwts.builder()
                 .subject(email)
+                .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(key)
@@ -37,6 +39,15 @@ public class JwtUtil {
         try {
             Claims claims = jwtParser.parseSignedClaims(token).getPayload();
             return claims.getSubject();
+        } catch (SignatureException e) {
+            throw new RuntimeException("Невірний JWT");
+        }
+    }
+
+    public String extractRole(String token) {
+        try {
+            Claims claims = jwtParser.parseSignedClaims(token).getPayload();
+            return claims.get("role", String.class);
         } catch (SignatureException e) {
             throw new RuntimeException("Невірний JWT");
         }

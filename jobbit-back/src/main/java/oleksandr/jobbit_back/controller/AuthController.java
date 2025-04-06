@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -41,16 +40,12 @@ public class AuthController {
         User user = userService.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("No such user"));
 
         if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getUserPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
         }
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getUserRole());
 
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
-        response.put("role", user.getUserRole().toString());
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(Map.of("token", token, "role", user.getUserRole().toString()));
     }
 
     @GetMapping("/verify")

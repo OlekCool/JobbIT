@@ -39,6 +39,7 @@ jobbit-back/.vscode/
 jobbit-client/.DS_Store
 jobbit-client/node_modules
 jobbit-client/dist
+jobbit-client/package-lock.json
 
 
 # local env files

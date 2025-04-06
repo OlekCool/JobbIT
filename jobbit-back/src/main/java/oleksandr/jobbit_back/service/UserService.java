@@ -7,10 +7,10 @@ import oleksandr.jobbit_back.utils.TokenGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -62,5 +62,9 @@ public class UserService {
 
     public void verifyUser(String email) {
         userRepository.verifyUser(email);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

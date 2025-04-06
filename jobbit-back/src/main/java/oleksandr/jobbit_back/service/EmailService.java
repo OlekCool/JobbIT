@@ -52,7 +52,7 @@ public class EmailService {
 
     public void sendVerificationEmail(User user) {
         String subject = "Підтвердження реєстрації";
-        String url = "http://localhost:3000/auth/verify?token=" + user.getVerificationToken();
+        String url = "http://localhost:8081/auth/verify?token=" + user.getVerificationToken();
         String message = "Привіт, " + user.getEmail() + "!<br>" +
                 "Будь ласка, натисни <a href=\"" + url + "\">сюди</a>, щоб підтвердити акаунт.";
 
