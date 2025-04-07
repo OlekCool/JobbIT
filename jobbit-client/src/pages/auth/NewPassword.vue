@@ -16,7 +16,7 @@
       <p class="error">{{ errorChange }}</p>
 
       <div class="buttons">
-        <button to="/auth/login" class="change-button" type="submit">Змінити пароль</button>
+        <button class="change-button" type="submit">Змінити пароль</button>
       </div>
     </form>
   </div>
@@ -34,6 +34,7 @@ const errorChange = ref("");
 
 const router = useRouter();
 
+// обробка кнопки для зміни пароля
 const handleSubmit = async () => {
   const passwordPattern = /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g;
 
@@ -49,12 +50,13 @@ const handleSubmit = async () => {
     return;
   }
 
+  // запит на зміну пароля
   try {
     const response = await AuthService.changePassword(email.value, newPassword.value, repeatPassword.value);
 
     if (response.status === 200) {
       console.log("Successful change of password", response.data);
-      router.push("/auth/login");
+      await router.push("/auth/login");
     }
   } catch (error) {
     errorChange.value = "Помилка на стороні серверу";

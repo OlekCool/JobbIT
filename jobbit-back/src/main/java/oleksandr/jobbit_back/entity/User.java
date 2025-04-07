@@ -1,6 +1,7 @@
 package oleksandr.jobbit_back.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -8,110 +9,55 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
+@Data
 public class User {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "email", unique = true)
     @NotBlank(message = "The email can't be empty")
-    @Column(unique = true)
     @Email(message = "Enter a valid email")
     private String email;
 
+    @Column(name = "user_password")
     @NotBlank(message = "The password can't be empty")
     private String userPassword;
 
+    @Column(name = "registration_date")
     private LocalDate registrationDate;
 
-    @OneToOne(mappedBy = "user")
-    private ForgotPassword forgotPassword;
-
+    @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
     private Role userRole;
 
+    @Column(name = "last_password_changed")
     private LocalDateTime lastPasswordChanged;
 
+    @Column(name = "verified")
     private Boolean verified;
 
+    @Column(name = "verification_token")
     private String verificationToken;
 
-    public User() {
-    }
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "user")
+    private ForgotPassword forgotPassword;
 
-    public User(Integer id, String email, String userPassword, LocalDate registrationDate,
-                Role userRole, LocalDateTime lastPasswordChanged, Boolean verified, String verificationToken) {
-        this.id = id;
-        this.email = email;
-        this.userPassword = userPassword;
-        this.registrationDate = registrationDate;
-        this.userRole = userRole;
-        this.lastPasswordChanged = lastPasswordChanged;
-        this.verified = verified;
-        this.verificationToken = verificationToken;
-    }
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private CandidateProfile candidateProfile;
 
-    public Integer getId() {
-        return id;
-    }
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private RecruiterProfile recruiterProfile;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDate registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public Role getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(Role userRole) {
-        this.userRole = userRole;
-    }
-
-    public LocalDateTime getLastPasswordChanged() {
-        return lastPasswordChanged;
-    }
-
-    public void setLastPasswordChanged(LocalDateTime lastPasswordChanged) {
-        this.lastPasswordChanged = lastPasswordChanged;
-    }
-
-    public Boolean getVerified() {
-        return verified;
-    }
-
-    public void setVerified(Boolean verified) {
-        this.verified = verified;
-    }
-
-    public String getVerificationToken() {
-        return verificationToken;
-    }
-
-    public void setVerificationToken(String verificationToken) {
-        this.verificationToken = verificationToken;
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", registrationDate=" + registrationDate +
+                ", userRole=" + userRole +
+                ", verified=" + verified +
+                '}';
     }
 }

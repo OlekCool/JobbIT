@@ -50,7 +50,8 @@ const passwordError = ref("");
 
 const router = useRouter();
 
-const validatePasswords = () => {
+// валідація емайл-пароль
+const validateCredentials = () => {
   emailError.value = "";
   passwordError.value = "";
 
@@ -60,7 +61,7 @@ const validatePasswords = () => {
   }
 
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/g;
-  const passwordPattern = /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g;
+  const passwordPattern = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}/g;
 
   if (!emailPattern.test(email.value)) {
     emailError.value = "Email має бути коректним";
@@ -75,8 +76,9 @@ const validatePasswords = () => {
   return true;
 };
 
+// при натиску проходить валідація даних, потім посилання запита й обробка отриманої відповіді
 const handleSubmit = async () => {
-  if (!validatePasswords()) return;
+  if (!validateCredentials()) return;
 
   try {
     const response = await AuthService.register(email.value, password.value, role.value);
@@ -84,12 +86,12 @@ const handleSubmit = async () => {
     if (response.status === 200) {
       console.log("Success registration frontend", response.data);
       alert("На вашу пошту надіслано лінк для підтвердження акаунта.");
-      router.push("/auth/login");
+      await router.push("/auth/login");
     } else {
       console.error("Unexpected response:", response);
     }
   } catch (error) {
-    console.error("Помилка реєстрації", error.response?.data || error.message);
+    emailError.value = "Такий email вже зареєстровано";
   }
 };
 </script>

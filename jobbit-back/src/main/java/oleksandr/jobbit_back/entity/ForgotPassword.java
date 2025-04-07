@@ -1,65 +1,27 @@
 package oleksandr.jobbit_back.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "forgot_password")
+@Data
 public class ForgotPassword {
 
     @Id
+    @Column(name = "fpid")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer fpid;
 
-    @Column(nullable = false)
+    @Column(name = "otp", nullable = false)
     private Integer otp;
 
-    @Column(nullable = false)
-    private Date expirationTime;
+    @Column(name = "expiration_date", nullable = false)
+    private Date expirationDate;
 
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
-
-    public ForgotPassword() {
-    }
-
-    public ForgotPassword(Integer fpid, Integer otp, Date expirationTime, User user) {
-        this.fpid = fpid;
-        this.otp = otp;
-        this.expirationTime = expirationTime;
-        this.user = user;
-    }
-
-    public Integer getFpid() {
-        return fpid;
-    }
-
-    public void setFpid(Integer fpid) {
-        this.fpid = fpid;
-    }
-
-    public Integer getOtp() {
-        return otp;
-    }
-
-    public void setOtp(Integer otp) {
-        this.otp = otp;
-    }
-
-    public Date getExpirationTime() {
-        return expirationTime;
-    }
-
-    public void setExpirationTime(Date expirationTime) {
-        this.expirationTime = expirationTime;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

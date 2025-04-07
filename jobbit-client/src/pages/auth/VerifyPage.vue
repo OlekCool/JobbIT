@@ -18,6 +18,7 @@ const error = ref(false);
 const errorMessage = ref("");
 const route = useRoute();
 
+// отримання токена
 const token = route.query.token;
 
 onMounted(async () => {
@@ -28,6 +29,7 @@ onMounted(async () => {
     return;
   }
 
+  // get-запит на перевірку верифікаційного токена
   try {
     const response = await axios.get(`http://localhost:8080/api/auth/verify?token=${token}`);
     verified.value = true;

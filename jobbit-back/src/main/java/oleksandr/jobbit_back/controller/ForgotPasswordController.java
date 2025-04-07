@@ -37,6 +37,7 @@ public class ForgotPasswordController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // надсилання otp-коду на вказану пошту
     @PostMapping("/forgotpassword/verifyMail/{email}")
     public ResponseEntity<String> verifyEmail(@PathVariable String email) {
         User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("The email must be valid"));
@@ -49,7 +50,7 @@ public class ForgotPasswordController {
 
         ForgotPassword fp = new ForgotPassword();
         fp.setOtp(otp);
-        fp.setExpirationTime(new Date(System.currentTimeMillis() + 600 * 1000));
+        fp.setExpirationDate(new Date(System.currentTimeMillis() + 600 * 1000));
         fp.setUser(user);
 
         emailService.sendSimpleMessage(mailBody);
@@ -59,6 +60,7 @@ public class ForgotPasswordController {
         return ResponseEntity.ok("Email sent for verification");
     }
 
+    // перевірка otp-коду і його дійсність
     @PostMapping("/sendotp/{otp}/{email}")
     public ResponseEntity<String> verifyOtp(@PathVariable Integer otp, @PathVariable String email) {
         User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("The email must be valid"));
@@ -66,7 +68,7 @@ public class ForgotPasswordController {
         ForgotPassword fp = forgotPasswordRepository.findByOtpAndUser(otp, user)
                 .orElseThrow(() -> new RuntimeException("Invalid OTP for email: " + email));
 
-        if (fp.getExpirationTime().before(Date.from(Instant.now()))) {
+        if (fp.getExpirationDate().before(Date.from(Instant.now()))) {
             forgotPasswordRepository.deleteById(fp.getFpid());
             return new ResponseEntity<>("OTP has expired!", HttpStatus.EXPECTATION_FAILED);
         }
@@ -75,6 +77,7 @@ public class ForgotPasswordController {
         return ResponseEntity.ok("OTP verified!");
     }
 
+    // занесення нового паролю
     @PostMapping("/newpassword/{email}")
     public ResponseEntity<String> changePasswordHandler(@PathVariable String email,
                                                         @RequestBody ChangePassword changePassword) {
