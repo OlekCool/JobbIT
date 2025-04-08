@@ -34,7 +34,7 @@ onMounted(async () => {
     const response = await axios.get(`http://localhost:8080/api/auth/verify?token=${token}`);
     verified.value = true;
     loading.value = false;
-    console.log(response);
+    console.log(response); // eslint-disable-line no-console
   } catch (err) {
     error.value = true;
     errorMessage.value = "Помилка підтвердження акаунта.";

@@ -26,6 +26,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import AuthService from "@/services/AuthService.ts";
+import { HttpStatusCode } from "axios";
 
 const email = ref(localStorage.getItem("email"));
 const newPassword = ref("");
@@ -36,17 +37,17 @@ const router = useRouter();
 
 // Обробка кнопки для зміни пароля
 const handleSubmit = async () => {
-  const passwordPattern = /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g;
+  const passwordPattern = /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/gu;
 
   if (!passwordPattern.test(newPassword.value)) {
     errorChange.value = "Пароль має містити хоча б 8 символів, хоча б одну велику та малу літеру, цифру і спец.символ";
-    console.error("Помилка валідації нового паролю", errorChange.value);
+    console.error("Помилка валідації нового паролю", errorChange.value); // eslint-disable-line no-console
     return;
   }
 
   if (newPassword.value !== repeatPassword.value) {
     errorChange.value = "Пароль і повтор паролю не співпали";
-    console.error("Помилка валідації нового паролю", errorChange.value);
+    console.error("Помилка валідації нового паролю", errorChange.value); // eslint-disable-line no-console
     return;
   }
 
@@ -54,13 +55,13 @@ const handleSubmit = async () => {
   try {
     const response = await AuthService.changePassword(email.value, newPassword.value, repeatPassword.value);
 
-    if (response.status === 200) {
-      console.log("Successful change of password", response.data);
+    if (response.status === HttpStatusCode.Ok) {
+      console.log("Successful change of password", response.data); // eslint-disable-line no-console
       await router.push("/auth/login");
     }
   } catch (error) {
     errorChange.value = "Помилка на стороні серверу";
-    console.error("Помилка обробки OTP коду", error.response?.data || error.message);
+    console.error("Помилка обробки OTP коду", error.response?.data || error.message); // eslint-disable-line no-console
   }
 };
 </script>

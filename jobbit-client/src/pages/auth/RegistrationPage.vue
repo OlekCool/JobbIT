@@ -39,6 +39,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import AuthService from "@/services/AuthService.ts";
+import { HttpStatusCode } from "axios";
 
 const email = ref("");
 const password = ref("");
@@ -60,8 +61,8 @@ const validateCredentials = () => {
     return false;
   }
 
-  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/g;
-  const passwordPattern = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}/g;
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/gu;
+  const passwordPattern = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}/gu;
 
   if (!emailPattern.test(email.value)) {
     emailError.value = "Email має бути коректним";
@@ -85,12 +86,12 @@ const handleSubmit = async () => {
   try {
     const response = await AuthService.register(email.value, password.value, role.value);
 
-    if (response.status === 200) {
-      console.log("Success registration frontend", response.data);
-      alert("На вашу пошту надіслано лінк для підтвердження акаунта.");
+    if (response.status === HttpStatusCode.Ok) {
+      console.log("Success registration frontend", response.data); // eslint-disable-line no-console
+      alert("На вашу пошту надіслано лінк для підтвердження акаунта."); // eslint-disable-line no-alert
       await router.push("/auth/login");
     } else {
-      console.error("Unexpected response:", response);
+      console.error("Unexpected response:", response); // eslint-disable-line no-console
     }
   } catch (error) {
     emailError.value = "Такий email вже зареєстровано";

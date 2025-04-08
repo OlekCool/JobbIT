@@ -22,6 +22,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import AuthService from "@/services/AuthService.ts";
+import { HttpStatusCode } from "axios";
 
 const email = ref(localStorage.getItem("email"));
 const otpCode = ref("");
@@ -30,9 +31,9 @@ const errorOtp = ref("");
 const router = useRouter();
 
 const handleSubmit = async () => {
-  if (!(/^\d+$/).test(otpCode.value)) {
+  if (!(/^\d+$/u).test(otpCode.value)) {
     errorOtp.value = "OTP повинен містити тільки цифри!";
-    console.error("Помилка формату OTP:", errorOtp.value);
+    console.error("Помилка формату OTP:", errorOtp.value); // eslint-disable-line no-console
     return;
   }
 
@@ -40,13 +41,13 @@ const handleSubmit = async () => {
     const otpInt = Number(otpCode.value);
     const response = await AuthService.sendOtpCode(otpInt, email.value);
 
-    if (response.status === 200) {
-      console.log("Successful checking OTP code", response.data);
-      router.push("/auth/newpassword");
+    if (response.status === HttpStatusCode.Ok) {
+      console.log("Successful checking OTP code", response.data); // eslint-disable-line no-console
+      await router.push("/auth/newpassword");
     }
   } catch (error) {
     errorOtp.value = "Невірний OTP, або ж строк коду закінчився (10 хвилин)";
-    console.error("Помилка обробки OTP коду", error.response?.data || error.message);
+    console.error("Помилка обробки OTP коду", error.response?.data || error.message); // eslint-disable-line no-console
   }
 };
 </script>

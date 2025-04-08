@@ -29,6 +29,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import AuthService from "@/services/AuthService.ts";
+import { HttpStatusCode } from "axios";
 
 const email = ref("");
 const password = ref("");
@@ -39,20 +40,20 @@ const handleSubmit = async () => {
   try {
     const response = await AuthService.login(email.value, password.value);
 
-    if (response.status === 200) {
+    if (response.status === HttpStatusCode.Ok) {
       localStorage.setItem("authToken", response.data.token);
       localStorage.setItem("userRole", response.data.role);
-      console.log("Логін успішний", response.data);
+      console.log("Логін успішний", response.data); // eslint-disable-line no-console
 
       if (response.data.role === "CANDIDATE") {
-        router.push("/candidate-dash");
+        await router.push("/candidate-dash");
       } else if (response.data.role === "RECRUITER") {
-        router.push("/recruiter-dash");
+        await router.push("/recruiter-dash");
       }
     }
   } catch (error) {
     loginError.value = "Невірний email або пароль";
-    console.error("Помилка авторизації", error.response?.data || error.message);
+    console.error("Помилка авторизації", error.response?.data || error.message); // eslint-disable-line no-console
   }
 };
 </script>

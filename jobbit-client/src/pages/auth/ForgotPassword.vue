@@ -22,6 +22,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import AuthService from "@/services/AuthService.ts";
+import { HttpStatusCode } from "axios";
 
 const email = ref("");
 const errorForgot = ref("");
@@ -32,14 +33,14 @@ const handleSubmit = async () => {
   try {
     const response = await AuthService.sendEmail(email.value);
 
-    if (response.status === 200) {
+    if (response.status === HttpStatusCode.Ok) {
       localStorage.setItem("email", email.value);
-      console.log("OTP code was sent to email", response.data);
-      router.push("/auth/sendotp");
+      console.log("OTP code was sent to email", response.data); // eslint-disable-line no-console
+      await router.push("/auth/sendotp");
     }
   } catch (error) {
     errorForgot.value = "Email повинен бути валідним та існувати в базі користувачів";
-    console.error("Помилка надсилання OTP коду", error.response?.data || error.message);
+    console.error("Помилка надсилання OTP коду", error.response?.data || error.message); // eslint-disable-line no-console
   }
 };
 </script>
