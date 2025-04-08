@@ -21,7 +21,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import AuthService from "@/services/AuthService";
+import AuthService from "@/services/AuthService.ts";
 
 const email = ref(localStorage.getItem("email"));
 const otpCode = ref("");
@@ -30,7 +30,7 @@ const errorOtp = ref("");
 const router = useRouter();
 
 const handleSubmit = async () => {
-  if (!/^\d+$/.test(otpCode.value)) {
+  if (!(/^\d+$/).test(otpCode.value)) {
     errorOtp.value = "OTP повинен містити тільки цифри!";
     console.error("Помилка формату OTP:", errorOtp.value);
     return;

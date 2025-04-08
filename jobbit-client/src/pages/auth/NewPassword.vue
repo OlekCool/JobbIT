@@ -25,7 +25,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import AuthService from "@/services/AuthService";
+import AuthService from "@/services/AuthService.ts";
 
 const email = ref(localStorage.getItem("email"));
 const newPassword = ref("");
@@ -34,7 +34,7 @@ const errorChange = ref("");
 
 const router = useRouter();
 
-// обробка кнопки для зміни пароля
+// Обробка кнопки для зміни пароля
 const handleSubmit = async () => {
   const passwordPattern = /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g;
 
@@ -50,7 +50,7 @@ const handleSubmit = async () => {
     return;
   }
 
-  // запит на зміну пароля
+  // Запит на зміну пароля
   try {
     const response = await AuthService.changePassword(email.value, newPassword.value, repeatPassword.value);
 

@@ -38,7 +38,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import AuthService from "@/services/AuthService";
+import AuthService from "@/services/AuthService.ts";
 
 const email = ref("");
 const password = ref("");
@@ -50,7 +50,7 @@ const passwordError = ref("");
 
 const router = useRouter();
 
-// валідація емайл-пароль
+// Валідація емайл-пароль
 const validateCredentials = () => {
   emailError.value = "";
   passwordError.value = "";
@@ -76,9 +76,11 @@ const validateCredentials = () => {
   return true;
 };
 
-// при натиску проходить валідація даних, потім посилання запита й обробка отриманої відповіді
+// При натиску проходить валідація даних, потім посилання запита й обробка отриманої відповіді
 const handleSubmit = async () => {
-  if (!validateCredentials()) return;
+  if (!validateCredentials()) {
+ return;
+}
 
   try {
     const response = await AuthService.register(email.value, password.value, role.value);
