@@ -30,7 +30,9 @@ public class UserService {
     private final EmailService emailService;
 
     @Autowired
-    public UserService(UserRepository userRepository, CandidateProfileRepository candidateProfileRepository, RecruiterProfileRepository recruiterProfileRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
+    public UserService(UserRepository userRepository, CandidateProfileRepository candidateProfileRepository,
+                       RecruiterProfileRepository recruiterProfileRepository, PasswordEncoder passwordEncoder,
+                       EmailService emailService) {
         this.userRepository = userRepository;
         this.candidateProfileRepository = candidateProfileRepository;
         this.recruiterProfileRepository = recruiterProfileRepository;
@@ -75,7 +77,7 @@ public class UserService {
         emailService.sendVerificationEmail(user);
     }
 
-    public Optional<User> findByEmail(String email){
+    public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 

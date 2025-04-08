@@ -1,9 +1,19 @@
 package oleksandr.jobbit_back.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.CascadeType;
 import lombok.Data;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Email;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -53,11 +63,11 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "email='" + email + '\'' +
-                ", registrationDate=" + registrationDate +
-                ", userRole=" + userRole +
-                ", verified=" + verified +
-                '}';
+        return "User{"
+                + "email='" + email + '\''
+                + ", registrationDate=" + registrationDate
+                + ", userRole=" + userRole
+                + ", verified=" + verified
+                + '}';
     }
 }

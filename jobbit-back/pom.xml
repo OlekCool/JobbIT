@@ -110,19 +110,20 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.6.0</version> <executions>
-				<execution>
-					<id>checkstyle</id>
-					<phase>verify</phase>
-					<goals>
-						<goal>check</goal>
-					</goals>
-					<configuration>
-						<configLocation>checkstyle.xml</configLocation>
-						<failOnViolation>true</failOnViolation>
-					</configuration>
-				</execution>
-			</executions>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<id>checkstyle</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<configLocation>src/main/resources/checkstyle/checkstyle.xml</configLocation>
+							<failOnViolation>true</failOnViolation>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

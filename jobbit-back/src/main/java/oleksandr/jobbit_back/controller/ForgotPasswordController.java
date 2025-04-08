@@ -11,13 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Random;
 
 @RestController
@@ -30,14 +33,14 @@ public class ForgotPasswordController {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ForgotPasswordController(UserService userService, EmailService emailService, ForgotPasswordRepository forgotPasswordRepository, PasswordEncoder passwordEncoder) {
+    public ForgotPasswordController(UserService userService, EmailService emailService,
+                                    ForgotPasswordRepository forgotPasswordRepository, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.emailService = emailService;
         this.forgotPasswordRepository = forgotPasswordRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    // надсилання otp-коду на вказану пошту
     @PostMapping("/forgotpassword/verifyMail/{email}")
     public ResponseEntity<String> verifyEmail(@PathVariable String email) {
         User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("The email must be valid"));
@@ -60,7 +63,6 @@ public class ForgotPasswordController {
         return ResponseEntity.ok("Email sent for verification");
     }
 
-    // перевірка otp-коду і його дійсність
     @PostMapping("/sendotp/{otp}/{email}")
     public ResponseEntity<String> verifyOtp(@PathVariable Integer otp, @PathVariable String email) {
         User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("The email must be valid"));
@@ -77,7 +79,6 @@ public class ForgotPasswordController {
         return ResponseEntity.ok("OTP verified!");
     }
 
-    // занесення нового паролю
     @PostMapping("/newpassword/{email}")
     public ResponseEntity<String> changePasswordHandler(@PathVariable String email,
                                                         @RequestBody ChangePassword changePassword) {

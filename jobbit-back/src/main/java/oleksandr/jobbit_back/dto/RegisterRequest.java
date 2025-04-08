@@ -1,6 +1,6 @@
 package oleksandr.jobbit_back.dto;
 
-import lombok.*;
+import lombok.Data;
 import oleksandr.jobbit_back.entity.Role;
 
 @Data
@@ -9,7 +9,8 @@ public class RegisterRequest {
     private String password;
     private Role role;
 
-    public RegisterRequest() {}
+    public RegisterRequest() {
+    }
 
     public RegisterRequest(String email, String password, Role role) {
         this.email = email;

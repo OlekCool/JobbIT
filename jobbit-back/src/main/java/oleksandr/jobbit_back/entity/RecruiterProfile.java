@@ -1,6 +1,12 @@
 package oleksandr.jobbit_back.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
 import lombok.Data;
 
 @Entity
@@ -22,9 +28,9 @@ public class RecruiterProfile {
 
     @Override
     public String toString() {
-        return "RecruiterProfile{" +
-                "id=" + id +
-                ", user=" + (user != null ? user.getEmail() : "no user") +
-                '}';
+        return "RecruiterProfile{"
+                + "id=" + id
+                + ", user=" + (user != null ? user.getEmail() : "no user")
+                + '}';
     }
 }
