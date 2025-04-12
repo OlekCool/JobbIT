@@ -24,11 +24,26 @@ import { useRouter } from "vue-router";
 import AuthService from "@/services/AuthService.ts";
 import { HttpStatusCode } from "axios";
 
+/**
+ * Сторінка для відновлення пароля через email.
+ *
+ * @component
+ * @description Цей компонент дозволяє користувачу ввести свій email для отримання OTP (One-Time Password) коду
+ * для відновлення пароля.
+ */
 const email = ref("");
 const errorForgot = ref("");
 
 const router = useRouter();
 
+/**
+ * Обробка події на надислання форми.
+ *
+ * @async
+ * @function
+ * @returns {Promise<void>} Повертає проміс, що виконується після запиту на надсилання OTP коду на email користувача.
+ * Якщо успішно, то користувача переносить на сторінку введення OTP-коду.
+ */
 const handleSubmit = async () => {
   try {
     const response = await AuthService.sendEmail(email.value);

@@ -125,6 +125,37 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.6.0</version>
+				<executions>
+					<execution>
+						<id>generate-javadocs</id>
+						<goals>
+							<goal>javadoc</goal>
+						</goals>
+						<phase>verify</phase>
+						<configuration>
+							<outputDirectory>../javadocs</outputDirectory>
+							<reportOutputDirectory>../javadocs</reportOutputDirectory>
+							<source>17</source>
+							<encoding>UTF-8</encoding>
+							<doclint>none</doclint>
+						</configuration>
+					</execution>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<phase>verify</phase>
+						<configuration>
+							<javadocDirectory>../javadocs</javadocDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 

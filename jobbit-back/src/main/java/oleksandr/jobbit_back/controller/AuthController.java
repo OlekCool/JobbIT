@@ -18,6 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
+/**
+ * REST-контролер для операцій аутентифікації, таких як реєстрація, вхід та верифікація облікового запису.
+ * Забезпечує доступ до ендпоінтів для всіх користувачів.
+ *
+ * @author Oleksandr Borovyk
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -26,6 +32,14 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    /**
+     * Конструктор класу {@code AuthController}, що ініціалізує залежності:
+     * {@link UserService}, {@link PasswordEncoder} та {@link JwtUtil}.
+     *
+     * @param userService Сервіс для роботи з користувачами.
+     * @param passwordEncoder Кодувальник паролів для безпечного зберігання.
+     * @param jwtUtil Утиліта для роботи з JWT-токенами.
+     */
     @Autowired
     public AuthController(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userService = userService;
@@ -33,12 +47,30 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
+    /**
+     * Ендпоінт для реєстрації нового користувача в системі.
+     * Приймає запит з даними користувача та передає їх до сервісу реєстрації.
+     * HTTP POST запит на `/api/auth/register`.
+     *
+     * @param registerRequest Об'єкт {@link RegisterRequest}, що містить дані для реєстрації користувача.
+     * @return {@link ResponseEntity} зі статусом 200 (OK) та повідомленням про успішну реєстрацію.
+     */
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody RegisterRequest registerRequest) {
         userService.register(registerRequest);
         return ResponseEntity.ok("User registered successfully");
     }
 
+    /**
+     * Ендпоінт для входу користувача в систему.
+     * Перевіряє надані облікові дані та у разі успіху повертає JWT-токен та роль користувача.
+     * HTTP POST запит на `/api/auth/login`.
+     *
+     * @param loginRequest Об'єкт {@link LoginRequest}, що містить email та пароль користувача.
+     * @return {@link ResponseEntity} зі статусом 200 (OK) та мапою, що містить токен (token) та роль (role) користувача.
+     * Повертає статус 401 (UNAUTHORIZED) у разі невірних облікових даних.
+     * @throws RuntimeException Якщо користувача з вказаним email не знайдено.
+     */
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest) {
 
@@ -53,6 +85,15 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("token", token, "role", user.getUserRole().toString()));
     }
 
+    /**
+     * Ендпоінт для верифікації облікового запису користувача за наданим токеном.
+     * Перевіряє токен, встановлює статус користувача як верифікований та видаляє токен верифікації.
+     * HTTP GET запит на `/api/auth/verify` з параметром token.
+     *
+     * @param token Токен верифікації, надісланий на електронну пошту користувача.
+     * @return {@link ResponseEntity} зі статусом 200 (OK) та повідомленням про успішну верифікацію.
+     * Повертає статус 400 (BAD_REQUEST) у разі невірного токена.
+     */
     @GetMapping("/verify")
     public ResponseEntity<String> verifyAccount(@RequestParam String token) {
         User user = userService.findByVerificationToken(token);

@@ -24,12 +24,27 @@ import { useRouter } from "vue-router";
 import AuthService from "@/services/AuthService.ts";
 import { HttpStatusCode } from "axios";
 
+/**
+ * Сторінка для введення OTP (One-Time Password) коду для відновлення пароля.
+ *
+ * @component
+ * @description Цей компонент дозволяє користувачу ввести OTP код, який надійшов на їх email
+ * для підтвердження і відновлення пароля.
+ */
 const email = ref(localStorage.getItem("email"));
 const otpCode = ref("");
 const errorOtp = ref("");
 
 const router = useRouter();
 
+/**
+ * Обробка події на надсилання форми з OTP кодом. OTP-код валідується на наявність тільки цифр
+ *
+ * @async
+ * @function
+ * @returns {Promise<void>} Повертає проміс, що виконується після перевірки OTP коду. Якщо успішно - то
+ * користувача переносить на сторінку вводу нового пароля.
+ */
 const handleSubmit = async () => {
   if (!(/^\d+$/u).test(otpCode.value)) {
     errorOtp.value = "OTP повинен містити тільки цифри!";

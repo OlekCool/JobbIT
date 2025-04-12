@@ -31,11 +31,25 @@ import { useRouter } from "vue-router";
 import AuthService from "@/services/AuthService.ts";
 import { HttpStatusCode } from "axios";
 
+/**
+ * Сторінка авторизації користувача.
+ *
+ * @component
+ * @description Компонент авторизації користувача з валідацією введених даних (email та пароль).
+ */
 const email = ref("");
 const password = ref("");
 const loginError = ref("");
 const router = useRouter();
 
+/**
+ * Обробка події при натисканні на кнопку авторизації.
+ * Виконується валідація даних та надсилання запиту на реєстрацію.
+ *
+ * @async
+ * @returns {Promise<void>} Повертає проміс, який виконується після обробки запиту. Якщо успішно, то користувача
+ * переносить на сторінку кандидата/рекрутера в залежності вір ролі зареєстрованого користувача.
+ */
 const handleSubmit = async () => {
   try {
     const response = await AuthService.login(email.value, password.value);

@@ -41,6 +41,12 @@ import { useRouter } from "vue-router";
 import AuthService from "@/services/AuthService.ts";
 import { HttpStatusCode } from "axios";
 
+/**
+ * Сторінка реєстрації користувача.
+ *
+ * @component
+ * @description Компонент реєстрації користувача з валідацією введених даних (email та пароль).
+ */
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
@@ -51,7 +57,12 @@ const passwordError = ref("");
 
 const router = useRouter();
 
-// Валідація емайл-пароль
+/**
+ * Валідація введених даних користувача (email та пароль).
+ * Перевіряє, чи збігаються паролі та відповідають введені значення шаблонам.
+ *
+ * @returns {boolean} Повертає true, якщо дані валідні, інакше false.
+ */
 const validateCredentials = () => {
   emailError.value = "";
   passwordError.value = "";
@@ -77,11 +88,18 @@ const validateCredentials = () => {
   return true;
 };
 
-// При натиску проходить валідація даних, потім посилання запита й обробка отриманої відповіді
+/**
+ * Обробка події при натисканні на кнопку реєстрації.
+ * Виконується валідація даних та надсилання запиту на реєстрацію.
+ *
+ * @async
+ * @returns {Promise<void>} Повертає проміс, який виконується після обробки запиту. Якщо успішно, то користувача
+ * переносить на сторінку авторизацію
+ */
 const handleSubmit = async () => {
   if (!validateCredentials()) {
- return;
-}
+    return;
+  }
 
   try {
     const response = await AuthService.register(email.value, password.value, role.value);

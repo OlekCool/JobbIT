@@ -28,6 +28,13 @@ import { useRouter } from "vue-router";
 import AuthService from "@/services/AuthService.ts";
 import { HttpStatusCode } from "axios";
 
+/**
+ * Сторінка для зміни пароля користувача.
+ *
+ * @component
+ * @description Цей компонент дозволяє користувачу ввести новий пароль і підтвердити його для завершення
+ * процесу зміни пароля.
+ */
 const email = ref(localStorage.getItem("email"));
 const newPassword = ref("");
 const repeatPassword = ref("");
@@ -35,7 +42,14 @@ const errorChange = ref("");
 
 const router = useRouter();
 
-// Обробка кнопки для зміни пароля
+/**
+ * Обробка події на надсилання форми з новим паролем. Валідація введеного пароля
+ *
+ * @async
+ * @function
+ * @returns {Promise<void>} Повертає проміс, що виконується після перевірки та зміни пароля. Якщо успішно - користувача
+ * переносить на сторінку авторизації
+ */
 const handleSubmit = async () => {
   const passwordPattern = /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/gu;
 

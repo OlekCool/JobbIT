@@ -1,0 +1,9 @@
+oleksandr.jobbit_back
+oleksandr.jobbit_back.config
+oleksandr.jobbit_back.controller
+oleksandr.jobbit_back.dto
+oleksandr.jobbit_back.entity
+oleksandr.jobbit_back.exception
+oleksandr.jobbit_back.repository
+oleksandr.jobbit_back.service
+oleksandr.jobbit_back.utils

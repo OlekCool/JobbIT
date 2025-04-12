@@ -5,6 +5,11 @@
 </template>
 
 <script>
+
+/**
+ * @module App
+ * @description Головний кореневий компонент додатка. Відображає поточний маршрут за допомогою <router-view>.
+ */
 export default {
   name: "App",
 };

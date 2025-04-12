@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: router/router.ts</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: router/router.ts</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { createRouter, createWebHistory } from "vue-router";
+import StartPage from "@/pages/StartPage.vue";
+import RegistrationPage from "@/pages/auth/RegistrationPage.vue";
+import LoginPage from "@/pages/auth/LoginPage.vue";
+import ForgotPassword from "@/pages/auth/ForgotPassword.vue";
+import SendOTP from "@/pages/auth/SendOTP.vue";
+import NewPassword from "@/pages/auth/NewPassword.vue";
+import MainRecruiterPage from "@/pages/MainRecruiterPage.vue";
+import MainCandidatePage from "@/pages/MainCandidatePage.vue";
+import VerifyPage from "@/pages/auth/VerifyPage.vue";
+
+/**
+ * Описує навігацію по додатку.
+ * @constant
+ * @type {Array&lt;Object>}
+ */
+const routes = [
+  /**
+   * Шлях до стартової сторінки.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
+  { path: "/", name: "StartPage", component: StartPage },
+
+  /**
+   * Шлях до сторінки реєстрації.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
+  { path: "/auth/register", name: "RegistrationPage", component: RegistrationPage },
+
+  /**
+   * Шлях до сторінки входу.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
+  { path: "/auth/login", name: "LoginPage", component: LoginPage },
+
+  /**
+   * Шлях до сторінки надсилання пошти.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
+  { path: "/auth/forgotpassword", name: "ForgotPassword", component: ForgotPassword },
+
+  /**
+   * Шлях до сторінки для надсилання OTP.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
+  { path: "/auth/sendotp", name: "SendOTP", component: SendOTP },
+
+  /**
+   * Шлях до сторінки для зміни пароля.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
+  { path: "/auth/newpassword", name: "NewPassword", component: NewPassword },
+
+  /**
+   * Шлях до сторінки для підтвердження електронної пошти.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
+  { path: "/auth/verify", name: "VerifyPage", component: VerifyPage },
+
+  /**
+   * Шлях до головної сторінки рекрутера.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   * @property {function} beforeEnter - Перевірка перед входом на сторінку для рекрутера.
+   */
+  {
+    path: "/recruiter-dash",
+    name: "MainRecruiterPage",
+    component: MainRecruiterPage,
+    beforeEnter: (to, from, next) => {
+      const role = localStorage.getItem("userRole");
+      if (role === "RECRUITER") {
+        next();
+      } else {
+        next("/login");
+      }
+    },
+  },
+
+  /**
+   * Шлях до головної сторінки кандидата.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   * @property {function} beforeEnter - Перевірка перед входом на сторінку для кандидата.
+   */
+  {
+    path: "/candidate-dash",
+    name: "MainCandidatePage",
+    component: MainCandidatePage,
+    beforeEnter: (to, from, next) => {
+      const role = localStorage.getItem("userRole");
+      if (role === "CANDIDATE") {
+        next();
+      } else {
+        next("/login");
+      }
+    },
+  },
+];
+
+/**
+ * Створення роутера для додатка.
+ * @constant
+ * @type {Object}
+ * @property {function} history - Історія переходів для роутера.
+ * @property {Array&lt;Object>} routes - Маршрути додатка.
+ */
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes,
+});
+
+export default router;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthService.html">AuthService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#router">router</a></li><li><a href="global.html#routes">routes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Apr 12 2025 19:12:10 GMT+0300 (за східноєвропейським літнім часом)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

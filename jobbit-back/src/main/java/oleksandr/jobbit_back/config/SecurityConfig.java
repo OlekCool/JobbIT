@@ -16,21 +16,47 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
 
+/**
+ * Конфігураційний клас Spring Security, що визначає правила авторизації, CORS, JWT-фільтр та
+ * інші налаштування безпеки для застосунку.
+ *
+ * @author Oleksandr Borovyk
+ */
 @Configuration
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
 
+    /**
+     * Конструктор класу {@code SecurityConfig}, що ініціалізує залежність {@link JwtUtil}.
+     *
+     * @param jwtUtil Об'єкт {@link JwtUtil} для роботи з JWT. Dependency Injection.
+     */
     @Autowired
     public SecurityConfig(final JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
 
+    /**
+     * Створює та повертає бін {@link PasswordEncoder} для кодування паролів.
+     * Використовує алгоритм BCrypt.
+     *
+     * @return Бін {@link PasswordEncoder} з BCrypt-алгоритмом.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Конфігурує ланцюг фільтрів безпеки ({@link SecurityFilterChain}) для обробки HTTP-запитів.
+     * Включає налаштування CORS, відключення CSRF для певних шляхів, правила авторизації за ролями,
+     * керування сесіями (без сесій) та додавання JWT-аутентифікаційного фільтра.
+     *
+     * @param http Об'єкт {@link HttpSecurity} для налаштування безпеки.
+     * @return Збудований {@link SecurityFilterChain}.
+     * @throws Exception У випадку помилки при конфігурації безпеки.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.cors(cors -> cors.configurationSource(request -> {
@@ -51,6 +77,12 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * Створює та повертає бін {@link JwtAuthenticationFilter} для обробки JWT-токенів
+     * перед стандартним фільтром аутентифікації за email та паролем.
+     *
+     * @return Бін {@link JwtAuthenticationFilter}.
+     */
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtUtil);

@@ -33,6 +33,15 @@
         <module name="StaticVariableName"/>
         <module name="TypeName"/>
 
+        <module name="JavadocType" />
+        <module name="JavadocMethod" />
+
+        <module name="JavadocStyle">
+            <property name="checkEmptyJavadoc" value="true"/>
+            <property name="checkHtml" value="false"/>
+        </module>
+
+
         <module name="AvoidStarImport">
             <property name="excludes" value="java.io,java.net,java.lang.Math"/>
         </module>
@@ -82,7 +91,7 @@
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
 
-<!--        <module name="DesignForExtension"/>-->
+        <module name="DesignForExtension"/>
         <module name="FinalClass"/>
 <!--        <module name="HideUtilityClassConstructor"/>-->
         <module name="InterfaceIsType"/>

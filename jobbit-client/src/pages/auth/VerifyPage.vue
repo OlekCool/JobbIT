@@ -12,15 +12,27 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 
+/**
+ * Сторінка підтвердження акаунта користувача.
+ *
+ * @component
+ * @description Цей компонент перевіряє верифікаційний токен і виводить результат (підтверджено чи помилка).
+ */
 const loading = ref(true);
 const verified = ref(false);
 const error = ref(false);
 const errorMessage = ref("");
 const route = useRoute();
 
-// Отримання токена
 const { token } = route.query;
 
+/**
+ * Отримання верифікаційного токена з URL параметрів і виконання запиту до сервера для підтвердження акаунта.
+ *
+ * @async
+ * @function
+ * @returns {Promise<void>} Повертає проміс, що виконується після обробки результату запиту.
+ */
 onMounted(async () => {
   if (!token) {
     error.value = true;
@@ -29,7 +41,6 @@ onMounted(async () => {
     return;
   }
 
-  // Get-запит на перевірку верифікаційного токена
   try {
     const response = await axios.get(`http://localhost:8080/api/auth/verify?token=${token}`);
     verified.value = true;

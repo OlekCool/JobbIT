@@ -9,15 +9,83 @@ import MainRecruiterPage from "@/pages/MainRecruiterPage.vue";
 import MainCandidatePage from "@/pages/MainCandidatePage.vue";
 import VerifyPage from "@/pages/auth/VerifyPage.vue";
 
+/**
+ * Описує навігацію по додатку.
+ * @constant
+ * @type {Array<Object>}
+ */
 const routes = [
+  /**
+   * Шлях до стартової сторінки.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
   { path: "/", name: "StartPage", component: StartPage },
+
+  /**
+   * Шлях до сторінки реєстрації.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
   { path: "/auth/register", name: "RegistrationPage", component: RegistrationPage },
+
+  /**
+   * Шлях до сторінки входу.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
   { path: "/auth/login", name: "LoginPage", component: LoginPage },
+
+  /**
+   * Шлях до сторінки надсилання пошти.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
   { path: "/auth/forgotpassword", name: "ForgotPassword", component: ForgotPassword },
+
+  /**
+   * Шлях до сторінки для надсилання OTP.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
   { path: "/auth/sendotp", name: "SendOTP", component: SendOTP },
+
+  /**
+   * Шлях до сторінки для зміни пароля.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
   { path: "/auth/newpassword", name: "NewPassword", component: NewPassword },
+
+  /**
+   * Шлях до сторінки для підтвердження електронної пошти.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
   { path: "/auth/verify", name: "VerifyPage", component: VerifyPage },
 
+  /**
+   * Шлях до головної сторінки рекрутера.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   * @property {function} beforeEnter - Перевірка перед входом на сторінку для рекрутера.
+   */
   {
     path: "/recruiter-dash",
     name: "MainRecruiterPage",
@@ -32,6 +100,14 @@ const routes = [
     },
   },
 
+  /**
+   * Шлях до головної сторінки кандидата.
+   * @type {Object}
+   * @property {string} path - Шлях до сторінки.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   * @property {function} beforeEnter - Перевірка перед входом на сторінку для кандидата.
+   */
   {
     path: "/candidate-dash",
     name: "MainCandidatePage",
@@ -47,6 +123,13 @@ const routes = [
   },
 ];
 
+/**
+ * Створення роутера для додатка.
+ * @constant
+ * @type {Object}
+ * @property {function} history - Історія переходів для роутера.
+ * @property {Array<Object>} routes - Маршрути додатка.
+ */
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,

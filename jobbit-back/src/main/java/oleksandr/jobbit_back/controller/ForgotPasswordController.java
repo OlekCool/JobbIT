@@ -23,6 +23,13 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Random;
 
+/**
+ * REST-контролер для обробки запитів, пов'язаних із відновленням забутого пароля.
+ * Включає ендпоінти для верифікації електронної пошти, підтвердження OTP та встановлення нового пароля.
+ * Доступ до ендпоінтів здійснюється без авторизації.
+ *
+ * @author Oleksandr Borovyk
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class ForgotPasswordController {
@@ -32,6 +39,14 @@ public class ForgotPasswordController {
     private final ForgotPasswordRepository forgotPasswordRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Конструктор класу {@code ForgotPasswordController}, що ініціалізує необхідні залежності.
+     *
+     * @param userService              Сервіс для роботи з користувачами. Автоматично впроваджується Spring.
+     * @param emailService             Сервіс для надсилання електронних листів. Автоматично впроваджується Spring.
+     * @param forgotPasswordRepository Репозиторій для роботи з даними відновлення пароля. Автоматично впроваджується Spring.
+     * @param passwordEncoder          Кодувальник паролів. Автоматично впроваджується Spring.
+     */
     @Autowired
     public ForgotPasswordController(UserService userService, EmailService emailService,
                                     ForgotPasswordRepository forgotPasswordRepository, PasswordEncoder passwordEncoder) {
@@ -41,6 +56,15 @@ public class ForgotPasswordController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Ендпоінт для верифікації наданої електронної пошти користувача при запиті відновлення пароля.
+     * Генерує одноразовий пароль (OTP), надсилає його на вказану електронну пошту та зберігає OTP у базі даних.
+     * HTTP POST запит на `/api/auth/forgotpassword/verifyMail/{email}`.
+     *
+     * @param email Електронна пошта користувача, який запитує відновлення пароля. Передається як параметр шляху.
+     * @return {@link ResponseEntity} зі статусом 200 (OK) та повідомленням про успішне надсилання OTP на електронну пошту.
+     * @throws RuntimeException Якщо вказана електронна пошта не є валідною та її нема у базі користувачів.
+     */
     @PostMapping("/forgotpassword/verifyMail/{email}")
     public ResponseEntity<String> verifyEmail(@PathVariable String email) {
         User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("The email must be valid"));
@@ -63,6 +87,18 @@ public class ForgotPasswordController {
         return ResponseEntity.ok("Email sent for verification");
     }
 
+    /**
+     * Ендпоінт для підтвердження наданого користувачем одноразового пароля (OTP).
+     * Перевіряє відповідність OTP збереженому в базі даних для вказаного користувача та термін його дії.
+     * У разі успішної верифікації видаляє OTP з бази даних.
+     * HTTP POST запит на `/api/auth/sendotp/{otp}/{email}`.
+     *
+     * @param otp   Одноразовий пароль, введений користувачем. Передається як параметр шляху.
+     * @param email Електронна пошта користувача, для якого перевіряється OTP. Передається як параметр шляху.
+     * @return {@link ResponseEntity} зі статусом 200 (OK) та повідомленням про успішне підтвердження OTP.
+     * Повертає статус 417 (EXPECTATION_FAILED) якщо час очікування OTP вийшов,
+     * @throws RuntimeException Якщо вказаний OTP не відповідає збереженому для даної електронної пошти.
+     */
     @PostMapping("/sendotp/{otp}/{email}")
     public ResponseEntity<String> verifyOtp(@PathVariable Integer otp, @PathVariable String email) {
         User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("The email must be valid"));
@@ -79,6 +115,16 @@ public class ForgotPasswordController {
         return ResponseEntity.ok("OTP verified!");
     }
 
+    /**
+     * Ендпоінт для обробки запиту на встановлення нового пароля користувача.
+     * Приймає новий пароль, кодує його та оновлює пароль користувача в базі даних.
+     * Також оновлює час останньої зміни пароля.
+     * HTTP POST запит на `/api/auth/newpassword/{email}` з тілом запиту у форматі {@link ChangePassword}.
+     *
+     * @param email Електронна пошта користувача, для якого встановлюється новий пароль. Передається як параметр шляху.
+     * @param changePassword Об'єкт {@link ChangePassword}, що містить новий пароль. Передається в тілі запиту.
+     * @return {@link ResponseEntity} зі статусом 200 (OK) та повідомленням про успішну зміну пароля.
+     */
     @PostMapping("/newpassword/{email}")
     public ResponseEntity<String> changePasswordHandler(@PathVariable String email,
                                                         @RequestBody ChangePassword changePassword) {
@@ -89,6 +135,11 @@ public class ForgotPasswordController {
         return ResponseEntity.ok("Password has been changed successfully");
     }
 
+    /**
+     * Приватний утилітний метод для генерації шестизначного одноразового пароля (OTP).
+     *
+     * @return Згенерований шестизначний OTP у вигляді цілого числа.
+     */
     private Integer otpGenerator() {
         Random random = new Random();
         return random.nextInt(100000, 999999);

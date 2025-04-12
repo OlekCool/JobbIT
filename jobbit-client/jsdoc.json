@@ -1,0 +1,14 @@
+{
+  "source": {
+    "include": ["src"],
+    "includePattern": ".+\\.(js|ts|vue)$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "plugins": ["plugins/markdown"],
+  "opts": {
+    "destination": "../docs/jsdocs/",
+    "recurse": true,
+    "template": "templates/default",
+    "encoding": "utf8"
+  }
+}
