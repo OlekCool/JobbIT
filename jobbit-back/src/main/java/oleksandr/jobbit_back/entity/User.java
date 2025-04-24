@@ -1,5 +1,6 @@
 package oleksandr.jobbit_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
@@ -99,6 +100,7 @@ public class User {
      * Містить профіль кандидата, якщо користувач має відповідну роль.
      * Всі операції каскадні.
      */
+    @JsonManagedReference
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private CandidateProfile candidateProfile;
 
@@ -107,6 +109,7 @@ public class User {
      * Містить профіль рекрутера, якщо користувач має відповідну роль.
      * Всі операції каскадні.
      */
+    @JsonManagedReference
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private RecruiterProfile recruiterProfile;
 

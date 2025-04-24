@@ -8,6 +8,7 @@ import NewPassword from "@/pages/auth/NewPassword.vue";
 import MainRecruiterPage from "@/pages/MainRecruiterPage.vue";
 import MainCandidatePage from "@/pages/MainCandidatePage.vue";
 import VerifyPage from "@/pages/auth/VerifyPage.vue";
+import CandidateProfile from "../components/CandidateProfile.vue";
 
 /**
  * Описує навігацію по додатку.
@@ -121,6 +122,15 @@ const routes = [
       }
     },
   },
+
+  /**
+   * Шлях до профілю кандидата.
+   * @type {Object}
+   * @property {string} path - Шлях до профілю кандидата.
+   * @property {string} name - Ім'я маршруту.
+   * @property {Object} component - Компонент, який буде відображатися на сторінці.
+   */
+  { path: "/candidate-dash/profile/:id", name: "CandidateProfile", component: CandidateProfile },
 ];
 
 /**

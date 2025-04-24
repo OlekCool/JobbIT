@@ -18,7 +18,7 @@
       <button class="login-button" type="submit">АВТОРИЗАЦІЯ</button>
 
       <div class="buttons">
-        <router-link to="/auth/forgotpassword" class="forgot-button" type="button">Забули пароль?</router-link>
+        <button class="forgot-button" type="button">Забули пароль?</button>
         <router-link to="/" class="back-button" type="button">На головну</router-link>
       </div>
     </form>
@@ -57,6 +57,8 @@ const handleSubmit = async () => {
     if (response.status === HttpStatusCode.Ok) {
       localStorage.setItem("authToken", response.data.token);
       localStorage.setItem("userRole", response.data.role);
+      localStorage.setItem("userProfile", JSON.stringify(response.data.profile));
+      localStorage.setItem("userId", JSON.stringify(response.data.profile.id));
       console.log("Логін успішний", response.data); // eslint-disable-line no-console
 
       if (response.data.role === "CANDIDATE") {

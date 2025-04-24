@@ -1,5 +1,7 @@
 package oleksandr.jobbit_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
@@ -17,7 +19,7 @@ import lombok.Data;
  * @author Oleksandr Borovyk
  */
 @Entity
-@Table(name = "recr_profile ")
+@Table(name = "recr_profile")
 @Data
 public class RecruiterProfile {
 
@@ -36,13 +38,69 @@ public class RecruiterProfile {
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
+    @JsonBackReference
     private User user;
 
     /**
-     * Додаткові дані профілю рекрутера.
+     * Ім'я рекрутера
      */
-    @Column(name = "some_data")
-    private String someData;
+    @Column(name = "firstname")
+    private String firstName;
+
+    /**
+     * Прізвище рекрутера
+     */
+    @Column(name = "lastname")
+    private String lastName;
+
+    /**
+     * По батькові рекрутера
+     */
+    @Column(name = "fathername")
+    private String fatherName;
+
+    /**
+     * Компанія рекрутера
+     */
+    @Column(name = "company_name")
+    private String companyName;
+
+    /**
+     * Е.Пошта рекрутера
+     */
+    @Column(name = "email")
+    private String email;
+
+    /**
+     * Телефон рекрутера
+     */
+    @Column(name = "phone")
+    private String phone;
+
+    /**
+     * Інстаграм рекрутера
+     */
+    @Column(name = "instagram")
+    private String instagram;
+
+    /**
+     * Країна рекрутера
+     */
+    @Column(name = "country")
+    private String country;
+
+    /**
+     * Місто рекрутера
+     */
+    @Column(name = "city")
+    private String city;
+
+    /**
+     * Опис про рекрутера
+     */
+    @Column(name = "description")
+    private String description;
+
 
     /**
      * Перевизначений метод {@code toString()} для зручного виведення основної інформації про профіль рекрутера.
@@ -52,9 +110,19 @@ public class RecruiterProfile {
      */
     @Override
     public String toString() {
-        return "RecruiterProfile{"
-                + "id=" + id
-                + ", user=" + (user != null ? user.getEmail() : "no user")
-                + '}';
+        return "RecruiterProfile{" +
+                "id=" + id +
+                ", user=" + user +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", fatherName='" + fatherName + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", instagram='" + instagram + '\'' +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

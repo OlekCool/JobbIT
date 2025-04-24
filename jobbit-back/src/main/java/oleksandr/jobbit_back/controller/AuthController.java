@@ -2,6 +2,8 @@ package oleksandr.jobbit_back.controller;
 
 import oleksandr.jobbit_back.dto.LoginRequest;
 import oleksandr.jobbit_back.dto.RegisterRequest;
+import oleksandr.jobbit_back.entity.CandidateProfile;
+import oleksandr.jobbit_back.entity.RecruiterProfile;
 import oleksandr.jobbit_back.entity.User;
 import oleksandr.jobbit_back.service.UserService;
 import oleksandr.jobbit_back.utils.JwtUtil;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * REST-контролер для операцій аутентифікації, таких як реєстрація, вхід та верифікація облікового запису.
@@ -72,17 +75,31 @@ public class AuthController {
      * @throws RuntimeException Якщо користувача з вказаним email не знайдено.
      */
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest) {
-
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         User user = userService.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("No such user"));
 
         if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getUserPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
         }
-
         String token = jwtUtil.generateToken(user.getEmail(), user.getUserRole());
 
-        return ResponseEntity.ok(Map.of("token", token, "role", user.getUserRole().toString()));
+        Object profile = null;
+        if (Objects.equals(user.getUserRole().toString(), "CANDIDATE")) {
+            profile = user.getCandidateProfile();
+        } else if (Objects.equals(user.getUserRole().toString(), "RECRUITER")) {
+            profile = user.getRecruiterProfile();
+        }
+
+        if (profile == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    Map.of("message", "Profile not found for this user"));
+        }
+
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "role", user.getUserRole().toString(),
+                "profile", profile
+        ));
     }
 
     /**
