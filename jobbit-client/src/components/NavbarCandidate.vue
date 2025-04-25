@@ -9,7 +9,7 @@
     </div>
 
     <div class="nav-buttons-section">
-      <button>Пошук</button>
+      <button @click="goToVacancies">Пошук</button>
       <button>Збережене</button>
       <button>Відгуки</button>
       <button>Повідомлення</button>
@@ -26,9 +26,11 @@ import { ref } from 'vue';
 import { useRouter } from "vue-router";
 import candProfileService from "@/services/CandProfileService.ts";
 import { HttpStatusCode } from "axios";
+import { defineEmits } from 'vue';
 
 const router = useRouter();
 const userProfile = ref(JSON.parse(localStorage.getItem('userProfile')));
+const emit = defineEmits(['show-profile']);
 
 /**
  * Метод для здійснення виходу з профілю
@@ -51,13 +53,20 @@ const goToCandidateProfile = async () => {
 
     if (response.status === HttpStatusCode.Ok) {
       console.log("Відображення успішне", response.data);
-      await router.push("/candidate-dash/profile/" + localStorage.getItem('userId'));
+      emit('show-profile');
     } else {
       console.error("Помилка відображення даних профіля", HttpStatusCode);
     }
   } catch (error) {
     console.error("Помилка відображення даних профіля", error.response?.data || error.message); // eslint-disable-line no-console
   }
+};
+
+/**
+ * Метод для обробки кліка на кнопку "Пошук"
+ */
+const goToVacancies = () => {
+  emit('show-vacancies');
 };
 </script>
 

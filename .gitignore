@@ -39,6 +39,9 @@ jobbit-back/.vscode/
 jobbit-client/.DS_Store
 jobbit-client/node_modules
 jobbit-client/dist
+jobbit-client/src/assets/userPhotos
+jobbit-client/src/assets/candidatesCV
+jobbit-client/src/assets/candidatesProjectPhotos
 jobbit-client/package-lock.json
 
 

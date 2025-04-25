@@ -8,7 +8,6 @@ import NewPassword from "@/pages/auth/NewPassword.vue";
 import MainRecruiterPage from "@/pages/MainRecruiterPage.vue";
 import MainCandidatePage from "@/pages/MainCandidatePage.vue";
 import VerifyPage from "@/pages/auth/VerifyPage.vue";
-import CandidateProfile from "../components/CandidateProfile.vue";
 
 /**
  * Описує навігацію по додатку.
@@ -113,6 +112,18 @@ const routes = [
     path: "/candidate-dash",
     name: "MainCandidatePage",
     component: MainCandidatePage,
+    children: [
+      {
+        path: 'profile/:userId',
+        name: 'CandidateProfile',
+        component: MainCandidatePage,
+      },
+      {
+        path: 'search',
+        name: 'CandidateSearch',
+        component: MainCandidatePage,
+      },
+    ],
     beforeEnter: (to, from, next) => {
       const role = localStorage.getItem("userRole");
       if (role === "CANDIDATE") {
@@ -122,15 +133,6 @@ const routes = [
       }
     },
   },
-
-  /**
-   * Шлях до профілю кандидата.
-   * @type {Object}
-   * @property {string} path - Шлях до профілю кандидата.
-   * @property {string} name - Ім'я маршруту.
-   * @property {Object} component - Компонент, який буде відображатися на сторінці.
-   */
-  { path: "/candidate-dash/profile/:id", name: "CandidateProfile", component: CandidateProfile },
 ];
 
 /**
