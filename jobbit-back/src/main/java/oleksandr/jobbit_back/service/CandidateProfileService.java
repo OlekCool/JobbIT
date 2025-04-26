@@ -9,7 +9,6 @@ import java.util.Optional;
 
 /**
  * Сервіс {@code CandidateProfileService} відповідає за роботу з профілями кандидатів.
- * Поки що пустий.
  * Анотація {@code @Service} позначає цей клас як Spring-сервіс.
  *
  * @author Oleksandr Borovyk
