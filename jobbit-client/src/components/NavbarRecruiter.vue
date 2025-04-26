@@ -1,6 +1,6 @@
 <template>
   <nav role="navigation" class="navbar">
-    <div class="profile-section" @click="goToCandidateProfile" style="cursor: pointer">
+    <div class="profile-section" @click="goToRecruiterProfile" style="cursor: pointer">
       <h1 class="candName"> {{ userProfile ? `${userProfile.firstName} ${userProfile.lastName}` : 'Вітаємо!' }} </h1>
 
       <div class="profile-photo">
@@ -9,10 +9,7 @@
     </div>
 
     <div class="nav-buttons-section">
-      <button @click="goToVacancies">Пошук</button>
-      <button>Збережене</button>
-      <button>Відгуки</button>
-      <button>Повідомлення</button>
+      <button @click="goToVacancies">Мої вакансії</button>
     </div>
 
     <div class="logout-section">
@@ -24,7 +21,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from "vue-router";
-import candProfileService from "@/services/ProfileService.ts";
+import recrProfileService from "@/services/ProfileService.ts";
 import { HttpStatusCode } from "axios";
 import { defineEmits } from 'vue';
 
@@ -44,12 +41,12 @@ const logout = () => {
 };
 
 /**
- * Метод для обробки події переходу до сторінки даних профілю кандидата
+ * Метод для обробки події переходу до сторінки даних профілю рекрутера
  * @returns {Promise<void>} проміс
  */
-const goToCandidateProfile = async () => {
+const goToRecruiterProfile = async () => {
   try {
-    const response = await candProfileService.getProfileCandidate(localStorage.getItem('userId'));
+    const response = await recrProfileService.getProfileRecruiter(localStorage.getItem('userId'));
 
     if (response.status === HttpStatusCode.Ok) {
       console.log("Відображення успішне", response.data);

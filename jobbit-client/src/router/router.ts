@@ -90,6 +90,18 @@ const routes = [
     path: "/recruiter-dash",
     name: "MainRecruiterPage",
     component: MainRecruiterPage,
+    children: [
+      {
+        path: 'profile/:userId',
+        name: 'RecruiterProfile',
+        component: MainRecruiterPage,
+      },
+      {
+        path: 'myvacancies',
+        name: 'RecruiterVacancies',
+        component: MainRecruiterPage,
+      },
+    ],
     beforeEnter: (to, from, next) => {
       const role = localStorage.getItem("userRole");
       if (role === "RECRUITER") {

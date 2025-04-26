@@ -54,79 +54,134 @@
         </div>
       </div>
 
-      <div class="right-column">
-        <div class="location-info">
-          <h3>Місцезнаходження</h3>
-          <div class="info-group">
-            <label>Країна:</label>
-            <span v-if="!isEditing">{{ profile.country }}</span>
-            <input v-if="isEditing" v-model="profile.country" />
-          </div>
-          <div class="info-group">
-            <label>Місто:</label>
-            <span v-if="!isEditing">{{ profile.city }}</span>
-            <input v-if="isEditing" v-model="profile.city" />
-          </div>
+      <div class="location-info">
+        <h3>Місцезнаходження</h3>
+        <div class="info-group">
+          <label>Країна:</label>
+          <span v-if="!isEditing">{{ profile.country }}</span>
+          <input v-if="isEditing" v-model="profile.country" />
         </div>
-
-        <div class="experience-level">
-          <h3>Досвід та рівень англійської</h3>
-          <div class="info-group">
-            <label>Досвід (років):</label>
-            <span v-if="!isEditing">{{ profile.experienceYears }}</span>
-            <input v-if="isEditing" type="number" v-model="profile.experienceYears" />
-          </div>
-          <div class="info-group">
-            <label>Рівень англійської:</label>
-            <span v-if="!isEditing">{{ profile.levelEng }}</span>
-            <input v-if="isEditing" v-model="profile.levelEng" />
-          </div>
-        </div>
-
-        <div class="desired-info">
-          <h3>Бажана робота</h3>
-          <div class="info-group">
-            <label>Бажана посада:</label>
-            <span v-if="!isEditing">{{ profile.jobWants }}</span>
-            <input v-if="isEditing" v-model="profile.jobWants" />
-          </div>
-          <div class="info-group">
-            <label>Бажана зарплата (грн.):</label>
-            <span v-if="!isEditing">{{ profile.salaryWants }}</span>
-            <input v-if="isEditing" type="number" v-model="profile.salaryWants" />
-          </div>
-        </div>
-
-        <div class="cv-upload">
-          <h3>Резюме</h3>
-          <span v-if="!isEditing">{{ profile.cvPath }}</span>
-          <input v-if="isEditing" type="file" @change="handleCvUpload" />
-        </div>
-
-        <div class="actions">
-          <button v-if="isEditing" @click="saveChanges">Зберегти дані</button>
-          <button v-if="isEditing" @click="cancelEdit">Скасувати редагування</button>
-          <button v-if="!isEditing" @click="isEditing = !isEditing">Редагувати дані</button>
+        <div class="info-group">
+          <label>Місто:</label>
+          <span v-if="!isEditing">{{ profile.city }}</span>
+          <input v-if="isEditing" v-model="profile.city" />
         </div>
       </div>
-    </div>
 
-    <div class="right-side">
-      <h3>Мої проєкти</h3>
-      <ul>
-        <li>Проєкт 1 (Опис проєкту та посилання)</li>
-        <li>Проєкт 2 (Опис проєкту та посилання)</li>
-        <li>Проєкт 3 (Опис проєкту та посилання)</li>
-      </ul>
+      <div class="experience-level">
+        <h3>Досвід та рівень англійської</h3>
+        <div class="info-group">
+          <label>Досвід (років):</label>
+          <span v-if="!isEditing">{{ profile.experienceYears }}</span>
+          <input v-if="isEditing" type="number" v-model="profile.experienceYears" />
+        </div>
+        <div class="info-group">
+          <label>Рівень англійської:</label>
+          <span v-if="!isEditing">{{ profile.levelEng }}</span>
+          <input v-if="isEditing" v-model="profile.levelEng" />
+        </div>
+      </div>
+
+      <div class="desired-info">
+        <h3>Бажана робота</h3>
+        <div class="info-group">
+          <label>Бажана посада:</label>
+          <span v-if="!isEditing">{{ profile.jobWants }}</span>
+          <input v-if="isEditing" v-model="profile.jobWants" />
+        </div>
+        <div class="info-group">
+          <label>Бажана зарплата (грн.):</label>
+          <span v-if="!isEditing">{{ profile.salaryWants }}</span>
+          <input v-if="isEditing" type="number" v-model="profile.salaryWants" />
+        </div>
+      </div>
+
+      <div class="cv-upload">
+        <h3>Резюме</h3>
+        <span v-if="!isEditing">{{ profile.cvPath }}</span>
+        <input v-if="isEditing" type="file" @change="handleCvUpload" />
+      </div>
+
+      <div class="actions">
+        <button v-if="isEditing" @click="saveChanges">Зберегти дані</button>
+        <button v-if="isEditing" @click="cancelEdit">Скасувати редагування</button>
+        <button v-if="!isEditing" @click="isEditing = !isEditing">Редагувати дані</button>
+      </div>
+
+      <div class="projects-section">
+        <h3>Мої проєкти</h3>
+        <div v-if="!isEditingProjects && !isAddingProject">
+          <ul v-if="profile.projects && profile.projects.length > 0">
+            <li v-for="(project, index) in profile.projects" :key="index">
+              {{ project.name }}
+            </li>
+          </ul>
+          <p v-else>Немає доданих проєктів.</p>
+          <button @click="isEditingProjects = true" style="margin-top: 10px; padding: 5px 10px; font-size: 0.7em;">Керувати проєктами</button>
+        </div>
+
+        <div v-if="isEditingProjects && !isAddingProject && editingProjectIndex === null">
+          <button @click="addProject" style="margin-top: 5px; padding: 5px 10px; font-size: 0.7em;">Додати проєкт</button>
+          <ul v-if="profile.projects && profile.projects.length > 0">
+            <li v-for="(project, index) in profile.projects" :key="index" style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+              <span>{{ project.name }}</span>
+              <button @click="editProject(project, index)" style="padding: 3px 5px; font-size: 0.7em;">Редагувати</button>
+              <button @click="deleteProject(index)" style="padding: 3px 5px; font-size: 0.7em; background-color: #dc3545; color: white; border: none; border-radius: 3px; cursor: pointer;">Видалити</button>
+            </li>
+          </ul>
+          <p v-else>Немає доданих проєктів.</p>
+        </div>
+
+        <div v-if="isEditingProjects && isAddingProject">
+          <h4>Додати проєкт</h4>
+          <div class="info-group">
+            <label>Назва проєкту:</label>
+            <input v-model="currentProject.name" />
+          </div>
+          <div class="info-group">
+            <label>Опис проєкту:</label>
+            <textarea v-model="currentProject.description"></textarea>
+          </div>
+          <div class="info-group">
+            <label>Посилання:</label>
+            <input v-model="currentProject.link" />
+          </div>
+          <button @click="saveNewProject">Зберегти проєкт</button>
+          <button @click="isAddingProject = false; currentProject = { name: '', description: '', link: '' };">Скасувати</button>
+        </div>
+
+        <div v-if="isEditingProjects && editingProjectIndex !== null">
+          <h4>Редагувати проєкт</h4>
+          <div class="info-group">
+            <label>Назва проєкту:</label>
+            <input v-model="currentProject.name" />
+          </div>
+          <div class="info-group">
+            <label>Опис проєкту:</label>
+            <textarea v-model="currentProject.description"></textarea>
+          </div>
+          <div class="info-group">
+            <label>Посилання:</label>
+            <input v-model="currentProject.link" />
+          </div>
+          <button @click="saveProject">Зберегти зміни</button>
+          <button @click="cancelEditProject">Скасувати</button>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, toRaw } from "vue";
-import ProfileService from "../services/CandProfileService.ts";
+import { reactive, ref, onMounted } from "vue";
+import ProfileService from "../services/ProfileService.ts";
 
 const isEditing = ref(false);
+const isEditingProjects = ref(false);
+const isAddingProject = ref(false);
+const editingProjectIndex = ref(null);
+const currentProject = ref({ name: '', description: '', link: '' });
 const profile = reactive({
   firstName: "",
   lastName: "",
@@ -141,7 +196,8 @@ const profile = reactive({
   tgNick: "",
   phone: "",
   github: "",
-  cvPath: ""
+  cvPath: "",
+  projects: []
 });
 const userId = localStorage.getItem("userId");
 
@@ -150,7 +206,7 @@ const userId = localStorage.getItem("userId");
  */
 function loadProfile() {
   if (userId) {
-    ProfileService.getProfile(parseInt(userId))
+    ProfileService.getProfileCandidate(parseInt(userId))
         .then((response) => {
           Object.assign(profile, response.data);
         })
@@ -166,14 +222,15 @@ function loadProfile() {
  */
 function saveChanges() {
   if (userId) {
-    ProfileService.updateProfile(profile)
-        .then(() => {
-          isEditing.value = false;
-        })
-        .catch((err) => {
-          console.error("Помилка при збереженні профілю", err);
-          alert("Сталася помилка при збереженні.");
-        });
+    ProfileService.updateProfileCandidate(profile)
+    .then(() => {
+      isEditing.value = false;
+      loadProfile();
+    })
+    .catch((err) => {
+      console.error("Помилка при збереженні профілю", err);
+      alert("Сталася помилка при збереженні.");
+    });
   }
 }
 
@@ -193,48 +250,90 @@ const handleCvUpload = (event) => {
   console.log("Завантажено файл:", event.target.files[0]);
 };
 
+/**
+ * Функція для додавання проєкта
+ */
+const addProject = () => {
+  isAddingProject.value = true;
+  editingProjectIndex.value = null;
+  currentProject.value = { name: '', description: '', link: '' };
+};
+
+/**
+ * Функція для редагування проєкта
+ */
+const editProject = (project, index) => {
+  editingProjectIndex.value = index;
+  currentProject.value = { ...project };
+};
+
+/**
+ * Функція для збереження нового проєкту
+ */
+const saveNewProject = () => {
+  profile.projects.push({ ...currentProject.value });
+  isAddingProject.value = false;
+  currentProject.value = { name: '', description: '', link: '' };
+};
+
+
+/**
+ * Функція для збереження проєкта
+ */
+const saveProject = () => {
+  if (editingProjectIndex.value !== null) {
+    profile.projects[editingProjectIndex.value] = { ...currentProject.value };
+    editingProjectIndex.value = null;
+  }
+  currentProject.value = { name: '', description: '', link: '' };
+};
+
+/**
+ * Функція для видалення проєкта
+ */
+const deleteProject = (index) => {
+  if (confirm('Ви впевнені, що хочете видалити цей проєкт?')) {
+    profile.projects.splice(index, 1);
+  }
+};
+
+/**
+ * Функція для скасування редагування проєкта
+ */
+const cancelEditProject = () => {
+  editingProjectIndex.value = null;
+  currentProject.value = { name: '', description: '', link: '' };
+};
+
 onMounted(loadProfile);
 </script>
 
 <style scoped>
 .profile-page-layout {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 1fr;
   gap: 20px;
   padding: 20px;
   margin: 0 auto;
+  width: 60vw;
+  max-height: 75vh;
+  overflow-y: auto;
 }
 
 .left-side {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
-  width: 60vw;
-}
-
-.left-side > .navigation-photo {
-  grid-column: 1 / 3;
-  width: 91%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: left;
 }
 
 .left-side > .actions {
-  grid-column: 1 / 3;
-}
-
-.right-side {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 28vw;
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .profile-photo {
@@ -243,7 +342,19 @@ onMounted(loadProfile);
   margin: 20px 0;
 }
 
-.personal-info, .contact-info, .location-info, .experience-level, .desired-info, .cv-upload {
+.profile-photo > div {
+  width: 66px;
+  height: 66px;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.personal-info, .contact-info, .location-info, .experience-level,
+.desired-info, .cv-upload, .projects-section {
   margin-bottom: 10px;
   padding: 10px;
   border: 1px solid #f0f0f0;
@@ -251,45 +362,36 @@ onMounted(loadProfile);
   background-color: #f9f9f9;
 }
 
-.personal-info h3, .contact-info h3, .location-info h3, .experience-level h3, .desired-info h3, .cv-upload h3 {
+.personal-info h3, .contact-info h3, .location-info h3, .experience-level h3,
+.desired-info h3, .cv-upload h3, .projects-section h3 {
   margin-top: 0;
-  margin-bottom: 5px;
-  font-size: 1em;
+  margin-bottom: 10px;
+  font-size: 1.1em;
 }
 
 .info-group {
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 .info-group label {
   font-weight: bold;
-  width: 90px;
-  margin-right: 5px;
+  width: 120px;
+  margin-right: 10px;
   font-size: 0.9em;
   flex-shrink: 0;
+  text-align: left;
 }
 
 .info-group span,
-.info-group input[type="text"],
-.info-group input[type="number"] {
+.info-group input {
   flex-grow: 1;
-  padding: 5px;
+  padding: 8px;
   border: 1px solid #ccc;
   border-radius: 3px;
   font-size: 0.9em;
   margin-left: 0;
-  width: 50%;
-}
-
-.cv-upload input[type="file"] {
-  flex-grow: 1;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  margin-left: 0;
-  font-size: 0.9em;
   width: 100%;
   box-sizing: border-box;
 }
@@ -297,14 +399,14 @@ onMounted(loadProfile);
 .actions {
   display: flex;
   justify-content: space-around;
-  margin-top: 10px;
 }
 
 .actions button {
-  padding: 8px 10px;
+  padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 0.8em;
+  font-size: 0.9em;
+  font-weight: bold;
 }
 
 .actions button:first-child {
@@ -329,22 +431,51 @@ onMounted(loadProfile);
 
 span, label {
   text-align: left;
-  font-size: 0.85em;
-}
-
-.right-side h3 {
-  font-size: 1em;
-  margin-top: 0;
-  margin-bottom: 5px;
-}
-
-.right-side ul {
-  padding-left: 20px;
-  margin-bottom: 0;
   font-size: 0.9em;
 }
 
-.right-side li {
-  margin-bottom: 3px;
+.projects-section ul {
+  padding-left: 20px;
+}
+
+.projects-section li {
+  margin-bottom: 5px;
+}
+
+.projects-section button {
+  padding: 5px 8px;
+  font-size: 0.8em;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.projects-section button:first-child {
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+}
+
+.projects-section button:first-child:hover {
+  background-color: #0056b3;
+}
+
+.projects-section button:nth-child(2) {
+  background-color: #28a745;
+  color: white;
+  border: 1px solid #28a745;
+}
+
+.projects-section button:nth-child(2):hover {
+  background-color: #1e7e34;
+}
+
+.projects-section button:last-child {
+  background-color: #dc3545;
+  color: white;
+  border: 1px solid #dc3545;
+}
+
+.projects-section button:last-child:hover {
+  background-color: #c82333;
 }
 </style>
