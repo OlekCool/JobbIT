@@ -1,6 +1,5 @@
 package oleksandr.jobbit_back.repository;
 
-import oleksandr.jobbit_back.entity.CandidateProfile;
 import oleksandr.jobbit_back.entity.RecruiterProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

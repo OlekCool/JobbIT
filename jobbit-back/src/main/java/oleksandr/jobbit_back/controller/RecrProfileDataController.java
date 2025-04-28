@@ -1,10 +1,16 @@
 package oleksandr.jobbit_back.controller;
 
 import oleksandr.jobbit_back.entity.RecruiterProfile;
+import oleksandr.jobbit_back.entity.User;
 import oleksandr.jobbit_back.service.RecruiterProfileService;
+import oleksandr.jobbit_back.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * Контролер {@code RecrProfileDataController} надає певні операції по роботі з профілями рекрутерів
@@ -17,15 +23,18 @@ import org.springframework.web.bind.annotation.*;
 public class RecrProfileDataController {
 
     private final RecruiterProfileService recruiterProfileService;
+    private final UserService userService;
 
     /**
      * Конструктор класу {@code RecrProfileDataController}, що ініціалізує необхідні залежності.
      *
      * @param recruiterProfileService сервіс для роботи з профілями рекрутера. Автоматично впроваджується Spring.
+     * @param userService сервіс для роботи з користувачами. Автоматично впроваджується Spring.
      */
     @Autowired
-    public RecrProfileDataController(RecruiterProfileService recruiterProfileService) {
+    public RecrProfileDataController(RecruiterProfileService recruiterProfileService, UserService userService) {
         this.recruiterProfileService = recruiterProfileService;
+        this.userService = userService;
     }
 
     /**
@@ -54,4 +63,28 @@ public class RecrProfileDataController {
         return ResponseEntity.ok("Профіль оновлено");
     }
 
+    /**
+     * Метод для обробки завантаження фото для рекрутера
+     * @param userId ідентифікатор користувача
+     * @param photo фото для збереження
+     * @return {@link ResponseEntity} зі статусом OK, якщо фото успішно оброблено
+     * Повертає статус 404 (NOT_FOUND) у разі не знаходження користувача, якому треба встановити фото
+     * Повертає статус INTERNAL_SERVER_ERROR при помилці оброблення фото
+     */
+    @PostMapping("/profile/{userId}/uploadphoto")
+    public ResponseEntity<String> uploadProfilePhoto(@PathVariable Integer userId, @RequestParam("photo") MultipartFile photo) {
+        try {
+            String filePath = recruiterProfileService.saveProfilePhoto(userId, photo);
+            User user = userService.findUserById(userId);
+            if (user != null) {
+                user.setPhotoSrc(filePath);
+                userService.save(user);
+                return ResponseEntity.ok("Фото профілю успішно завантажено та збережено за шляхом: " + filePath);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Профіль рекрутера з ID " + userId + " не знайдено.");
+            }
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Не вдалося завантажити фото профілю: " + e.getMessage());
+        }
+    }
 }

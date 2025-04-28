@@ -88,6 +88,12 @@ public class User {
     private String verificationToken;
 
     /**
+     * Рядок, яккий містить посилання на фото користувача
+     */
+    @Column(name = "photo_src")
+    private String photoSrc;
+
+    /**
      * Зв'язок "один до одного" з сутністю {@link ForgotPassword}.
      * Використовується для зберігання інформації про процес відновлення пароля користувача.
      * Каскадне видалення та видалення orphan-записів налаштовано.

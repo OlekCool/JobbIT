@@ -2,15 +2,12 @@ package oleksandr.jobbit_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entity-клас {@code CandidateProfile} представляє профіль кандидата, пов'язаний з обліковим записом
@@ -125,6 +122,13 @@ public class CandidateProfile {
      */
     @Column(name = "cv_src")
     private String cvPath;
+
+    /**
+     * Проєкти певного кандидата
+     */
+    @OneToMany(mappedBy = "candidateProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Project> projects = new ArrayList<>();
 
     /**
      * Перевизначений метод {@code toString()} для зручного виведення основної інформації про профіль кандидата.

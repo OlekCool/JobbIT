@@ -4,7 +4,7 @@
       <h1 class="candName"> {{ userProfile ? `${userProfile.firstName} ${userProfile.lastName}` : 'Вітаємо!' }} </h1>
 
       <div class="profile-photo">
-        <img src="../assets/userPhotos/userDemo.png" alt="User Photo" />
+        <img src="../../../files/userPhotos/userDemo.png" alt="User Photo" />
       </div>
     </div>
 

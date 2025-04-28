@@ -33,6 +33,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
 
     /**
+     * Метод для знаходження користувача за певним id
+     * @param id ідентифікатор користувача
+     * @return користувача
+     */
+    Optional<User> findById(Integer id);
+
+    /**
      * Перевіряє, чи існує користувач з вказаною електронною поштою в базі даних.
      *
      * @param email Електронна пошта для перевірки.
@@ -87,4 +94,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Transactional
     @Query("UPDATE User u SET u.verified = true, u.verificationToken = NULL WHERE u.verificationToken = ?1")
     void verifyUser(String token);
+
+    @Modifying
+    @Transactional
+    void save(Integer id);
 }

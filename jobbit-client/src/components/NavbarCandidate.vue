@@ -4,7 +4,7 @@
       <h1 class="candName"> {{ userProfile ? `${userProfile.firstName} ${userProfile.lastName}` : 'Вітаємо!' }} </h1>
 
       <div class="profile-photo">
-        <img src="../assets/userPhotos/userDemo.png" alt="User Photo" />
+        <img src="../../../files/userPhotos/userDemo.png" alt="User Photo" />
       </div>
     </div>
 
@@ -22,7 +22,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import axios from 'axios';
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import candProfileService from "@/services/ProfileService.ts";
 import { HttpStatusCode } from "axios";
@@ -30,6 +31,7 @@ import { defineEmits } from 'vue';
 
 const router = useRouter();
 const userProfile = ref(JSON.parse(localStorage.getItem('userProfile')));
+const userId = ref(JSON.parse(localStorage.getItem('userId')));
 const emit = defineEmits(['show-profile']);
 
 /**
@@ -49,7 +51,8 @@ const logout = () => {
  */
 const goToCandidateProfile = async () => {
   try {
-    const response = await candProfileService.getProfileCandidate(localStorage.getItem('userId'));
+    const response = await candProfileService.getProfileCandidate(localStorage.getItem('userId'),
+        localStorage.getItem('authToken'));
 
     if (response.status === HttpStatusCode.Ok) {
       console.log("Відображення успішне", response.data);

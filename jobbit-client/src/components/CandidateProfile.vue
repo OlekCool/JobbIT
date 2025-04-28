@@ -5,7 +5,7 @@
         <div class="navigation-photo">
           <div class="profile-photo">
             <div style="width: 66px; height: 66px; border: 1px solid #ccc; display: flex; justify-content: center; align-items: center;">
-              <img src="../assets/userPhotos/userDemo.png" alt="Фото профілю" style="max-width: 66%; max-height: 66%;">
+              <img src="../../../files/userPhotos/userDemo.png" alt="Фото профілю" style="max-width: 66%; max-height: 66%;">
             </div>
           </div>
         </div>
@@ -206,7 +206,7 @@ const userId = localStorage.getItem("userId");
  */
 function loadProfile() {
   if (userId) {
-    ProfileService.getProfileCandidate(parseInt(userId))
+    ProfileService.getProfileCandidate(parseInt(userId), localStorage.getItem('authToken'))
         .then((response) => {
           Object.assign(profile, response.data);
         })
@@ -222,7 +222,7 @@ function loadProfile() {
  */
 function saveChanges() {
   if (userId) {
-    ProfileService.updateProfileCandidate(profile)
+    ProfileService.updateProfileCandidate(profile, localStorage.getItem('authToken'))
     .then(() => {
       isEditing.value = false;
       loadProfile();

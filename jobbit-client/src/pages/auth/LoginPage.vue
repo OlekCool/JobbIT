@@ -55,6 +55,7 @@ const handleSubmit = async () => {
     const response = await AuthService.login(email.value, password.value);
 
     if (response.status === HttpStatusCode.Ok) {
+      console.log("Токен отримано:", response.data.token)
       localStorage.setItem("authToken", response.data.token);
       localStorage.setItem("userRole", response.data.role);
       localStorage.setItem("userProfile", JSON.stringify(response.data.profile));
