@@ -8,6 +8,9 @@ jobbit-back/target/
 !jobbit-back/src/main/resources/application.yml
 jobbit-back/src/main/resources/application.yml
 
+### USER FILES UPLOADED TO SERVER ###
+files
+
 ### STS ###
 jobbit-back/.apt_generated
 jobbit-back/.classpath
@@ -39,9 +42,6 @@ jobbit-back/.vscode/
 jobbit-client/.DS_Store
 jobbit-client/node_modules
 jobbit-client/dist
-jobbit-client/src/assets/userPhotos
-jobbit-client/src/assets/candidatesCV
-jobbit-client/src/assets/candidatesProjectPhotos
 jobbit-client/package-lock.json
 
 

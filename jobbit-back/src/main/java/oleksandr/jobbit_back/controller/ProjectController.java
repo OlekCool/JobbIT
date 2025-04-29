@@ -54,19 +54,29 @@ public class ProjectController {
 
     /**
      * Метод контролера для додавання нового проєкту кандидатом
-     * @param project проєкт для додавання
      * @param userId ідентифікатор кандидата
      * @return {@link ResponseEntity} зі статусом 201 (CREATED), або статус INTERNAL_SERVER_ERROR, якщо не
      * вдалося зберегти фото
      */
     @PostMapping("/addproject")
-    public ResponseEntity<Project> addProject(@PathVariable Integer userId, @RequestBody Project project, @RequestParam(value = "photo", required = false) MultipartFile photo) {
+    public ResponseEntity<Project> addProject(@PathVariable Integer userId, @RequestParam("projName") String projName,
+                                              @RequestParam("projDescription") String projDescription,
+                                              @RequestParam("projGithubLink") String projGithubLink,
+                                              @RequestParam(value = "photo", required = false) MultipartFile photo) {
         try {
-            if (photo != null && !photo.isEmpty()) {
-                String filePath = projectService.saveProjectPhoto(userId, project.getProjId(), photo);
-                project.setProjPictSrc(filePath);
-            }
+            Project project = new Project();
+            project.setProjName(projName);
+            project.setProjDescription(projDescription);
+            project.setProjGithubLink(projGithubLink);
+
             Project createdProject = projectService.addProject(userId, project);
+
+            if (photo != null && !photo.isEmpty()) {
+                String filePath = projectService.saveProjectPhoto(userId, createdProject.getProjId(), photo);
+                createdProject.setProjPictSrc(filePath);
+            }
+
+            projectService.updateProject(createdProject.getProjId(), createdProject);
             return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -76,22 +86,42 @@ public class ProjectController {
     /**
      * Метод контролера для редагування існуючого проєкту
      * @param id ідентифікатор проєкту
-     * @param updatedProject оновлені дані проєкту
      * @param userId ідентифікатор кандидата
      * @return {@link ResponseEntity} зі статусом 200 (OK) та повідомленням про успішне оновлення, або статус
      * INTERNAL_SERVER_ERROR, якщо не вдалося зберегти фото
      * Повертає статус 404 (NOT_FOUND) у разі не знаходження проєкту, якого треба редагувати
      */
     @PostMapping("/editproject/{id}")
-    public ResponseEntity<Project> updateProject(@PathVariable Integer id, @RequestBody Project updatedProject, @PathVariable Integer userId, @RequestParam(value = "photo", required = false) MultipartFile photo) {
+    public ResponseEntity<Project> updateProject(@PathVariable Integer id,
+                                                 @PathVariable Integer userId,
+                                                 @RequestParam(value = "projName", required = false) String projName,
+                                                 @RequestParam(value = "projDescription", required = false) String projDescription,
+                                                 @RequestParam(value = "projGithubLink", required = false) String projGithubLink,
+                                                 @RequestParam(value = "photo", required = false) MultipartFile photo) {
         try {
+            Project existingProject = projectService.getProjectById(id);
+
+            if (existingProject == null) {
+                throw new NoSuchElementException("Проєкт з ID " + id + " не знайдено");
+            }
+
+            if (projName != null) {
+                existingProject.setProjName(projName);
+            }
+            if (projDescription != null) {
+                existingProject.setProjDescription(projDescription);
+            }
+            if (projGithubLink != null) {
+                existingProject.setProjGithubLink(projGithubLink);
+            }
+
             if (photo != null && !photo.isEmpty()) {
                 String filePath = projectService.saveProjectPhoto(userId, id, photo);
-                updatedProject.setProjPictSrc(filePath);
+                existingProject.setProjPictSrc(filePath);
             }
-            updatedProject.setProjId(id);
-            Project project = projectService.updateProject(id, updatedProject);
-            return ResponseEntity.ok(project);
+
+            Project updatedProject = projectService.updateProject(id, existingProject);
+            return ResponseEntity.ok(updatedProject);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (IOException e) {

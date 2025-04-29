@@ -76,7 +76,7 @@ public class CandidateProfileService {
         Path destinationFile = Paths.get(profilePhotoUploadDir, fileName).normalize().toAbsolutePath();
         createDirectories(destinationFile.getParent());
         copyFile(photo, destinationFile);
-        return "JobbIT/files/userPhotos/" + fileName;
+        return "files/userPhotos/" + fileName;
     }
 
     /**
@@ -94,7 +94,7 @@ public class CandidateProfileService {
         Path destinationFile = Paths.get(cvUploadDir, fileName).normalize().toAbsolutePath();
         createDirectories(destinationFile.getParent());
         copyFile(cvFile, destinationFile);
-        return "JobbIT/files/candidateProjectPhotos/" + fileName;
+        return "files/candidateCVs/" + fileName;
     }
 
     /**

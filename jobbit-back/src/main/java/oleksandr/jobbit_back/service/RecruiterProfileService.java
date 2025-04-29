@@ -74,7 +74,7 @@ public class RecruiterProfileService {
         Path destinationFile = Paths.get(profilePhotoUploadDir, fileName).normalize().toAbsolutePath();
         createDirectories(destinationFile.getParent());
         copyFile(photo, destinationFile);
-        return "JobbIT/files/userPhotos/" + fileName;
+        return "files/userPhotos/" + fileName;
     }
 
     /**

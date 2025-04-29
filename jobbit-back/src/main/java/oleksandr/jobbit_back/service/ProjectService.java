@@ -109,10 +109,22 @@ public class ProjectService {
     @Modifying
     @Transactional
     public void deleteProject(Integer id) {
-        if (!projectRepository.existsById(id)) {
-            throw new NoSuchElementException("Проєкт з ID " + id + " не знайдено");
-        }
+        Project projectToDelete = projectRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Проєкт з ID " + id + " не знайдено"));
+
+        String photoPath = projectToDelete.getProjPictSrc();
+        System.out.println(photoPath);
         projectRepository.deleteById(id);
+
+        if (photoPath != null && !photoPath.isEmpty()) {
+            Path fileToDelete = Paths.get(uploadDir, photoPath.substring(photoPath.lastIndexOf('/') + 1));
+            try {
+                Files.deleteIfExists(fileToDelete);
+                System.out.println("Файл фотографії видалено: " + fileToDelete.toString());
+            } catch (IOException e) {
+                System.err.println("Помилка при видаленні файлу фотографії: " + fileToDelete.toString() + ". " + e.getMessage());
+            }
+        }
     }
 
     /**
@@ -138,7 +150,7 @@ public class ProjectService {
 
         try (var inputStream = photo.getInputStream()) {
             Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
-            return "JobbIT/files/candidateProjectPhotos/" + fileName;
+            return "files/candidateProjectPhotos/" + fileName;
         } catch (IOException e) {
             throw new IOException("Не вдалося зберегти файл " + fileName, e);
         }
