@@ -57,8 +57,8 @@ public class CandProfileDataController {
      * @param profile профіль кандидата, дані якого треба оновити
      * @return ResponseEntity зі статусом 200, якщо успішно оновлено
      */
-    @PostMapping("/profile/update")
-    public ResponseEntity<String> updateCandidateProfile(@RequestBody CandidateProfile profile) {
+    @PostMapping("/profile/{userId}/update")
+    public ResponseEntity<String> updateCandidateProfile(@RequestBody CandidateProfile profile, @PathVariable Integer userId) {
         candidateProfileService.save(profile);
         return ResponseEntity.ok("Профіль оновлено");
     }

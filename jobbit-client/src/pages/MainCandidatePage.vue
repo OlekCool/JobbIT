@@ -1,6 +1,8 @@
 <template>
   <div class="dashboard">
-    <NavbarCandidate @show-profile="handleShowProfile" @show-vacancies="handleShowVacancies" />
+    <NavbarCandidate :candidateProfile="candidateProfileData"
+                     @show-profile="handleShowProfile"
+                     @show-vacancies="handleShowVacancies" />
     <div class="dashboard-body">
       <FiltersSection v-if="!showProfile" @filter-change="applyFilters" />
       <VacanciesLayout
@@ -8,7 +10,9 @@
           :vacancies="filteredVacancies"
           @search="applySearch"
       />
-      <CandidateProfile v-if="showProfile" />
+      <CandidateProfile v-if="showProfile"
+                        :candidateProfile="candidateProfileData"
+                        :candidateProjects="candidateProfileData.projects" />
     </div>
   </div>
 </template>
@@ -18,12 +22,15 @@ import NavbarCandidate from "../components/NavbarCandidate.vue";
 import FiltersSection from "../components/FiltersSection.vue";
 import VacanciesLayout from "../components/VacanciesLayout.vue";
 import CandidateProfile from "@/components/CandidateProfile.vue";
+import ProfileService from "@/services/ProfileService.ts";
 import { useRouter } from "vue-router";
 import { computed, onMounted, ref } from "vue";
 
 const router = useRouter();
 const showProfile = ref(false);
 const userId = ref(localStorage.getItem('userId'));
+const authToken = localStorage.getItem('authToken');
+const candidateProfileData = ref(null);
 const filters = ref({ location: "", salaryFrom: 0, minExperience: 0 });
 const searchQuery = ref("");
 
@@ -44,20 +51,24 @@ const vacancies = ref([
   { id: 10, title: "Middle Java Developer.", salary: 45000, location: "Office", experience: 3 },
 ]);
 
-onMounted(() => {
-  userId.value = localStorage.getItem('userId');
-  console.log('userId onMounted:', userId.value, 'currentPath:', router.currentRoute.value.path);
+onMounted(async () => {
+  if (!userId || !authToken) {
+    await router.push('/login');
+    return;
+  }
 
-  if (router.currentRoute.value.path.startsWith('/candidate-dash/profile/')) {
-    showProfile.value = true;
-    console.log('Встановлено showProfile в true, оскільки шлях починається з /candidate-dash/profile/');
-  } else {
-    showProfile.value = false;
-    console.log('Встановлено showProfile в false');
-    if (userId.value && router.currentRoute.value.path === '/candidate-dash') {
-      console.log('Перенаправлення на /candidate-dash/search');
-      router.replace('/candidate-dash/search');
+  try {
+    const profileResponse = await ProfileService.getProfileCandidate(userId.value, authToken);
+    candidateProfileData.value = profileResponse.data;
+    console.log('Дані профілю кандидата завантажено:', candidateProfileData.value);
+
+    if (router.currentRoute.value.path.startsWith('/candidate-dash/profile/')) {
+      showProfile.value = true;
+    } else if (router.currentRoute.value.path === '/candidate-dash') {
+      await router.replace('/candidate-dash/search');
     }
+  } catch (error) {
+    console.error('Помилка при завантаженні даних на головній сторінці кандидата:', error);
   }
 });
 

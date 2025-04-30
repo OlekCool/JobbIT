@@ -1,8 +1,10 @@
 <template>
   <div class="dashboard">
-    <NavbarRecruiter @show-profile="handleShowProfile" @show-vacancies="handleShowVacancies" />
+    <NavbarRecruiter :recruiterProfile="recruiterProfileData"
+                     @show-profile="handleShowProfile"
+                     @show-vacancies="handleShowVacancies" />
     <div class="dashboard-body">
-      <RecruiterProfile v-if="showProfile" />
+      <RecruiterProfile v-if="showProfile" :recruiterProfile="recruiterProfileData" />
     </div>
   </div>
 </template>
@@ -10,28 +12,34 @@
 <script setup>
 import NavbarRecruiter from "@/components/NavbarRecruiter.vue";
 import RecruiterProfile from "@/components/RecruiterProfile.vue";
-
 import { useRouter } from "vue-router";
 import { onMounted, ref } from "vue";
+import ProfileService from "@/services/ProfileService.ts";
 
 const router = useRouter();
 const showProfile = ref(false);
 const userId = ref(localStorage.getItem('userId'));
+const authToken = localStorage.getItem('authToken');
+const recruiterProfileData = ref(null);
 
-onMounted(() => {
-  userId.value = localStorage.getItem('userId');
-  console.log('userId onMounted:', userId.value, 'currentPath:', router.currentRoute.value.path);
+onMounted(async () => {
+  if (!userId || !authToken) {
+    await router.push('/login');
+    return;
+  }
 
-  if (router.currentRoute.value.path.startsWith('/recruiter-dash/profile/')) {
-    showProfile.value = true;
-    console.log('Встановлено showProfile в true, оскільки шлях починається з /recruiter-dash/profile/');
-  } else {
-    showProfile.value = false;
-    console.log('Встановлено showProfile в false');
-    if (userId.value && router.currentRoute.value.path === '/recruiter-dash') {
-      console.log('Перенаправлення на /candidate-dash/search');
-      router.replace('/recruiter-dash/myvacancies');
+  try {
+    const profileResponse = await ProfileService.getProfileRecruiter(userId.value, authToken);
+    recruiterProfileData.value = profileResponse.data;
+    console.log('Дані профілю кандидата завантажено:', recruiterProfileData.value);
+
+    if (router.currentRoute.value.path.startsWith('/recruiter-dash/profile/')) {
+      showProfile.value = true;
+    } else if (router.currentRoute.value.path === '/recruiter-dash') {
+      await router.replace('/recruiter-dash/myvacancies');
     }
+  } catch (error) {
+    console.error('Помилка при завантаженні даних на головній сторінці кандидата:', error);
   }
 });
 

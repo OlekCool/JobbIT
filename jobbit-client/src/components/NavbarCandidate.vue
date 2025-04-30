@@ -1,7 +1,11 @@
 <template>
   <nav role="navigation" class="navbar">
     <div class="profile-section" @click="goToCandidateProfile" style="cursor: pointer">
-      <h1 class="candName"> {{ userProfile ? `${userProfile.firstName} ${userProfile.lastName}` : 'Вітаємо!' }} </h1>
+      <h1 class="candName">
+        {{ props.candidateProfile?.firstName && props.candidateProfile?.lastName
+          ? `${props.candidateProfile.firstName} ${props.candidateProfile.lastName}`
+          : 'Ім\'я Прізвище' }}
+      </h1>
 
       <div class="profile-photo">
         <img src="../../../files/userPhotos/userDemo.png" alt="User Photo" />
@@ -22,17 +26,18 @@
 </template>
 
 <script setup>
-import axios from 'axios';
-import { onMounted, ref } from "vue";
+import { ref, defineProps } from "vue";
 import { useRouter } from "vue-router";
 import candProfileService from "@/services/ProfileService.ts";
 import { HttpStatusCode } from "axios";
 import { defineEmits } from 'vue';
 
 const router = useRouter();
-const userProfile = ref(JSON.parse(localStorage.getItem('userProfile')));
 const userId = ref(JSON.parse(localStorage.getItem('userId')));
 const emit = defineEmits(['show-profile']);
+const props = defineProps({
+  candidateProfile: Object
+});
 
 /**
  * Метод для здійснення виходу з профілю
@@ -41,6 +46,7 @@ const logout = () => {
   localStorage.removeItem('authToken');
   localStorage.removeItem('userRole');
   localStorage.removeItem('userProfile');
+  localStorage.removeItem('userId');
 
   router.push("/");
 };

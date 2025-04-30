@@ -54,11 +54,11 @@ public class CandidateProfileService {
 
     /**
      * Зберігає або оновлює профіль кандидата.
+     *
      * @param profile Профіль для збереження.
-     * @return Збережений профіль.
      */
-    public CandidateProfile save(CandidateProfile profile) {
-        return candidateProfileRepository.save(profile);
+    public void save(CandidateProfile profile) {
+        candidateProfileRepository.save(profile);
     }
 
     /**

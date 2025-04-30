@@ -57,8 +57,8 @@ public class RecrProfileDataController {
      * @param profile профіль рекрутера, дані якого треба оновити
      * @return ResponseEntity зі статусом 200, якщо успішно оновлено
      */
-    @PostMapping("/profile/update")
-    public ResponseEntity<String> updateRecruiterProfile(@RequestBody RecruiterProfile profile) {
+    @PostMapping("/profile/{userId}/update")
+    public ResponseEntity<String> updateRecruiterProfile(@RequestBody RecruiterProfile profile, @PathVariable Integer userId) {
         recruiterProfileService.save(profile);
         return ResponseEntity.ok("Профіль оновлено");
     }

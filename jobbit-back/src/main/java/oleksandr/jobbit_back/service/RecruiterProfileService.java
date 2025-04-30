@@ -1,6 +1,5 @@
 package oleksandr.jobbit_back.service;
 
-import oleksandr.jobbit_back.entity.CandidateProfile;
 import oleksandr.jobbit_back.entity.RecruiterProfile;
 import oleksandr.jobbit_back.repository.RecruiterProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,11 +51,11 @@ public class RecruiterProfileService {
 
     /**
      * Зберігає або оновлює профіль рекрутера.
+     *
      * @param profile Профіль для збереження.
-     * @return Збережений профіль.
      */
-    public RecruiterProfile save(RecruiterProfile profile) {
-        return recruiterProfileRepository.save(profile);
+    public void save(RecruiterProfile profile) {
+        recruiterProfileRepository.save(profile);
     }
 
     /**

@@ -14,23 +14,23 @@
           <h3>Особиста інформація:</h3>
           <div class="info-group">
             <label>Ім’я:</label>
-            <span v-if="!isEditing">{{ profile.firstName }}</span>
-            <input v-if="isEditing" v-model="profile.firstName" />
+            <span v-if="!isEditing">{{ editableProfile.firstName }}</span>
+            <input v-if="isEditing" v-model="editableProfile.firstName" />
           </div>
           <div class="info-group">
             <label>Прізвище:</label>
-            <span v-if="!isEditing">{{ profile.lastName }}</span>
-            <input v-if="isEditing" v-model="profile.lastName" />
+            <span v-if="!isEditing">{{ editableProfile.lastName }}</span>
+            <input v-if="isEditing" v-model="editableProfile.lastName" />
           </div>
           <div class="info-group">
             <label>По батькові:</label>
-            <span v-if="!isEditing">{{ profile.fatherName }}</span>
-            <input v-if="isEditing" v-model="profile.fatherName" />
+            <span v-if="!isEditing">{{ editableProfile.fatherName }}</span>
+            <input v-if="isEditing" v-model="editableProfile.fatherName" />
           </div>
           <div class="info-group">
             <label>ІТ-компанія:</label>
-            <span v-if="!isEditing">{{ profile.companyName }}</span>
-            <input v-if="isEditing" v-model="profile.companyName" />
+            <span v-if="!isEditing">{{ editableProfile.companyName }}</span>
+            <input v-if="isEditing" v-model="editableProfile.companyName" />
           </div>
         </div>
 
@@ -38,18 +38,18 @@
           <h3>Контакти:</h3>
           <div class="info-group">
             <label>Email:</label>
-            <span v-if="!isEditing">{{ profile.email }}</span>
-            <input v-if="isEditing" v-model="profile.email" />
+            <span v-if="!isEditing">{{ editableProfile.email }}</span>
+            <input v-if="isEditing" v-model="editableProfile.email" />
           </div>
           <div class="info-group">
             <label>Телефон:</label>
-            <span v-if="!isEditing">{{ profile.phone }}</span>
-            <input v-if="isEditing" v-model="profile.phone" />
+            <span v-if="!isEditing">{{ editableProfile.phone }}</span>
+            <input v-if="isEditing" v-model="editableProfile.phone" />
           </div>
           <div class="info-group">
             <label>Instagram:</label>
-            <span v-if="!isEditing">{{ profile.instagram }}</span>
-            <input v-if="isEditing" v-model="profile.instagram" />
+            <span v-if="!isEditing">{{ editableProfile.instagram }}</span>
+            <input v-if="isEditing" v-model="editableProfile.instagram" />
           </div>
         </div>
       </div>
@@ -58,13 +58,13 @@
         <h3>Місцезнаходження:</h3>
         <div class="info-group">
           <label>Країна:</label>
-          <span v-if="!isEditing">{{ profile.country }}</span>
-          <input v-if="isEditing" v-model="profile.country" />
+          <span v-if="!isEditing">{{ editableProfile.country }}</span>
+          <input v-if="isEditing" v-model="editableProfile.country" />
         </div>
         <div class="info-group">
           <label>Місто:</label>
-          <span v-if="!isEditing">{{ profile.city }}</span>
-          <input v-if="isEditing" v-model="profile.city" />
+          <span v-if="!isEditing">{{ editableProfile.city }}</span>
+          <input v-if="isEditing" v-model="editableProfile.city" />
         </div>
       </div>
 
@@ -72,8 +72,8 @@
         <h3>Про вас:</h3>
         <div class="info-group">
           <label>Опишіть компанію:</label>
-          <span v-if="!isEditing">{{ profile.description }}</span>
-          <input v-if="isEditing" v-model="profile.description" />
+          <span v-if="!isEditing">{{ editableProfile.description }}</span>
+          <input v-if="isEditing" v-model="editableProfile.description" />
         </div>
       </div>
 
@@ -87,53 +87,45 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, defineProps, watch } from "vue";
 import ProfileService from "../services/ProfileService.ts";
 
-const isEditing = ref(false);
-const profile = reactive({
-  firstName: "",
-  lastName: "",
-  fatherName: "",
-  companyName: "",
-  country: "",
-  city: "",
-  description: "",
-  email: "",
-  phone: "",
-  instagram: ""
+const props = defineProps({
+  recruiterProfile: Object
 });
-const userId = localStorage.getItem("userId");
 
-/**
- * Завантаження даних профілю у момент рендерингу компонента
- */
-function loadProfile() {
-  if (userId) {
-    ProfileService.getProfileRecruiter(parseInt(userId), localStorage.getItem('authToken'))
-    .then((response) => {
-      Object.assign(profile, response.data);
-    })
-    .catch((err) => {
-      console.error("Помилка при завантаженні профілю", err);
-      alert("Не вдалося завантажити профіль");
-    });
+const isEditing = ref(false);
+const editableProfile = reactive(props.recruiterProfile ? { ...props.recruiterProfile } : {});
+const userId = localStorage.getItem("userId");
+const authToken = localStorage.getItem("authToken");
+
+watch(() => props.recruiterProfile, (newProfile) => {
+  if (newProfile) {
+    Object.assign(editableProfile, newProfile);
+  } else {
+    Object.assign(editableProfile, {});
   }
-}
+});
+
+onMounted(() => {
+  if (props.recruiterProfile) {
+    Object.assign(editableProfile, props.recruiterProfile);
+  }
+});
 
 /**
  * Збереження змін даних профілю кандидата
  */
-function saveChanges() {
-  if (userId) {
-    ProfileService.updateProfileRecruiter(profile, localStorage.getItem('authToken'))
-    .then(() => {
+async function saveChanges() {
+  if (userId && authToken) {
+    try {
+      await ProfileService.updateProfileRecruiter(editableProfile, userId, authToken);
       isEditing.value = false;
-    })
-    .catch((err) => {
-      console.error("Помилка при збереженні профілю", err);
-      alert("Сталася помилка при збереженні.");
-    });
+      window.location.reload();
+    } catch (err) {
+      console.error("Помилка при збереженні профілю рекрутера", err);
+      alert("Сталася помилка при збереженні профілю рекрутера.");
+    }
   }
 }
 
@@ -142,9 +134,8 @@ function saveChanges() {
  */
 const cancelEdit = () => {
   isEditing.value = false;
-  loadProfile();
+  Object.assign(editableProfile, props.recruiterProfile);
 };
-onMounted(loadProfile);
 </script>
 
 <style scoped>

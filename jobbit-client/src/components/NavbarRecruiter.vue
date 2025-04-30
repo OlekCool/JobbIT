@@ -1,7 +1,11 @@
 <template>
   <nav role="navigation" class="navbar">
     <div class="profile-section" @click="goToRecruiterProfile" style="cursor: pointer">
-      <h1 class="candName"> {{ userProfile ? `${userProfile.firstName} ${userProfile.lastName}` : 'Вітаємо!' }} </h1>
+      <h1 class="candName">
+        {{ props.recruiterProfile?.firstName && props.recruiterProfile?.lastName
+          ? `${props.recruiterProfile.firstName} ${props.recruiterProfile.lastName}`
+          : 'Ім\'я Прізвище' }}
+      </h1>
 
       <div class="profile-photo">
         <img src="../../../files/userPhotos/userDemo.png" alt="User Photo" />
@@ -19,15 +23,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, defineProps } from 'vue';
 import { useRouter } from "vue-router";
 import recrProfileService from "@/services/ProfileService.ts";
 import { HttpStatusCode } from "axios";
 import { defineEmits } from 'vue';
 
 const router = useRouter();
-const userProfile = ref(JSON.parse(localStorage.getItem('userProfile')));
+const userId = ref(JSON.parse(localStorage.getItem('userId')));
 const emit = defineEmits(['show-profile']);
+const props = defineProps({
+  recruiterProfile: Object
+});
 
 /**
  * Метод для здійснення виходу з профілю
@@ -36,6 +43,7 @@ const logout = () => {
   localStorage.removeItem('authToken');
   localStorage.removeItem('userRole');
   localStorage.removeItem('userProfile');
+  localStorage.removeItem('userId');
 
   router.push("/");
 };
@@ -46,7 +54,8 @@ const logout = () => {
  */
 const goToRecruiterProfile = async () => {
   try {
-    const response = await recrProfileService.getProfileRecruiter(localStorage.getItem('userId'));
+    const response = await recrProfileService.getProfileRecruiter(localStorage.getItem('userId'),
+        localStorage.getItem('authToken'));
 
     if (response.status === HttpStatusCode.Ok) {
       console.log("Відображення успішне", response.data);

@@ -11,11 +11,12 @@ class ProfileService {
     /**
      * Оновлення даних профілю кандидата.
      * @param {Object} profileData - Дані профілю.
+     * @param userId id користувача
      * @param token токен JWT
      * @returns {Promise}
      */
-    async updateProfileCandidate(profileData, token) {
-        return axios.post(`${API_URL_CAND}/update`, profileData, {
+    async updateProfileCandidate(profileData, userId, token) {
+        return axios.post(`${API_URL_CAND}/${userId}/update`, profileData, {
             headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
     }
@@ -23,11 +24,12 @@ class ProfileService {
     /**
      * Оновлення даних профілю рекрутера.
      * @param {Object} profileData - Дані профілю.
+     * @param userId id користувача
      * @param token токен JWT
      * @returns {Promise}
      */
-    async updateProfileRecruiter(profileData, token) {
-        return axios.post(`${API_URL_RECR}/update`, profileData, {
+    async updateProfileRecruiter(profileData, userId, token) {
+        return axios.post(`${API_URL_RECR}/${userId}/update`, profileData, {
             headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
     }
