@@ -74,6 +74,9 @@ public class ProjectController {
             if (photo != null && !photo.isEmpty()) {
                 String filePath = projectService.saveProjectPhoto(userId, createdProject.getProjId(), photo);
                 createdProject.setProjPictSrc(filePath);
+            } else {
+                projectService.saveProjectPhoto(userId, createdProject.getProjId(), photo);
+                createdProject.setProjPictSrc("files/candidateProjectPhotos/projectDemo.png");
             }
 
             projectService.updateProject(createdProject.getProjId(), createdProject);
@@ -118,6 +121,9 @@ public class ProjectController {
             if (photo != null && !photo.isEmpty()) {
                 String filePath = projectService.saveProjectPhoto(userId, id, photo);
                 existingProject.setProjPictSrc(filePath);
+            } else {
+                projectService.saveProjectPhoto(userId, id, photo);
+                existingProject.setProjPictSrc("files/candidateProjectPhotos/projectDemo.png");
             }
 
             Project updatedProject = projectService.updateProject(id, existingProject);

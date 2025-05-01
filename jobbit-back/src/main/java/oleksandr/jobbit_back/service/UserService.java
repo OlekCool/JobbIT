@@ -163,11 +163,21 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    /**
+     * Знаходить користувача за ідентифікатором
+     * @param id ідентифікатор користувача
+     *
+     * @return конкретного користувача або NoSuchElementException коли користувач не знайдений
+     */
     public User findUserById(Integer id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Користувача з ID " + id + " не знайдено"));
     }
 
+    /**
+     * Зберігає дані конкретного користувача
+     * @param user дані конкретного користувача
+     */
     public void save(User user) {
         userRepository.save(user);
     }

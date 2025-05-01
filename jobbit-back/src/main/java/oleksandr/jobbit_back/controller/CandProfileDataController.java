@@ -65,7 +65,7 @@ public class CandProfileDataController {
             if (user != null && user.getPhotoSrc() != null) {
                 return ResponseEntity.ok(user.getPhotoSrc());
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Фото профілю користувача не знайдено.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("files/userPhotos/userDemo.png");
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Профіль кандидата з ID " + userId + " не знайдено.");

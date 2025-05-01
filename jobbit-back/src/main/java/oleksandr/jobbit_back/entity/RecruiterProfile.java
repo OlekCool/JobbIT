@@ -1,15 +1,13 @@
 package oleksandr.jobbit_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entity-клас {@code RecruiterProfile} представляє профіль рекрутера, пов'язаний з обліковим записом
@@ -101,6 +99,12 @@ public class RecruiterProfile {
     @Column(name = "description")
     private String description;
 
+    /**
+     * Прив'язка вакансій до рекрутера зі зв'язком один до багатьох. Каскадні операції є.
+     */
+    @OneToMany(mappedBy = "recruiterProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Vacancy> vacancies = new ArrayList<>();
 
     /**
      * Перевизначений метод {@code toString()} для зручного виведення основної інформації про профіль рекрутера.

@@ -1,6 +1,5 @@
 package oleksandr.jobbit_back.controller;
 
-import oleksandr.jobbit_back.entity.CandidateProfile;
 import oleksandr.jobbit_back.entity.RecruiterProfile;
 import oleksandr.jobbit_back.entity.User;
 import oleksandr.jobbit_back.service.RecruiterProfileService;
@@ -66,7 +65,7 @@ public class RecrProfileDataController {
             if (user != null && user.getPhotoSrc() != null) {
                 return ResponseEntity.ok(user.getPhotoSrc());
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Фото профілю користувача не знайдено.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("files/userPhotos/userDemo.png");
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Профіль рекрутера з ID " + userId + " не знайдено.");

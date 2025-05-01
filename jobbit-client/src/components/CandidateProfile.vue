@@ -1,5 +1,4 @@
 <template>
-  <Notification :message="notificationMessage" :type="notificationType" />
   <div class="profile-page">
     <div class="profile-container">
       <div class="profile-header">

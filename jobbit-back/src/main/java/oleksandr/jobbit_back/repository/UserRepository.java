@@ -94,8 +94,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Transactional
     @Query("UPDATE User u SET u.verified = true, u.verificationToken = NULL WHERE u.verificationToken = ?1")
     void verifyUser(String token);
-
-    @Modifying
-    @Transactional
-    void save(Integer id);
 }
