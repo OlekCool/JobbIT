@@ -106,7 +106,7 @@ const handleSubmit = async () => {
 
     if (response.status === HttpStatusCode.Ok) {
       console.log("Success registration frontend", response.data); // eslint-disable-line no-console
-      alert("На вашу пошту надіслано лінк для підтвердження акаунта."); // eslint-disable-line no-alert
+      alert("На вашу пошту надіслано лінк для підтвердження акаунта.");
       await router.push("/auth/login");
     } else {
       console.error("Unexpected response:", response); // eslint-disable-line no-console

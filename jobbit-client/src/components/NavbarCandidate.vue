@@ -8,7 +8,7 @@
       </h1>
 
       <div class="profile-photo">
-        <img src="../../../files/userPhotos/userDemo.png" alt="User Photo" />
+        <img :src="userPhoto" alt="User Photo" />
       </div>
     </div>
 
@@ -36,7 +36,8 @@ const router = useRouter();
 const userId = ref(JSON.parse(localStorage.getItem('userId')));
 const emit = defineEmits(['show-profile']);
 const props = defineProps({
-  candidateProfile: Object
+  candidateProfile: Object,
+  userPhoto: String
 });
 
 /**

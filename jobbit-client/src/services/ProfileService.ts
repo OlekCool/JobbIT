@@ -57,6 +57,100 @@ class ProfileService {
             headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
     }
+
+    /**
+     * Метод сервісу з завантаження резюме кандидата
+     * @param formData дані, в яких міститься файл
+     * @param userId ідентифікатор користувача
+     * @param token jwt-токен
+     * @param contentType тип контенту, який надсилається на бекенд
+     */
+    async uploadCvCandidate(formData, userId, token, contentType) {
+        const headers = {
+            ...token ? { Authorization: `Bearer ${token}` } : {},
+            'Content-Type': contentType,
+        };
+
+        try {
+            const response = await axios.post(`${API_URL_CAND}/${userId}/uploadcv`, formData, { headers }); // Окремий ендпоінт для завантаження CV
+            return response.data;
+        } catch (error) {
+            console.error("Помилка при завантаженні CV", error);
+            throw error;
+        }
+    }
+
+    /**
+     * Метод для завантаження на сервер фото кандидата
+     * @param formData дані, в яких міститься файл
+     * @param userId ідентифікатор користувача
+     * @param token jwt-токен
+     * @param contentType тип контенту, який надсилається на бекенд
+     */
+    async uploadProfilePhotoCandidate(formData, userId, token, contentType) {
+        const headers = {
+            ...token ? { Authorization: `Bearer ${token}` } : {},
+            'Content-Type': contentType,
+        };
+
+        try {
+            const response = await axios.post(`${API_URL_CAND}/${userId}/uploadphoto`, formData, { headers });
+            return response.data;
+        } catch (error) {
+            console.error("Помилка при завантаженні фото профілю", error);
+            throw error;
+        }
+    }
+
+    /**
+     * Метод для завантаження на сервер фото рекрутера
+     * @param formData дані, в яких міститься файл
+     * @param userId ідентифікатор користувача
+     * @param token jwt-токен
+     * @param contentType тип контенту, який надсилається на бекенд
+     */
+    async uploadProfilePhotoRecruiter(formData, userId, token, contentType) {
+        const headers = {
+            ...token ? { Authorization: `Bearer ${token}` } : {},
+            'Content-Type': contentType,
+        };
+
+        try {
+            const response = await axios.post(`${API_URL_RECR}/${userId}/uploadphoto`, formData, { headers });
+            return response.data;
+        } catch (error) {
+            console.error("Помилка при завантаженні фото профілю", error);
+            throw error;
+        }
+    }
+
+    async getRecruiterProfilePhoto(userId, authToken) {
+        try {
+            const response = await fetch(`${API_URL_RECR}/${userId}/photo`, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                },
+            });
+            return await response.text();
+        } catch (error) {
+            console.error("Failed to fetch recruiter profile photo:", error);
+            throw error;
+        }
+    }
+
+    async getCandidateProfilePhoto(userId, authToken) {
+        try {
+            const response = await fetch(`${API_URL_CAND}/${userId}/photo`, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                },
+            });
+            return await response.text();
+        } catch (error) {
+            console.error("Failed to fetch candidate profile photo:", error);
+            throw error;
+        }
+    }
 }
 
 export default new ProfileService();

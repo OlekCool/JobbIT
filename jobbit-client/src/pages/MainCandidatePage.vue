@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard">
     <NavbarCandidate :candidateProfile="candidateProfileData"
+                     :userPhoto="userPhotoUrl"
                      @show-profile="handleShowProfile"
                      @show-vacancies="handleShowVacancies" />
     <div class="dashboard-body">
@@ -12,7 +13,8 @@
       />
       <CandidateProfile v-if="showProfile"
                         :candidateProfile="candidateProfileData"
-                        :candidateProjects="candidateProfileData.projects" />
+                        :candidateProjects="candidateProfileData.projects"
+                        :userPhoto="userPhotoUrl"/>
     </div>
   </div>
 </template>
@@ -31,6 +33,7 @@ const showProfile = ref(false);
 const userId = ref(localStorage.getItem('userId'));
 const authToken = localStorage.getItem('authToken');
 const candidateProfileData = ref(null);
+const userPhotoUrl = ref('/files/userPhotos/userDemo.png');
 const filters = ref({ location: "", salaryFrom: 0, minExperience: 0 });
 const searchQuery = ref("");
 
@@ -61,6 +64,12 @@ onMounted(async () => {
     const profileResponse = await ProfileService.getProfileCandidate(userId.value, authToken);
     candidateProfileData.value = profileResponse.data;
     console.log('Дані профілю кандидата завантажено:', candidateProfileData.value);
+
+    const photoPath = await ProfileService.getCandidateProfilePhoto(userId.value, authToken);
+    if (photoPath) {
+      userPhotoUrl.value = `/${photoPath}`;
+      console.log('Шлях до фото користувача отримано:', userPhotoUrl.value);
+    }
 
     if (router.currentRoute.value.path.startsWith('/candidate-dash/profile/')) {
       showProfile.value = true;

@@ -9,7 +9,7 @@ jobbit-back/target/
 jobbit-back/src/main/resources/application.yml
 
 ### USER FILES UPLOADED TO SERVER ###
-files
+jobbit-client/public/files
 
 ### STS ###
 jobbit-back/.apt_generated

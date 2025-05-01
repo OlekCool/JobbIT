@@ -61,26 +61,29 @@ class ProjectService {
      * @param token авторизаційний токен
      */
     async updateProject(id, userId, projectData, token) {
-        const formData = new FormData();
-        if (projectData.name) {
-            formData.append('projName', projectData.name);
-        }
-        if (projectData.description) {
-            formData.append('projDescription', projectData.description);
-        }
-        if (projectData.link) {
-            formData.append('projGithubLink', projectData.link);
-        }
-        if (projectData.photo) {
-            formData.append('photo', projectData.photo);
-        }
+        const headers = {
+            ...token ? { Authorization: `Bearer ${token}` } : {},
+        };
 
-        return axios.post(`${API_URL_PROJECT}/${userId}/editproject/${id}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                ...token ? { Authorization: `Bearer ${token}` } : {},
-            },
-        });
+        if (projectData.photo instanceof File) {
+            const formData = new FormData();
+            formData.append('projName', projectData.projName);
+            formData.append('projDescription', projectData.projDescription);
+            formData.append('projGithubLink', projectData.projGithubLink);
+            formData.append('photo', projectData.photo);
+            headers['Content-Type'] = 'multipart/form-data';
+
+            return axios.post(`${API_URL_PROJECT}/${userId}/editproject/${id}`, formData, { headers });
+        } else {
+            const jsonData = {
+                projName: projectData.projName,
+                projDescription: projectData.projDescription,
+                projGithubLink: projectData.projGithubLink,
+            };
+            headers['Content-Type'] = 'application/json';
+
+            return axios.post(`${API_URL_PROJECT}/${userId}/editproject/${id}`, jsonData, { headers });
+        }
     }
 
     /**

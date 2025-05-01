@@ -1,10 +1,11 @@
 <template>
   <div class="dashboard">
     <NavbarRecruiter :recruiterProfile="recruiterProfileData"
+                     :userPhoto="userPhotoUrl"
                      @show-profile="handleShowProfile"
                      @show-vacancies="handleShowVacancies" />
     <div class="dashboard-body">
-      <RecruiterProfile v-if="showProfile" :recruiterProfile="recruiterProfileData" />
+      <RecruiterProfile v-if="showProfile" :recruiterProfile="recruiterProfileData" :userPhoto="userPhotoUrl" />
     </div>
   </div>
 </template>
@@ -18,6 +19,7 @@ import ProfileService from "@/services/ProfileService.ts";
 
 const router = useRouter();
 const showProfile = ref(false);
+const userPhotoUrl = ref('/files/userPhotos/userDemo.png');
 const userId = ref(localStorage.getItem('userId'));
 const authToken = localStorage.getItem('authToken');
 const recruiterProfileData = ref(null);
@@ -32,6 +34,12 @@ onMounted(async () => {
     const profileResponse = await ProfileService.getProfileRecruiter(userId.value, authToken);
     recruiterProfileData.value = profileResponse.data;
     console.log('Дані профілю кандидата завантажено:', recruiterProfileData.value);
+
+    const photoPath = await ProfileService.getRecruiterProfilePhoto(userId.value, authToken);
+    if (photoPath) {
+      userPhotoUrl.value = `/${photoPath}`;
+      console.log('Шлях до фото користувача отримано:', userPhotoUrl.value);
+    }
 
     if (router.currentRoute.value.path.startsWith('/recruiter-dash/profile/')) {
       showProfile.value = true;

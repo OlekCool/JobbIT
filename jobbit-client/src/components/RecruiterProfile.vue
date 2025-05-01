@@ -1,61 +1,70 @@
 <template>
-  <div class="profile-page-layout">
-    <div class="left-side">
-      <div class="left-column">
-        <div class="navigation-photo">
-          <div class="profile-photo">
-            <div style="width: 66px; height: 66px; border: 1px solid #ccc; display: flex; justify-content: center; align-items: center;">
-              <img src="../../../files/userPhotos/userDemo.png" alt="Фото профілю" style="max-width: 66%; max-height: 66%;">
+  <div class="profile-page">
+    <div class="profile-container">
+      <div class="profile-header">
+        <div class="profile-photo">
+          <div class="profile-photo-container" @mouseover="showUploadHint = true" @mouseleave="showUploadHint = false">
+            <div class="profile-photo-inner">
+              <img :src="profilePhotoUrl" alt="Фото профілю">
+              <div v-if="showUploadHint && isEditing" class="upload-overlay">
+                <label for="profile-photo-upload" class="upload-label">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="upload-icon">
+                    <path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v8.5h8.5a.75.75 0 010 1.5h-8.5v8.5a.75.75 0 01-1.5 0v-8.5H3.75a.75.75 0 010-1.5h8.5V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="upload-text">Завантажити фото</span>
+                </label>
+                <input type="file" id="profile-photo-upload" @change="handleProfilePhotoChange" class="upload-input">
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div class="personal-info">
-          <h3>Особиста інформація:</h3>
-          <div class="info-group">
-            <label>Ім’я:</label>
-            <span v-if="!isEditing">{{ editableProfile.firstName }}</span>
-            <input v-if="isEditing" v-model="editableProfile.firstName" />
-          </div>
-          <div class="info-group">
-            <label>Прізвище:</label>
-            <span v-if="!isEditing">{{ editableProfile.lastName }}</span>
-            <input v-if="isEditing" v-model="editableProfile.lastName" />
-          </div>
-          <div class="info-group">
-            <label>По батькові:</label>
-            <span v-if="!isEditing">{{ editableProfile.fatherName }}</span>
-            <input v-if="isEditing" v-model="editableProfile.fatherName" />
-          </div>
-          <div class="info-group">
-            <label>ІТ-компанія:</label>
-            <span v-if="!isEditing">{{ editableProfile.companyName }}</span>
-            <input v-if="isEditing" v-model="editableProfile.companyName" />
-          </div>
-        </div>
-
-        <div class="contact-info">
-          <h3>Контакти:</h3>
-          <div class="info-group">
-            <label>Email:</label>
-            <span v-if="!isEditing">{{ editableProfile.email }}</span>
-            <input v-if="isEditing" v-model="editableProfile.email" />
-          </div>
-          <div class="info-group">
-            <label>Телефон:</label>
-            <span v-if="!isEditing">{{ editableProfile.phone }}</span>
-            <input v-if="isEditing" v-model="editableProfile.phone" />
-          </div>
-          <div class="info-group">
-            <label>Instagram:</label>
-            <span v-if="!isEditing">{{ editableProfile.instagram }}</span>
-            <input v-if="isEditing" v-model="editableProfile.instagram" />
           </div>
         </div>
       </div>
 
-      <div class="location-info">
-        <h3>Місцезнаходження:</h3>
+      <div class="profile-info-section personal-info">
+        <h3>Особиста інформація</h3>
+        <div class="info-group">
+          <label>Ім’я:</label>
+          <span v-if="!isEditing">{{ editableProfile.firstName }}</span>
+          <input v-if="isEditing" v-model="editableProfile.firstName" />
+        </div>
+        <div class="info-group">
+          <label>Прізвище:</label>
+          <span v-if="!isEditing">{{ editableProfile.lastName }}</span>
+          <input v-if="isEditing" v-model="editableProfile.lastName" />
+        </div>
+        <div class="info-group">
+          <label>По батькові:</label>
+          <span v-if="!isEditing">{{ editableProfile.fatherName }}</span>
+          <input v-if="isEditing" v-model="editableProfile.fatherName" />
+        </div>
+        <div class="info-group">
+          <label>ІТ-компанія:</label>
+          <span v-if="!isEditing">{{ editableProfile.companyName }}</span>
+          <input v-if="isEditing" v-model="editableProfile.companyName" />
+        </div>
+      </div>
+
+      <div class="profile-info-section contact-info">
+        <h3>Контакти</h3>
+        <div class="info-group">
+          <label>Email:</label>
+          <span v-if="!isEditing">{{ editableProfile.email }}</span>
+          <input v-if="isEditing" v-model="editableProfile.email" />
+        </div>
+        <div class="info-group">
+          <label>Телефон:</label>
+          <span v-if="!isEditing">{{ editableProfile.phone }}</span>
+          <input v-if="isEditing" v-model="editableProfile.phone" />
+        </div>
+        <div class="info-group">
+          <label>Instagram:</label>
+          <span v-if="!isEditing">{{ editableProfile.instagram }}</span>
+          <input v-if="isEditing" v-model="editableProfile.instagram" />
+        </div>
+      </div>
+
+      <div class="profile-info-section location-info">
+        <h3>Місцезнаходження</h3>
         <div class="info-group">
           <label>Країна:</label>
           <span v-if="!isEditing">{{ editableProfile.country }}</span>
@@ -68,19 +77,19 @@
         </div>
       </div>
 
-      <div class="description">
-        <h3>Про вас:</h3>
+      <div class="profile-info-section description">
+        <h3>Про вас</h3>
         <div class="info-group">
           <label>Опишіть компанію:</label>
-          <span v-if="!isEditing">{{ editableProfile.description }}</span>
-          <input v-if="isEditing" v-model="editableProfile.description" />
+          <textarea v-if="isEditing" v-model="editableProfile.description"></textarea>
+          <span v-else>{{ editableProfile.description }}</span>
         </div>
       </div>
 
       <div class="actions">
-        <button v-if="isEditing" @click="saveChanges">Зберегти дані</button>
-        <button v-if="isEditing" @click="cancelEdit">Скасувати редагування</button>
-        <button v-if="!isEditing" @click="isEditing = !isEditing">Редагувати дані</button>
+        <button v-if="isEditing" @click="saveChanges" class="primary">Зберегти дані</button>
+        <button v-if="isEditing" @click="cancelEdit" class="secondary">Скасувати редагування</button>
+        <button v-if="!isEditing" @click="isEditing = !isEditing" class="primary">Редагувати дані</button>
       </div>
     </div>
   </div>
@@ -90,15 +99,25 @@
 import { reactive, ref, onMounted, defineProps, watch } from "vue";
 import ProfileService from "../services/ProfileService.ts";
 
+// PROPS
 const props = defineProps({
-  recruiterProfile: Object
+  recruiterProfile: Object,
+  userPhoto: String
 });
 
+// REACTIVE STATES AND VARIABLES
 const isEditing = ref(false);
 const editableProfile = reactive(props.recruiterProfile ? { ...props.recruiterProfile } : {});
+
+const showUploadHint = ref(false);
+const profilePhotoFile = ref(null);
+
+const profilePhotoUrl = ref(props.userPhoto);
+
 const userId = localStorage.getItem("userId");
 const authToken = localStorage.getItem("authToken");
 
+// WATCHER для відстеження зміни профілю та фото
 watch(() => props.recruiterProfile, (newProfile) => {
   if (newProfile) {
     Object.assign(editableProfile, newProfile);
@@ -107,11 +126,63 @@ watch(() => props.recruiterProfile, (newProfile) => {
   }
 });
 
+// для провантаження профілю, фото рекрутера при mount компонента
 onMounted(() => {
   if (props.recruiterProfile) {
     Object.assign(editableProfile, props.recruiterProfile);
   }
 });
+
+/**
+ * Скасовувати редагування
+ */
+const cancelEdit = () => {
+  isEditing.value = false;
+  profilePhotoFile.value = null;
+  profilePhotoUrl.value = props.recruiterProfile?.photoSrc || 'files/userPhotos/userDemo.png'
+  Object.assign(editableProfile, props.recruiterProfile);
+};
+
+/**
+ * Обробка завантаження фото кандидата
+ * @param event
+ */
+const handleProfilePhotoChange = (event) => {
+  const file = event.target.files[0];
+  profilePhotoFile.value = file;
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      profilePhotoUrl.value = e.target?.result;
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+// Функції для надсилання даних на сервер
+
+/**
+ * Обробка збереження фото користувача на сервері
+ * @returns {Promise<void>}
+ */
+async function uploadProfilePhoto() {
+  if (userId && authToken && profilePhotoFile.value) {
+    const formData = new FormData();
+    formData.append('photo', profilePhotoFile.value);
+
+    try {
+      const response = await ProfileService.uploadProfilePhotoRecruiter(formData, userId, authToken, 'multipart/form-data');
+      const photoPath = response?.photo || response?.filePath || response?.src;
+      if (photoPath) {
+        profilePhotoUrl.value = `/${photoPath}`;
+      }
+      profilePhotoFile.value = null;
+    } catch (error) {
+      alert("Не вдалося завантажити фото профілю.");
+    }
+  }
+}
 
 /**
  * Збереження змін даних профілю кандидата
@@ -121,89 +192,131 @@ async function saveChanges() {
     try {
       await ProfileService.updateProfileRecruiter(editableProfile, userId, authToken);
       isEditing.value = false;
+
+      if (profilePhotoFile.value) {
+        await uploadProfilePhoto();
+      }
+
       window.location.reload();
     } catch (err) {
-      console.error("Помилка при збереженні профілю рекрутера", err);
       alert("Сталася помилка при збереженні профілю рекрутера.");
     }
   }
 }
-
-/**
- * Скасовувати редагування
- */
-const cancelEdit = () => {
-  isEditing.value = false;
-  Object.assign(editableProfile, props.recruiterProfile);
-};
 </script>
 
 <style scoped>
-.profile-page-layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+/* Layout Styles */
+.profile-page {
+  display: flex;
+  justify-content: center;
   padding: 20px;
   margin: 0 auto;
-  width: 60vw;
-  max-height: 75vh;
-  overflow-y: auto;
 }
 
-.left-side {
+.profile-container {
+  width: 60vw;
+  max-width: 800px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
+  max-height: 77vh;
+  overflow-y: auto;
 }
 
-.left-side > .actions {
-  order: 10;
-  margin-top: 20px;
+/* Header Styles */
+.profile-header {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .profile-photo {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
+  position: relative;
 }
 
-.profile-photo > div {
+.profile-photo-container {
   width: 66px;
   height: 66px;
   border: 1px solid #ccc;
+  border-radius: 50%;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  cursor: pointer;
+}
+
+.profile-photo-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.profile-photo-inner img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
   border-radius: 50%;
 }
 
-.personal-info,
-.contact-info,
-.location-info,
-.description {
-  margin-bottom: 10px;
-  padding: 10px;
+.upload-label {
+  cursor: pointer;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.8em;
+}
+
+.upload-icon {
+  width: 24px;
+  height: 24px;
+  fill: white;
+  margin-bottom: 5px;
+}
+
+.upload-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Section Styles */
+.profile-info-section {
+  padding: 15px;
   border: 1px solid #f0f0f0;
   border-radius: 5px;
   background-color: #f9f9f9;
+  margin-bottom: 10px;
 }
 
-.personal-info h3,
-.contact-info h3,
-.location-info h3,
-.description h3 {
+.section-header h3,
+.profile-info-section h3 {
   margin-top: 0;
   margin-bottom: 10px;
   font-size: 1.1em;
 }
 
+/* Info Group Styles */
 .info-group {
   display: flex;
   align-items: center;
@@ -220,7 +333,8 @@ const cancelEdit = () => {
 }
 
 .info-group span,
-.info-group input {
+.info-group input,
+.info-group textarea {
   flex-grow: 1;
   padding: 8px;
   border: 1px solid #ccc;
@@ -229,32 +343,19 @@ const cancelEdit = () => {
   margin-left: 0;
   width: 100%;
   box-sizing: border-box;
+  text-align: left;
 }
 
-.description h3 {
-  margin-top: 15px;
+.info-group textarea {
+  min-height: 80px;
 }
 
-.description span {
-  display: block;
-  white-space: pre-line;
-  font-size: 0.9em;
-  line-height: 1.6;
-}
-
-.description input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  font-size: 0.9em;
-  box-sizing: border-box;
-  min-height: 100px;
-}
-
+/* Button Styles */
 .actions {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .actions button {
@@ -263,30 +364,30 @@ const cancelEdit = () => {
   cursor: pointer;
   font-size: 0.9em;
   font-weight: bold;
+  border: none;
+  transition: background-color 0.3s ease;
 }
 
-.actions button:first-child {
-  background-color: #28a745;
-  color: white;
-  border: 1px solid #28a745;
+.actions button {
+  padding: 5px 10px;
+  font-size: 0.8em;
 }
 
-.actions button:first-child:hover {
-  background-color: #1e7e34;
-}
-
-.actions button:nth-child(2) {
+.primary {
   background-color: #007bff;
   color: white;
-  border: 1px solid #007bff;
 }
 
-.actions button:nth-child(2):hover {
+.primary:hover {
   background-color: #0056b3;
 }
 
-span, label {
-  text-align: left;
-  font-size: 0.9em;
+.secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.secondary:hover {
+  background-color: #545b62;
 }
 </style>

@@ -8,7 +8,7 @@
       </h1>
 
       <div class="profile-photo">
-        <img src="../../../files/userPhotos/userDemo.png" alt="User Photo" />
+        <img :src="userPhoto" alt="User Photo" />
       </div>
     </div>
 
@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, onMounted, watch } from 'vue';
 import { useRouter } from "vue-router";
 import recrProfileService from "@/services/ProfileService.ts";
 import { HttpStatusCode } from "axios";
@@ -33,7 +33,8 @@ const router = useRouter();
 const userId = ref(JSON.parse(localStorage.getItem('userId')));
 const emit = defineEmits(['show-profile']);
 const props = defineProps({
-  recruiterProfile: Object
+  recruiterProfile: Object,
+  userPhoto: String
 });
 
 /**

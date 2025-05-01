@@ -53,6 +53,26 @@ public class CandProfileDataController {
     }
 
     /**
+     * GET метод для отримання шляху до фото користувача за ID кандидата.
+     * @param userId ID користувача-кандидата.
+     * @return ResponseEntity зі статусом 200 та шляхом до фото, або 404, якщо користувача не знайдено.
+     */
+    @GetMapping("/profile/{userId}/photo")
+    public ResponseEntity<String> getUserPhoto(@PathVariable Integer userId) {
+        CandidateProfile profile = candidateProfileService.findByUserId(userId);
+        if (profile != null) {
+            User user = userService.findUserById(profile.getUser().getId());
+            if (user != null && user.getPhotoSrc() != null) {
+                return ResponseEntity.ok(user.getPhotoSrc());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Фото профілю користувача не знайдено.");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Профіль кандидата з ID " + userId + " не знайдено.");
+        }
+    }
+
+    /**
      * POST метод для оновлення даних профілю користувача
      * @param profile профіль кандидата, дані якого треба оновити
      * @return ResponseEntity зі статусом 200, якщо успішно оновлено

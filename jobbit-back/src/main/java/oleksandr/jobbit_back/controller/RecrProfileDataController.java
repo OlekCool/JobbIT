@@ -1,5 +1,6 @@
 package oleksandr.jobbit_back.controller;
 
+import oleksandr.jobbit_back.entity.CandidateProfile;
 import oleksandr.jobbit_back.entity.RecruiterProfile;
 import oleksandr.jobbit_back.entity.User;
 import oleksandr.jobbit_back.service.RecruiterProfileService;
@@ -49,6 +50,26 @@ public class RecrProfileDataController {
             return ResponseEntity.ok(profile);
         } else {
             return ResponseEntity.status(404).build();
+        }
+    }
+
+    /**
+     * GET метод для отримання шляху до фото користувача за ID рекрутера.
+     * @param userId ID користувача-рекрутера.
+     * @return ResponseEntity зі статусом 200 та шляхом до фото, або 404, якщо користувача не знайдено.
+     */
+    @GetMapping("/profile/{userId}/photo")
+    public ResponseEntity<String> getUserPhoto(@PathVariable Integer userId) {
+        RecruiterProfile profile = recruiterProfileService.findByUserId(userId);
+        if (profile != null) {
+            User user = userService.findUserById(profile.getUser().getId());
+            if (user != null && user.getPhotoSrc() != null) {
+                return ResponseEntity.ok(user.getPhotoSrc());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Фото профілю користувача не знайдено.");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Профіль рекрутера з ID " + userId + " не знайдено.");
         }
     }
 
