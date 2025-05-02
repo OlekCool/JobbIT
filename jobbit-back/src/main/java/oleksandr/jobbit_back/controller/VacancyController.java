@@ -1,12 +1,12 @@
 package oleksandr.jobbit_back.controller;
 
-import oleksandr.jobbit_back.entity.Project;
 import oleksandr.jobbit_back.entity.Vacancy;
 import oleksandr.jobbit_back.service.VacancyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -40,5 +40,15 @@ public class VacancyController {
     public ResponseEntity<List<Vacancy>> getAllVacancies() {
         List<Vacancy> vacancies = vacancyService.getAllVacancies();
         return ResponseEntity.ok(vacancies);
+    }
+
+    /**
+     * Метод контролера для отримання всіх вакансій рекрутера
+     * @return {@link ResponseEntity} зі статусом 200 та вакансіями рекрутера
+     */
+    @GetMapping("/my-vacancies")
+    public ResponseEntity<List<Vacancy>> getRecruiterVacancies(@RequestParam Integer recruiterId) {
+        List<Vacancy> recr_vacancies = vacancyService.getVacanciesByRecruiterId(recruiterId);
+        return ResponseEntity.ok(recr_vacancies);
     }
 }

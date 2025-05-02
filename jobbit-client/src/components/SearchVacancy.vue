@@ -50,11 +50,16 @@ function handleSearch() {
 
 .search-button {
   padding: 20px 20px;
-  background-color: #1c571d;
+  background-color: #4caf50;
   border: none;
   color: white;
   font-weight: bold;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #29752d;
 }
 </style>

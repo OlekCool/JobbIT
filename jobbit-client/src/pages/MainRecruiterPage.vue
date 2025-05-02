@@ -6,9 +6,12 @@
                      @show-all-vacancies="handleShowAllVacancies"
                      @show-my-vacancies="handleShowMyVacancies"/>
     <div class="dashboard-body">
+      <div v-if="showMyVacancies" class="my-vacancies-sidebar">
+        <button>Додати вакансію</button>
+      </div>
       <FiltersSection v-if="!showProfile && !showMyVacancies && showAllVacancies" @filter-change="applyFilters" />
       <VacanciesLayout
-          v-if="!showProfile && !showMyVacancies && showAllVacancies"
+          v-if="!showProfile"
           :vacancies="filteredVacancies"
           @search="applySearch"
       />
@@ -26,10 +29,11 @@ import ProfileService from "@/services/ProfileService.ts";
 import VacancyService from "@/services/VacancyService.ts";
 import VacanciesLayout from "@/components/VacanciesLayout.vue";
 import FiltersSection from "@/components/FiltersSection.vue";
-import { useRouter } from "vue-router";
-import { computed, onMounted, ref } from "vue";
+import { useRouter, useRoute  } from "vue-router";
+import { computed, onMounted, ref, watch } from "vue";
 
 const router = useRouter();
+const route = useRoute();
 
 const showProfile = ref(false);
 const showAllVacancies = ref(false);
@@ -64,10 +68,23 @@ onMounted(async () => {
       showAllVacancies.value = false;
       showMyVacancies.value = false;
     } else if (router.currentRoute.value.path === '/recruiter-dash/my-vacancies') {
+      try {
+        const recruiterId = JSON.parse(userId.value);
+        vacancies.value = await VacancyService.getRecruiterVacancies(recruiterId, authToken);
+      } catch (error) {
+        console.error('Помилка при отриманні вакансій рекрутера:', error);
+      }
+
       showAllVacancies.value = false;
       showMyVacancies.value = true;
-      showProfile.value = false;
+      showProfile.value = false
     } else if (router.currentRoute.value.path === '/recruiter-dash/all-vacancies') {
+      try {
+        vacancies.value = await VacancyService.getAllVacancies();
+      } catch (error) {
+        console.error('Помилка при отриманні всіх вакансій:', error);
+      }
+
       showAllVacancies.value = true;
       showMyVacancies.value = false;
       showProfile.value = false;
@@ -75,11 +92,36 @@ onMounted(async () => {
   } catch (error) {
     console.error('Помилка при завантаженні даних на головній сторінці кандидата:', error);
   }
+});
 
-  try {
-    vacancies.value = await VacancyService.getAllVacancies();
-  } catch (error) {
-    console.error('Помилка при завантаженні вакансій з бекенду:', error);
+watch(() => route.path, async (newPath) => {
+  if (newPath === '/recruiter-dash/my-vacancies') {
+    try {
+      const recruiterId = JSON.parse(userId.value);
+      vacancies.value = await VacancyService.getRecruiterVacancies(recruiterId, authToken);
+    } catch (error) {
+      console.error('Помилка при отриманні вакансій рекрутера:', error);
+    }
+
+    showAllVacancies.value = false;
+    showMyVacancies.value = true;
+    showProfile.value = false;
+  } else if (newPath === '/recruiter-dash/all-vacancies') {
+    try {
+      vacancies.value = await VacancyService.getAllVacancies();
+    } catch (error) {
+      console.error('Помилка при отриманні всіх вакансій:', error);
+    }
+
+    showAllVacancies.value = true;
+    showMyVacancies.value = false;
+    showProfile.value = false;
+  } else if (newPath.startsWith('/recruiter-dash/profile')) {
+    vacancies.value = null;
+
+    showProfile.value = true;
+    showAllVacancies.value = false;
+    showMyVacancies.value = false;
   }
 });
 
@@ -87,18 +129,13 @@ onMounted(async () => {
  * Обробник події відображення профілю
  */
 const handleShowProfile = () => {
-  showProfile.value = true;
-  showAllVacancies.value = false;
-  showMyVacancies.value = false;
+  router.push(`/recruiter-dash/profile/${userId.value}`);
 };
 
 /**
  * Обробник події відображення всіх вакансій
  */
 const handleShowAllVacancies = () => {
-  showProfile.value = false;
-  showAllVacancies.value = true;
-  showMyVacancies.value = false;
   router.push('/recruiter-dash/all-vacancies');
 };
 
@@ -106,9 +143,6 @@ const handleShowAllVacancies = () => {
  * Обробник події відображення всіх вакансій
  */
 const handleShowMyVacancies = () => {
-  showProfile.value = false;
-  showAllVacancies.value = false;
-  showMyVacancies.value = true;
   router.push('/recruiter-dash/my-vacancies');
 };
 
@@ -157,5 +191,31 @@ const filteredVacancies = computed(() => {
   display: flex;
   flex: 1;
   border-top: 2px solid #aaa;
+}
+
+.my-vacancies-sidebar {
+  width: 20.05%;
+  height: 78vh;
+  padding: 0 20px;
+  border-right: 2px solid #ccc;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  margin: 2px;
+  align-content: center;
+}
+
+.my-vacancies-sidebar button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.my-vacancies-sidebar button:hover {
+  background-color: #29752d;
 }
 </style>

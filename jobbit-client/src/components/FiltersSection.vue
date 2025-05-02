@@ -61,7 +61,7 @@ watch(filters, () => {
 
 <style scoped>
 .filters {
-  width: 20%;
+  width: 20.05%;
   height: 78vh;
   padding: 0 20px;
   border-right: 2px solid #ccc;

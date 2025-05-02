@@ -13,8 +13,8 @@
     </div>
 
     <div class="nav-buttons-section">
-      <button @click="goToMyVacancies">Мої вакансії</button>
-      <button @click="goToAllVacancies">Всі вакансії</button>
+      <button @click="goToMyVacancies" :class="{ 'active': isActive('/recruiter-dash/my-vacancies') }">Мої вакансії</button>
+      <button @click="goToAllVacancies" :class="{ 'active': isActive('/recruiter-dash/all-vacancies') }">Всі вакансії</button>
     </div>
 
     <div class="logout-section">
@@ -25,18 +25,29 @@
 
 <script setup>
 import { ref, defineProps } from 'vue';
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import recrProfileService from "@/services/ProfileService.ts";
 import { HttpStatusCode } from "axios";
 import { defineEmits } from 'vue';
 
 const router = useRouter();
+const route = useRoute();
 const userId = ref(JSON.parse(localStorage.getItem('userId')));
 const emit = defineEmits(['show-profile', 'show-my-vacancies', 'show-all-vacancies']);
 const props = defineProps({
   recruiterProfile: Object,
   userPhoto: String
 });
+
+/**
+ * Метод для перевірки, чи є поточний шлях активним. Потрібно для підсвічення кнопки,
+ * яка відповідає певному шляху (який зараз)
+ * @param path Шлях для перевірки
+ * @returns {boolean} True, якщо поточний шлях співпадає з переданим, інакше false
+ */
+const isActive = (path) => {
+  return route.path === path;
+};
 
 /**
  * Метод для здійснення виходу з профілю
@@ -145,6 +156,11 @@ const goToAllVacancies = () => {
 
 .nav-buttons-section button:hover {
   background-color: #e0e0e0;
+}
+
+.nav-buttons-section button.active {
+  background-color: #aaffaa; /* Зелений колір для активної кнопки */
+  border-color: #88ff88;
 }
 
 /* Кнопка Logout */

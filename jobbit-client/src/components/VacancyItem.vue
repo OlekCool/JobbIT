@@ -48,9 +48,10 @@ const props = defineProps({
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
+  transition: background-color 0.3s ease;
 }
 
 .view-details-btn:hover {
-  background-color: #45a049;
+  background-color: #29752d;
 }
 </style>

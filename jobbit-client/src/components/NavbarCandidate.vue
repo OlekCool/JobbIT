@@ -13,10 +13,10 @@
     </div>
 
     <div class="nav-buttons-section">
-      <button @click="goToVacancies">Пошук</button>
-      <button @click="goToSaved">Збережене</button>
-      <button @click="goToApplied">Відгуки</button>
-      <button @click="goToNotifications">Повідомлення</button>
+      <button @click="goToVacancies" :class="{ 'active': isActive('/candidate-dash/search') }">Пошук</button>
+      <button @click="goToSaved" :class="{ 'active': isActive('/candidate-dash/saved') }">Збережене</button>
+      <button @click="goToApplied" :class="{ 'active': isActive('/candidate-dash/applied') }">Відгуки</button>
+      <button @click="goToNotifications" :class="{ 'active': isActive('/candidate-dash/notifications') }">Повідомлення</button>
     </div>
 
     <div class="logout-section">
@@ -27,12 +27,13 @@
 
 <script setup>
 import { ref, defineProps } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import candProfileService from "@/services/ProfileService.ts";
 import { HttpStatusCode } from "axios";
 import { defineEmits } from 'vue';
 
 const router = useRouter();
+const route = useRoute();
 const userId = ref(JSON.parse(localStorage.getItem('userId')));
 const emit = defineEmits(['show-profile', 'show-vacancies', 'show-saved-vacancies',
   'show-applied-vacancies', 'show-notifications']);
@@ -40,6 +41,16 @@ const props = defineProps({
   candidateProfile: Object,
   userPhoto: String
 });
+
+/**
+ * Метод для перевірки, чи є поточний шлях активним. Потрібно для підсвічення кнопки,
+ * яка відповідає певному шляху (який зараз)
+ * @param path Шлях для перевірки
+ * @returns {boolean} True, якщо поточний шлях співпадає з переданим, інакше false
+ */
+const isActive = (path) => {
+  return route.path === path;
+};
 
 /**
  * Метод для здійснення виходу з профілю
@@ -164,6 +175,11 @@ const goToNotifications = () => {
 
 .nav-buttons-section button:hover {
   background-color: #e0e0e0;
+}
+
+.nav-buttons-section button.active {
+  background-color: #aaffaa;
+  border-color: #88ff88;
 }
 
 /* Кнопка Logout */
