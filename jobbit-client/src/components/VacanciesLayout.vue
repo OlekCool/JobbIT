@@ -28,7 +28,7 @@ function handleSearch(query) {
 
 <style scoped>
 .vacancies-holder {
-  width: 60%;
+  width: 80%;
   height: 80vh;
   padding: 20px 60px;
   margin: 0 auto;

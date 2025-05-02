@@ -97,13 +97,19 @@ const routes = [
         component: MainRecruiterPage,
       },
       {
-        path: 'myvacancies',
+        path: 'my-vacancies',
         name: 'RecruiterVacancies',
         component: MainRecruiterPage,
       },
+      {
+        path: 'all-vacancies',
+        name: 'AllVacancies',
+        component: MainRecruiterPage,
+      }
     ],
     beforeEnter: (to, from, next) => {
       const role = localStorage.getItem("userRole");
+      console.log("ROLE: " + role);
       if (role === "RECRUITER") {
         next();
       } else {
@@ -133,6 +139,21 @@ const routes = [
       {
         path: 'search',
         name: 'CandidateSearch',
+        component: MainCandidatePage,
+      },
+      {
+        path: 'saved',
+        name: 'CandidateSaved',
+        component: MainCandidatePage,
+      },
+      {
+        path: 'applied',
+        name: 'CandidateApplied',
+        component: MainCandidatePage,
+      },
+      {
+        path: 'notifications',
+        name: 'CandidateNotifications',
         component: MainCandidatePage,
       },
     ],

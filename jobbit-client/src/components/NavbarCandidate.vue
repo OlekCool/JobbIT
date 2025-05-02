@@ -14,9 +14,9 @@
 
     <div class="nav-buttons-section">
       <button @click="goToVacancies">Пошук</button>
-      <button>Збережене</button>
-      <button>Відгуки</button>
-      <button>Повідомлення</button>
+      <button @click="goToSaved">Збережене</button>
+      <button @click="goToApplied">Відгуки</button>
+      <button @click="goToNotifications">Повідомлення</button>
     </div>
 
     <div class="logout-section">
@@ -34,7 +34,8 @@ import { defineEmits } from 'vue';
 
 const router = useRouter();
 const userId = ref(JSON.parse(localStorage.getItem('userId')));
-const emit = defineEmits(['show-profile']);
+const emit = defineEmits(['show-profile', 'show-vacancies', 'show-saved-vacancies',
+  'show-applied-vacancies', 'show-notifications']);
 const props = defineProps({
   candidateProfile: Object,
   userPhoto: String
@@ -78,6 +79,28 @@ const goToCandidateProfile = async () => {
 const goToVacancies = () => {
   emit('show-vacancies');
 };
+
+/**
+ * Метод для обробки кліка на кнопку "Пошук"
+ */
+const goToSaved = () => {
+  emit('show-saved-vacancies');
+};
+
+/**
+ * Метод для обробки кліка на кнопку "Пошук"
+ */
+const goToApplied = () => {
+  emit('show-applied-vacancies');
+};
+
+/**
+ * Метод для обробки кліка на кнопку "Пошук"
+ */
+const goToNotifications = () => {
+  emit('show-notifications');
+};
+
 </script>
 
 <style scoped>

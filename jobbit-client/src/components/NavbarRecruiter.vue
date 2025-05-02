@@ -13,7 +13,8 @@
     </div>
 
     <div class="nav-buttons-section">
-      <button @click="goToVacancies">Мої вакансії</button>
+      <button @click="goToMyVacancies">Мої вакансії</button>
+      <button @click="goToAllVacancies">Всі вакансії</button>
     </div>
 
     <div class="logout-section">
@@ -23,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, onMounted, watch } from 'vue';
+import { ref, defineProps } from 'vue';
 import { useRouter } from "vue-router";
 import recrProfileService from "@/services/ProfileService.ts";
 import { HttpStatusCode } from "axios";
@@ -31,7 +32,7 @@ import { defineEmits } from 'vue';
 
 const router = useRouter();
 const userId = ref(JSON.parse(localStorage.getItem('userId')));
-const emit = defineEmits(['show-profile']);
+const emit = defineEmits(['show-profile', 'show-my-vacancies', 'show-all-vacancies']);
 const props = defineProps({
   recruiterProfile: Object,
   userPhoto: String
@@ -59,7 +60,6 @@ const goToRecruiterProfile = async () => {
         localStorage.getItem('authToken'));
 
     if (response.status === HttpStatusCode.Ok) {
-      console.log("Відображення успішне", response.data);
       emit('show-profile');
     } else {
       console.error("Помилка відображення даних профіля", HttpStatusCode);
@@ -70,10 +70,17 @@ const goToRecruiterProfile = async () => {
 };
 
 /**
- * Метод для обробки кліка на кнопку "Пошук"
+ * Метод для обробки кліка на кнопку "Мої вакансії"
  */
-const goToVacancies = () => {
-  emit('show-vacancies');
+const goToMyVacancies = () => {
+  emit('show-my-vacancies');
+};
+
+/**
+ * Метод для обробки кліка на кнопку "Всі вакансії"
+ */
+const goToAllVacancies = () => {
+  emit('show-all-vacancies');
 };
 </script>
 

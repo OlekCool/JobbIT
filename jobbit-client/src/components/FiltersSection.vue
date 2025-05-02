@@ -4,20 +4,36 @@
 
     <div class="filter-group">
       <p class="filter-label">Розташування:</p>
-      <label><input type="radio" value="" v-model="selectedLocation" /> Будь-який</label>
-      <label><input type="radio" value="Remote" v-model="selectedLocation" /> Remote</label>
-      <label><input type="radio" value="Office" v-model="selectedLocation" /> Office</label>
-      <label><input type="radio" value="Partly Remote" v-model="selectedLocation" /> Partly Remote</label>
+      <label><input type="radio" value="" v-model="filters.remote" /> Будь-який </label>
+      <label><input type="radio" value="Віддалено" v-model="filters.remote" /> Віддалено </label>
+      <label><input type="radio" value="Офіс" v-model="filters.remote" /> Офіс </label>
+      <label><input type="radio" value="Частково" v-model="filters.remote" /> Частково віддалено </label>
+    </div>
+
+    <div class="filter-group">
+      <p class="filter-label">Тип зайнятості:</p>
+      <label><input type="checkbox" v-model="filters.fulltime" :value="true" /> Повна </label>
+      <label><input type="checkbox" v-model="filters.fulltime" :value="false" /> Часткова </label>
+    </div>
+
+    <div class="filter-group">
+      <p class="filter-label">Рівень англійської:</p>
+      <label><input type="checkbox" v-model="filters.level_eng" value="A1" /> A1</label>
+      <label><input type="checkbox" v-model="filters.level_eng" value="A2" /> A2</label>
+      <label><input type="checkbox" v-model="filters.level_eng" value="B1" /> B1</label>
+      <label><input type="checkbox" v-model="filters.level_eng" value="B2" /> B2</label>
+      <label><input type="checkbox" v-model="filters.level_eng" value="C1" /> C1</label>
+      <label><input type="checkbox" v-model="filters.level_eng" value="C2" /> C2</label>
     </div>
 
     <div class="filter-group">
       <label class="filter-label" for="salary">Зарплата від:</label>
-      <input id="salary" type="number" v-model.number="minSalary" placeholder="Наприклад, 25000" />
+      <input id="salary" type="number" v-model.number="filters.set_salary" placeholder="Наприклад, 25000" />
     </div>
 
     <div class="filter-group">
       <label class="filter-label" for="experience">Мінімальний досвід (роки):</label>
-      <input id="experience" type="number" min="0" max="50" v-model.number="minExperience" placeholder="0" />
+      <input id="experience" type="number" min="0" max="50" v-model.number="filters.min_exp" placeholder="0" />
     </div>
   </aside>
 </template>
@@ -25,22 +41,22 @@
 <script setup>
 import { ref, watch } from "vue";
 
-const selectedLocation = ref("");
-const minSalary = ref(null);
-const minExperience = ref(null);
+const filters = ref({
+  remote: "",
+  fulltime: [],
+  level_eng: [],
+  set_salary: null,
+  min_exp: null,
+});
 
 const emit = defineEmits(["filter-change"]);
 
 /**
  * Реагує на зміну фільтрів для відображення вакансій
  */
-watch([selectedLocation, minSalary, minExperience], () => {
-  emit("filter-change", {
-    location: selectedLocation.value,
-    salaryFrom: minSalary.value,
-    minExperience: minExperience.value,
-  });
-});
+watch(filters, () => {
+  emit("filter-change", { ...filters.value });
+}, { deep: true });
 </script>
 
 <style scoped>
@@ -52,9 +68,10 @@ watch([selectedLocation, minSalary, minExperience], () => {
   background-color: #f9f9f9;
   box-sizing: border-box;
   margin: 2px;
+  overflow-y: auto;
 }
 
-h3 {
+h2 {
   margin-bottom: 20px;
   font-size: 20px;
   color: #333;

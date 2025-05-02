@@ -1,12 +1,10 @@
 <template>
   <div class="vacancy-card">
     <div class="vacancy-title">{{ vacancy.title }}</div>
-    <div class="vacancy-salary">{{ vacancy.salary }}</div>
-    <div class="vacancy-location">{{ vacancy.location }}</div>
-    <div class="btns">
-      <button>L</button>
-      <button>A</button>
-    </div>
+    <div class="vacancy-salary">{{ vacancy.setSalary }} грн.</div>
+    <div class="vacancy-remote">{{ vacancy.remote }}</div>
+    <div class="vacancy-experience">Досвід: {{ vacancy.minExp }}+ років</div>
+    <button class="view-details-btn">Переглянути детальніше</button>
   </div>
 </template>
 
@@ -21,7 +19,7 @@ const props = defineProps({
 <style scoped>
 .vacancy-card {
   display: grid;
-  grid-template-columns: 2fr 1fr 1.5fr auto;
+  grid-template-columns: 2fr 1fr 1.5fr 1fr auto;
   align-items: center;
   padding: 10px;
   border: 2px solid #ddd;
@@ -37,13 +35,22 @@ const props = defineProps({
 }
 
 .vacancy-salary,
-.vacancy-location {
+.vacancy-remote,
+.vacancy-experience{
   text-align: left;
 }
 
-.btns {
-  display: flex;
-  gap: 5px;
-  justify-content: flex-end;
+.view-details-btn {
+  padding: 8px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.view-details-btn:hover {
+  background-color: #45a049;
 }
 </style>

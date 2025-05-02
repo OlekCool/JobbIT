@@ -1,5 +1,6 @@
 package oleksandr.jobbit_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -32,6 +33,7 @@ public class Vacancy {
      */
     @ManyToOne
     @JoinColumn(name = "posted_by", nullable = false)
+    @JsonBackReference
     private RecruiterProfile recruiterProfile;
 
     /**

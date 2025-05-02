@@ -6,9 +6,10 @@
         class="search-input"
         placeholder="Введіть пошуковий запит"
         v-model="search"
+        @keyup.enter="handleSearch"
     />
     <label for="search" class="searchBtn">
-      <button class="search-button" @click="handleSearch">
+      <button class="search-button" @click="handleSearch" >
         🔍
       </button>
     </label>

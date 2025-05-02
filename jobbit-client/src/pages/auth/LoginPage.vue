@@ -63,9 +63,9 @@ const handleSubmit = async () => {
       console.log("Логін успішний", response.data); // eslint-disable-line no-console
 
       if (response.data.role === "CANDIDATE") {
-        await router.push("/candidate-dash");
+        await router.push("/candidate-dash/search");
       } else if (response.data.role === "RECRUITER") {
-        await router.push("/recruiter-dash");
+        await router.push("/recruiter-dash/my-vacancies");
       }
     }
   } catch (error) {
