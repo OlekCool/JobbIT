@@ -41,6 +41,9 @@
 <script setup>
 import { ref, watch } from "vue";
 
+/**
+ * Збереження значень фільтрів у реактивну змінну
+ */
 const filters = ref({
   remote: "",
   fulltime: [],

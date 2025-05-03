@@ -4,16 +4,24 @@
     <div class="vacancy-salary">{{ vacancy.setSalary }} грн.</div>
     <div class="vacancy-remote">{{ vacancy.remote }}</div>
     <div class="vacancy-experience">Досвід: {{ vacancy.minExp }}+ років</div>
-    <button class="view-details-btn">Переглянути детальніше</button>
+    <button class="view-details-btn" @click="$emit('select-vacancy', vacancy)">Переглянути детальніше</button>
   </div>
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, defineEmits } from "vue";
 
+/**
+ * Пропс для отримання даних про вакансію з батьківського компонента
+ */
 const props = defineProps({
-  vacancy: Object
+  vacancy: {
+    type: Object,
+    required: true
+  }
 });
+
+const emit = defineEmits(['select-vacancy']);
 </script>
 
 <style scoped>
@@ -24,6 +32,16 @@ const props = defineProps({
   padding: 10px;
   border: 2px solid #ddd;
   gap: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.vacancy-card:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-color: #ccc;
 }
 
 .vacancy-title {

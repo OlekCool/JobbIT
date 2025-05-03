@@ -6,18 +6,27 @@
                      @show-all-vacancies="handleShowAllVacancies"
                      @show-my-vacancies="handleShowMyVacancies"/>
     <div class="dashboard-body">
-      <div v-if="showMyVacancies" class="my-vacancies-sidebar">
+      <div v-if="showMyVacancies && !selectedVacancyId" class="my-vacancies-sidebar">
         <button>Додати вакансію</button>
       </div>
-      <FiltersSection v-if="!showProfile && !showMyVacancies && showAllVacancies" @filter-change="applyFilters" />
+      <FiltersSection v-if="!showProfile && !showMyVacancies && showAllVacancies && !selectedVacancyId"
+                      @filter-change="applyFilters" />
       <VacanciesLayout
-          v-if="!showProfile"
+          v-if="!showProfile && !selectedVacancyId"
           :vacancies="filteredVacancies"
           @search="applySearch"
+          @select-vacancy="handleSelectVacancy"
       />
-      <RecruiterProfile v-if="showProfile && !showAllVacancies && !showMyVacancies"
+      <RecruiterProfile v-if="showProfile && !showAllVacancies && !showMyVacancies && !selectedVacancyId"
                         :recruiterProfile="recruiterProfileData"
                         :userPhoto="userPhotoUrl" />
+      <div v-if="selectedVacancyId" class="vacancy-details-container">
+        <component
+            :is="getDetailedVacancyComponent()"
+            :vacancy="selectedVacancy"
+        />
+        <button @click="closeVacancyDetails">Назад до списку</button>
+      </div>
     </div>
   </div>
 </template>
@@ -25,10 +34,12 @@
 <script setup>
 import NavbarRecruiter from "@/components/NavbarRecruiter.vue";
 import RecruiterProfile from "@/components/RecruiterProfile.vue";
-import ProfileService from "@/services/ProfileService.ts";
-import VacancyService from "@/services/VacancyService.ts";
 import VacanciesLayout from "@/components/VacanciesLayout.vue";
 import FiltersSection from "@/components/FiltersSection.vue";
+import VacancyCardCommon from "@/components/VacancyCardCommon.vue";
+import VacancyCardRecruiter from "@/components/VacancyCardRecruiter.vue";
+import ProfileService from "@/services/ProfileService.ts";
+import VacancyService from "@/services/VacancyService.ts";
 import { useRouter, useRoute  } from "vue-router";
 import { computed, onMounted, ref, watch } from "vue";
 
@@ -39,15 +50,57 @@ const showProfile = ref(false);
 const showAllVacancies = ref(false);
 const showMyVacancies = ref(true);
 
-const userPhotoUrl = ref('/files/userPhotos/userDemo.png');
 const userId = ref(localStorage.getItem('userId'));
 const authToken = localStorage.getItem('authToken');
 const recruiterProfileData = ref(null);
+const userPhotoUrl = ref('/files/userPhotos/userDemo.png');
 
 const filters = ref({ remote: "", fulltime: [], level_eng: [], set_salary: null, min_exp: null, });
 const searchQuery = ref("");
 const vacancies = ref([]);
+const selectedVacancyId = ref(null);
+const selectedVacancy = ref(null);
+const loadingVacancies = ref(false);
 
+/**
+ * Асинхронний метод для загрузки вакансій, залежно від url-адреси сторінки
+ * @returns {Promise<void>}
+ */
+const loadInitialVacancies = async () => {
+  loadingVacancies.value = true;
+
+  try {
+    if (route.path.startsWith('/recruiter-dash/profile')) {
+      vacancies.value = null;
+
+      showProfile.value = true;
+      showAllVacancies.value = false;
+      showMyVacancies.value = false;
+    } else if (route.path === '/recruiter-dash/my-vacancies') {
+      const recruiterId = JSON.parse(userId.value);
+      vacancies.value = await VacancyService.getRecruiterVacancies(recruiterId, authToken);
+
+      showAllVacancies.value = false;
+      showMyVacancies.value = true;
+      showProfile.value = false;
+    } else if (route.path === '/recruiter-dash/all-vacancies') {
+      vacancies.value = await VacancyService.getAllVacancies();
+
+      showAllVacancies.value = true;
+      showMyVacancies.value = false;
+      showProfile.value = false;
+    }
+  } catch (error) {
+    console.error('Помилка при отриманні вакансій:', error);
+  } finally {
+    loadingVacancies.value = false;
+  }
+};
+
+/**
+ * Обробка монтування компонента, де завантажується профіль, фото кандидата, вакансії, та перевірка, чи є
+ * параметр vac_id в адресі (щоб отримати інформацію про вакансію)
+ */
 onMounted(async () => {
   if (!userId || !authToken) {
     await router.push('/login');
@@ -63,84 +116,84 @@ onMounted(async () => {
       userPhotoUrl.value = `/${photoPath}`;
     }
 
-    if (router.currentRoute.value.path.startsWith('/recruiter-dash/profile')) {
-      showProfile.value = true;
-      showAllVacancies.value = false;
-      showMyVacancies.value = false;
-    } else if (router.currentRoute.value.path === '/recruiter-dash/my-vacancies') {
-      try {
-        const recruiterId = JSON.parse(userId.value);
-        vacancies.value = await VacancyService.getRecruiterVacancies(recruiterId, authToken);
-      } catch (error) {
-        console.error('Помилка при отриманні вакансій рекрутера:', error);
-      }
+    await loadInitialVacancies();
 
-      showAllVacancies.value = false;
-      showMyVacancies.value = true;
-      showProfile.value = false
-    } else if (router.currentRoute.value.path === '/recruiter-dash/all-vacancies') {
-      try {
-        vacancies.value = await VacancyService.getAllVacancies();
-      } catch (error) {
-        console.error('Помилка при отриманні всіх вакансій:', error);
-      }
-
-      showAllVacancies.value = true;
-      showMyVacancies.value = false;
-      showProfile.value = false;
+    if (route.query.vac_id && vacancies.value.length > 0) {
+      const searchId = Number(route.query.vac_id);
+      selectedVacancy.value = vacancies.value.find(vac => vac.vacId === searchId);
+      selectedVacancyId.value = route.query.vac_id;
     }
   } catch (error) {
     console.error('Помилка при завантаженні даних на головній сторінці кандидата:', error);
   }
 });
 
+/**
+ * Відстеження зміни адресу сторінки на присутність параметра vac_id, щоб завантажити ідентифікатор  вакансії та  її дані
+ */
 watch(() => route.path, async (newPath) => {
-  if (newPath === '/recruiter-dash/my-vacancies') {
-    try {
-      const recruiterId = JSON.parse(userId.value);
-      vacancies.value = await VacancyService.getRecruiterVacancies(recruiterId, authToken);
-    } catch (error) {
-      console.error('Помилка при отриманні вакансій рекрутера:', error);
-    }
+  await loadInitialVacancies();
 
-    showAllVacancies.value = false;
-    showMyVacancies.value = true;
-    showProfile.value = false;
-  } else if (newPath === '/recruiter-dash/all-vacancies') {
-    try {
-      vacancies.value = await VacancyService.getAllVacancies();
-    } catch (error) {
-      console.error('Помилка при отриманні всіх вакансій:', error);
-    }
-
-    showAllVacancies.value = true;
-    showMyVacancies.value = false;
-    showProfile.value = false;
-  } else if (newPath.startsWith('/recruiter-dash/profile')) {
-    vacancies.value = null;
-
-    showProfile.value = true;
-    showAllVacancies.value = false;
-    showMyVacancies.value = false;
+  if (!newPath.includes('vac_id') && selectedVacancyId.value) {
+    selectedVacancyId.value = null;
+    selectedVacancy.value = null;
+  } else if (newPath.includes('vac_id') && vacancies.value) {
+    const searchId = Number(route.query.vac_id);
+    selectedVacancy.value = vacancies.value.find(vac => vac.vacId === searchId);
+    selectedVacancyId.value = route.query.vac_id;
   }
 });
 
 /**
- * Обробник події відображення профілю
+ * Обрання вакансії для відображення
+ * @param vacancy вакансія, яку треба відобразити
+ */
+const handleSelectVacancy = (vacancy) => {
+  selectedVacancyId.value = vacancy.vacId;
+  selectedVacancy.value = vacancy;
+  router.push({ path: route.path, query: { ...route.query, vac_id: vacancy.vacId } });
+};
+
+/**
+ * Закриття детальної інформації про вакансію
+ */
+const closeVacancyDetails = () => {
+  selectedVacancyId.value = null;
+  selectedVacancy.value = null;
+  const { vac_id, ...newQuery } = route.query;
+  router.push({ path: route.path, query: newQuery });
+};
+
+/**
+ * Отримання компонента вакансії, якщо є обрана вакансія зі списку
+ */
+const getDetailedVacancyComponent = () => {
+  if (selectedVacancy.value) {
+    if (route.path === '/recruiter-dash/my-vacancies') {
+      return VacancyCardRecruiter;
+    } else if (route.path === '/recruiter-dash/all-vacancies') {
+      return VacancyCardCommon;
+    }
+  }
+  return null;
+};
+
+/**
+ * Обробник події відображення профілю рекрутера
  */
 const handleShowProfile = () => {
   router.push(`/recruiter-dash/profile/${userId.value}`);
 };
 
 /**
- * Обробник події відображення всіх вакансій
+ * Обробник події всіх вакансій
  */
 const handleShowAllVacancies = () => {
   router.push('/recruiter-dash/all-vacancies');
 };
 
 /**
- * Обробник події відображення всіх вакансій
+ * Обробник події відображення вакансій рекрутера
  */
 const handleShowMyVacancies = () => {
   router.push('/recruiter-dash/my-vacancies');
@@ -174,7 +227,6 @@ const filteredVacancies = computed(() => {
     const matchSalary = filters.value.set_salary != null ? vac.setSalary >= filters.value.set_salary : true;
     const matchExperience = filters.value.min_exp != null ? vac.minExp >= filters.value.min_exp : true;
     const matchSearch = searchQuery.value ? vac.title.toLowerCase().includes(searchQuery.value) : true;
-
     return matchRemote && matchFulltime && matchLevelEng && matchSalary && matchExperience && matchSearch;
   });
 });
@@ -217,5 +269,10 @@ const filteredVacancies = computed(() => {
 
 .my-vacancies-sidebar button:hover {
   background-color: #29752d;
+}
+
+.vacancy-details-container {
+  margin: 0 auto;
+  padding: 20px;
 }
 </style>

@@ -37,6 +37,10 @@ const route = useRoute();
 const userId = ref(JSON.parse(localStorage.getItem('userId')));
 const emit = defineEmits(['show-profile', 'show-vacancies', 'show-saved-vacancies',
   'show-applied-vacancies', 'show-notifications']);
+
+/**
+ * Пропс для отримання даних про профіль кандидата та його фото з батьківського компонента
+ */
 const props = defineProps({
   candidateProfile: Object,
   userPhoto: String
@@ -111,7 +115,6 @@ const goToApplied = () => {
 const goToNotifications = () => {
   emit('show-notifications');
 };
-
 </script>
 
 <style scoped>

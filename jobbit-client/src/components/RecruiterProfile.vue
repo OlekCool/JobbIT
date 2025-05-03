@@ -99,13 +99,14 @@
 import { reactive, ref, onMounted, defineProps, watch } from "vue";
 import ProfileService from "../services/ProfileService.ts";
 
-// PROPS
+/**
+ * Пропс для отримання даних про профіль рекрутера та його фото з батьківського компонента
+ */
 const props = defineProps({
   recruiterProfile: Object,
   userPhoto: String
 });
 
-// REACTIVE STATES AND VARIABLES
 const isEditing = ref(false);
 const editableProfile = reactive(props.recruiterProfile ? { ...props.recruiterProfile } : {});
 
@@ -117,7 +118,9 @@ const profilePhotoUrl = ref(props.userPhoto);
 const userId = localStorage.getItem("userId");
 const authToken = localStorage.getItem("authToken");
 
-// WATCHER для відстеження зміни профілю та фото
+/**
+ * Відстеження змін у профілі для збереження редагованого профілю рекрутера
+ */
 watch(() => props.recruiterProfile, (newProfile) => {
   if (newProfile) {
     Object.assign(editableProfile, newProfile);
@@ -126,7 +129,9 @@ watch(() => props.recruiterProfile, (newProfile) => {
   }
 });
 
-// для провантаження профілю, фото рекрутера при mount компонента
+/**
+ * При монтуванні компонента збереження профілю рекрутера у редагований профіль
+ */
 onMounted(() => {
   if (props.recruiterProfile) {
     Object.assign(editableProfile, props.recruiterProfile);
@@ -159,8 +164,6 @@ const handleProfilePhotoChange = (event) => {
     reader.readAsDataURL(file);
   }
 };
-
-// Функції для надсилання даних на сервер
 
 /**
  * Обробка збереження фото користувача на сервері

@@ -12,6 +12,9 @@
 import VacancyDetails from './VacancyDetails.vue';
 import { defineProps, ref } from 'vue';
 
+/**
+ * Пропс для отримання даних про вакансію з батьківського компонента
+ */
 const props = defineProps({
   vacancy: {
     type: Object,
@@ -32,9 +35,10 @@ const vacancy = ref(props.vacancy);
 }
 
 .actions {
+  padding: 0 35%;
   display: flex;
   gap: 10px;
-  margin-top: 15px;
+  justify-content: space-evenly;
 }
 
 .save-button,

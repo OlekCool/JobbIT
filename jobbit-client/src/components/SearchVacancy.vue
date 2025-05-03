@@ -23,7 +23,7 @@ const emit = defineEmits(["search"]);
 const search = ref("");
 
 /**
- * Здійснення пошуку вакансій за запитом
+ * Емітування події пошуку вакансій за запитом
  */
 function handleSearch() {
   emit("search", search.value);

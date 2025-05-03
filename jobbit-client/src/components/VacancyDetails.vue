@@ -45,6 +45,9 @@ import { ref } from 'vue';
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';
 
+/**
+ * Пропс для отримання даних про вакансію з батьківського компонента
+ */
 const props = defineProps({
   vacancy: {
     type: Object,
@@ -54,6 +57,9 @@ const props = defineProps({
 
 const vacancy = ref(props.vacancy);
 
+/**
+ * Форматування дати для виводу в html-розмітку
+ */
 const formatDate = (dateString) => {
   if (!dateString) return '';
   const date = new Date(dateString);

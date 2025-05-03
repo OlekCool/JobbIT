@@ -34,6 +34,10 @@ const router = useRouter();
 const route = useRoute();
 const userId = ref(JSON.parse(localStorage.getItem('userId')));
 const emit = defineEmits(['show-profile', 'show-my-vacancies', 'show-all-vacancies']);
+
+/**
+ * Пропс для отримання даних про профіль рекрутера та його фото з батьківського компонента
+ */
 const props = defineProps({
   recruiterProfile: Object,
   userPhoto: String

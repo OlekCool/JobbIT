@@ -1,17 +1,6 @@
 <template>
   <div class="vacancy-card-recruiter">
     <VacancyDetails :vacancy="vacancy" />
-    <div class="actions">
-      <button class="edit-button">Редагувати</button>
-      <button class="delete-button">Видалити</button>
-    </div>
-
-    <div class="applicants-list">
-      <h3>Кандидати, які відгукнулися: </h3>
-      <ul>
-      </ul>
-      <p v-if="false">Поки що немає кандидатів, які відгукнулися.</p>
-    </div>
   </div>
 </template>
 
@@ -39,37 +28,6 @@ const vacancy = ref(props.vacancy);
   margin-bottom: 20px;
   padding: 15px;
   background-color: #fff;
-}
-
-.actions {
-  padding: 0 35%;
-  display: flex;
-  gap: 10px;
-  justify-content: space-evenly;
-}
-
-.edit-button,
-.delete-button {
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.edit-button {
-  background-color: #e0f7fa;
-  color: #00acc1;
-  border: 1px solid #b2ebf2;
-}
-
-.edit-button:hover {
-  background-color: #b2ebf2;
-}
-
-.delete-button {
-  background-color: #ffebee;
-  color: #d32f2f;
-  border: 1px solid #ef9a9a;
 }
 
 .delete-button:hover {

@@ -3,7 +3,7 @@
     <div class="search-container">
       <SearchVacancy @search="handleSearch" />
     </div>
-    <VacanciesList :vacancies="vacancies" />
+    <VacanciesList :vacancies="vacancies" @select-vacancy="$emit('select-vacancy', $event)" />
   </div>
 </template>
 
@@ -12,14 +12,17 @@ import SearchVacancy from "../components/SearchVacancy.vue";
 import VacanciesList from "../components/VacanciesList.vue";
 import { defineProps, defineEmits } from "vue";
 
+/**
+ * Пропс для отримання даних про вхідні вакансії в компонент з батьківського
+ */
 const props = defineProps({
   vacancies: Array
 });
 
-const emit = defineEmits(["search"]);
+const emit = defineEmits(["search", "select-vacancy"]);
 
 /**
- * Здійснення пошуку вакансій за запитом
+ * Емітування події пошуку вакансій за запитом
  */
 function handleSearch(query) {
   emit("search", query);

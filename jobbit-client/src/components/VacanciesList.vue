@@ -4,17 +4,23 @@
         v-for="vacancy in vacancies"
         :key="vacancy.id"
         :vacancy="vacancy"
+        @select-vacancy="$emit('select-vacancy', vacancy)"
     />
   </div>
 </template>
 
 <script setup>
 import VacancyItem from "../components/VacancyItem.vue";
-import { defineProps } from "vue";
+import { defineProps, defineEmits } from "vue";
 
+/**
+ * Пропс для отримання даних про вакансію з батьківського компонента
+ */
 const props = defineProps({
   vacancies: Array
 });
+
+const emit = defineEmits(['select-vacancy']);
 </script>
 
 <style scoped>

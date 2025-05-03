@@ -235,14 +235,15 @@ import { reactive, ref, onMounted, defineProps, watch } from "vue";
 import ProfileService from "../services/ProfileService.ts";
 import ProjectService from "../services/ProjectService.ts";
 
-// PROPS
+/**
+ * Пропс для отримання даних про профіль кандидата та його проєкти, а також фото, з батьківського компонента
+ */
 const props = defineProps({
   candidateProfile: Object,
   candidateProjects: Array,
   userPhoto: String
 });
 
-// REACTIVE STATES AND VARIABLES
 const isEditing = ref(false);
 const isEditingProjects = ref(false);
 const isAddingProject = ref(false);
@@ -261,7 +262,9 @@ const authToken = localStorage.getItem("authToken");
 const cvFile = ref(null);
 const profilePhotoFile = ref(null);
 
-// WATCHER для відстеження зміни профілю та фото
+/**
+ * Відстеження зміни даних профілю кандидата для збереження нових даних у редагований профіль
+ */
 watch(() => props.candidateProfile, (newProfile) => {
   if (newProfile) {
     Object.assign(editableProfile, newProfile);
@@ -270,12 +273,9 @@ watch(() => props.candidateProfile, (newProfile) => {
   }
 });
 
-// WATCHER для відстеження змін фото користувача
-watch(() => props.userPhoto, (newPhotoUrl) => {
-  profilePhotoUrl.value = newPhotoUrl;
-})
-
-// WATCHER для відстеження зміни проєктів користувача
+/**
+ * Відстеження змін у проєктах
+ */
 watch(() => props.candidateProjects, (newProjects) => {
   editableProjects.length = 0;
   if (newProjects && Array.isArray(newProjects)) {
@@ -284,7 +284,9 @@ watch(() => props.candidateProjects, (newProjects) => {
   }
 });
 
-// для провантаження профілю, фото та проєктів кандидата при mount компонента
+/**
+ * При монтуванні компонента збереження профілю рекрутера та його проєктів у редагований профіль
+ */
 onMounted(() => {
   if (props.candidateProfile) {
     Object.assign(editableProfile, props.candidateProfile);
@@ -348,7 +350,6 @@ const addProject = () => {
 const editProject = (project) => {
   editingProject.value = { ...project };
 };
-
 
 /**
  * Функція для обробки завантаження фотографії проєкту
