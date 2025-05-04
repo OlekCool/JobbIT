@@ -70,7 +70,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/api/vacancies/all").permitAll()
-                        .requestMatchers("/api/recruiter-dash/**", "/api/vacancies/my-vacancies").hasRole("RECRUITER")
+                        .requestMatchers("/api/recruiter-dash/**",
+                                         "/api/vacancies/my-vacancies/**").hasRole("RECRUITER")
                         .requestMatchers("/api/candidate-dash/**").hasRole("CANDIDATE")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

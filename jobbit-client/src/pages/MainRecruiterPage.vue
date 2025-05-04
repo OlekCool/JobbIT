@@ -7,7 +7,7 @@
                      @show-my-vacancies="handleShowMyVacancies"/>
     <div class="dashboard-body">
       <div v-if="showMyVacancies && !selectedVacancyId" class="my-vacancies-sidebar">
-        <button>Додати вакансію</button>
+        <button @click="openAddVacancyModal">Додати вакансію</button>
       </div>
       <FiltersSection v-if="!showProfile && !showMyVacancies && showAllVacancies && !selectedVacancyId"
                       @filter-change="applyFilters" />
@@ -24,9 +24,19 @@
         <component
             :is="getDetailedVacancyComponent()"
             :vacancy="selectedVacancy"
+            @vacancy-deleted-success="handleVacancyDeletedSuccess"
         />
         <button @click="closeVacancyDetails">Назад до списку</button>
       </div>
+
+      <VacancyModal
+          v-if="showVacancyModal"
+          :is-open="showVacancyModal"
+          :is-edit-mode="isEditMode"
+          :vacancy-to-edit="vacancyToEdit"
+          @close="closeVacancyModal"
+          @save="saveVacancy"
+      />
     </div>
   </div>
 </template>
@@ -38,6 +48,7 @@ import VacanciesLayout from "@/components/VacanciesLayout.vue";
 import FiltersSection from "@/components/FiltersSection.vue";
 import VacancyCardCommon from "@/components/VacancyCardCommon.vue";
 import VacancyCardRecruiter from "@/components/VacancyCardRecruiter.vue";
+import VacancyModal from "@/components/VacancyModal.vue";
 import ProfileService from "@/services/ProfileService.ts";
 import VacancyService from "@/services/VacancyService.ts";
 import { useRouter, useRoute  } from "vue-router";
@@ -49,6 +60,9 @@ const route = useRoute();
 const showProfile = ref(false);
 const showAllVacancies = ref(false);
 const showMyVacancies = ref(true);
+
+const showVacancyModal = ref(false);
+const isEditMode = ref(false);
 
 const userId = ref(localStorage.getItem('userId'));
 const authToken = localStorage.getItem('authToken');
@@ -230,6 +244,35 @@ const filteredVacancies = computed(() => {
     return matchRemote && matchFulltime && matchLevelEng && matchSalary && matchExperience && matchSearch;
   });
 });
+
+const openAddVacancyModal = () => {
+  isEditMode.value = false;
+  showVacancyModal.value = true;
+};
+
+const closeVacancyModal = () => {
+  showVacancyModal.value = false;
+};
+
+const saveVacancy = async (vacancyData) => {
+  try {
+    const recruiterId = JSON.parse(userId.value);
+    if (isEditMode.value) {
+    } else {
+      const response = await VacancyService.addNewVacancy(recruiterId, vacancyData, authToken);
+      await loadInitialVacancies();
+    }
+  } catch (error) {
+    console.error('Помилка при збереженні вакансії:', error);
+  }
+};
+
+const handleVacancyDeletedSuccess = () => {
+  router.push("/recruiter-dash/my-vacancies");
+  loadInitialVacancies();
+  selectedVacancyId.value = null;
+  selectedVacancy.value = null;
+};
 </script>
 
 <style>
@@ -274,5 +317,20 @@ const filteredVacancies = computed(() => {
 .vacancy-details-container {
   margin: 0 auto;
   padding: 20px;
+}
+
+.vacancy-details-container button {
+  background-color: #424242;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.vacancy-details-container button:hover {
+  background-color: #393939;
 }
 </style>

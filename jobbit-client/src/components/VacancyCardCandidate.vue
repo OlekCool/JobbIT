@@ -32,6 +32,8 @@ const vacancy = ref(props.vacancy);
   margin-bottom: 15px;
   padding: 15px;
   background-color: #fff;
+  height: 80%;
+  overflow-y: auto;
 }
 
 .actions {

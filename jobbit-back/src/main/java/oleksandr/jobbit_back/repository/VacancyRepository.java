@@ -32,4 +32,5 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Integer> {
      */
     Vacancy findVacancyByVacId(Integer vacId);
 
+
 }
