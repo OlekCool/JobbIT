@@ -1,8 +1,9 @@
 package oleksandr.jobbit_back.service;
 
 import jakarta.transaction.Transactional;
-import oleksandr.jobbit_back.entity.RecruiterProfile;
-import oleksandr.jobbit_back.entity.Vacancy;
+import oleksandr.jobbit_back.entity.*;
+import oleksandr.jobbit_back.repository.AppliedVacancyRepository;
+import oleksandr.jobbit_back.repository.SavedVacancyRepository;
 import oleksandr.jobbit_back.repository.VacancyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
@@ -23,7 +24,10 @@ import java.util.List;
 public class VacancyService {
 
     private final VacancyRepository vacancyRepository;
+    private final SavedVacancyRepository savedVacancyRepository;
+    private final AppliedVacancyRepository appliedVacancyRepository;
     private final RecruiterProfileService recruiterProfileService;
+    private final CandidateProfileService candidateProfileService;
 
     /**
      * Конструктор класу {@code VacancyService}, що ініціалізує залежності.
@@ -32,9 +36,12 @@ public class VacancyService {
      * @param recruiterProfileService репозиторій для роботи з профілями рекрутерів.
      */
     @Autowired
-    public VacancyService(VacancyRepository vacancyRepository, RecruiterProfileService recruiterProfileService) {
+    public VacancyService(VacancyRepository vacancyRepository, SavedVacancyRepository savedVacancyRepository, AppliedVacancyRepository appliedVacancyRepository, RecruiterProfileService recruiterProfileService, CandidateProfileService candidateProfileService) {
         this.vacancyRepository = vacancyRepository;
+        this.savedVacancyRepository = savedVacancyRepository;
+        this.appliedVacancyRepository = appliedVacancyRepository;
         this.recruiterProfileService = recruiterProfileService;
+        this.candidateProfileService = candidateProfileService;
     }
 
     /**
@@ -114,4 +121,107 @@ public class VacancyService {
     public void deleteVacancy(Integer id) {
         vacancyRepository.deleteById(id);
     }
+
+    /**
+     * Метод для збереження вакансії кандидатом
+     * @param candidateId ідентифікатор кандидата
+     * @param vacancyId ідентифікатор вакансії
+     */
+    @Modifying
+    @Transactional
+    public void saveVacancy(Integer candidateId, Integer vacancyId) {
+        CandidateProfile candidateProfile = candidateProfileService.findByUserId(candidateId);
+        Vacancy vacancy = vacancyRepository.findVacancyByVacId(vacancyId);
+
+        SavedVacancy savedVacancy = new SavedVacancy(candidateProfile, vacancy);
+        savedVacancy.setSaveDate(LocalDateTime.now());
+        savedVacancyRepository.save(savedVacancy);
+    }
+
+    /**
+     * Перевірка, чи вакансія збережена кандидатом
+     * @param candidateId ідентифікатор кандидата
+     * @param vacancyId ідентифікатор вакансії
+     * @return булеве значення
+     */
+    public boolean isVacancySaved(Integer candidateId, Integer vacancyId) {
+        return savedVacancyRepository.findById_WhoSavedAndId_VacId(candidateId, vacancyId).isPresent();
+    }
+
+    /**
+     * Метод для скасування збереження вакансії кандидатом
+     * @param candidateId ідентифікатор кандидата
+     * @param vacancyId ідентифікатор вакансії
+     */
+    @Modifying
+    @Transactional
+    public void unsaveVacancy(Integer candidateId, Integer vacancyId) {
+        SavedVacancyId id = new SavedVacancyId(candidateId, vacancyId);
+        savedVacancyRepository.deleteById(id);
+    }
+
+    /**
+     * Метод для відгуку кандидата на вакансію
+     * @param candidateId ідентифікатор кандидата
+     * @param vacancyId ідентифікатор вакансії
+     */
+    @Modifying
+    @Transactional
+    public void applyVacancy(Integer candidateId, Integer vacancyId) {
+        CandidateProfile candidateProfile = candidateProfileService.findByUserId(candidateId);
+        Vacancy vacancy = vacancyRepository.findVacancyByVacId(vacancyId);
+
+        AppliedVacancy appliedVacancy = new AppliedVacancy(candidateProfile, vacancy);
+        appliedVacancy.setApplyDate(LocalDateTime.now());
+        appliedVacancyRepository.save(appliedVacancy);
+    }
+
+    /**
+     * Метод для перевірки, чи кандидат відгукнувся на вакансію
+     * @param candidateId ідентифікатор кандидата
+     * @param vacancyId ідентифікатор вакансії
+     */
+    public boolean isVacancyApplied(Integer candidateId, Integer vacancyId) {
+        return appliedVacancyRepository.findById_WhoAppliedAndId_VacId(candidateId, vacancyId).isPresent();
+    }
+
+    /**
+     * Метод для скасування відгуку кандидата на вакансію
+     * @param candidateId ідентифікатор кандидата
+     * @param vacancyId ідентифікатор вакансії
+     */
+    @Modifying
+    @Transactional
+    public void unapplyVacancy(Integer candidateId, Integer vacancyId) {
+        AppliedVacancyId id = new AppliedVacancyId(candidateId, vacancyId);
+        appliedVacancyRepository.deleteById(id);
+    }
+
+    /**
+     * Метод для знаходження всіх кандидатів, хто відгукнувся на вакансію
+     * @param vacancyId ідентифікатор вакансії
+     * @return список кандидатів
+     */
+    public List<CandidateProfile> getApplicantsByVacancyId(Integer vacancyId) {
+        return appliedVacancyRepository.findCandidatesByVacancyId(vacancyId);
+    }
+
+    /**
+     * Метод для знаходження вакансій, які зберіг кандидат
+     * @param candidateId ідентифікатор кандидата
+     * @return список вакансій
+     */
+    public List<Vacancy> getSavedVacanciesForCandidate(Integer candidateId) {
+        return savedVacancyRepository.findSavedVacanciesByCandidateId(candidateId);
+    }
+
+    /**
+     * Метод для знаходження вакансій, на які кандидат відгукнувся
+     * @param candidateId ідентифікатор кандидата
+     * @return список вакансій
+     */
+    public List<Vacancy> getAppliedVacanciesForCandidate(Integer candidateId) {
+        return appliedVacancyRepository.findAppliedVacanciesByCandidateId(candidateId);
+    }
+
 }

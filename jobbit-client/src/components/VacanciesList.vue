@@ -6,6 +6,9 @@
         :vacancy="vacancy"
         @select-vacancy="$emit('select-vacancy', vacancy)"
     />
+    <div v-if="vacancies && vacancies.length === 0" class="empty-list-message">
+      {{ emptyListMessage }}
+    </div>
   </div>
 </template>
 
@@ -17,7 +20,14 @@ import { defineProps, defineEmits } from "vue";
  * Пропс для отримання даних про вакансію з батьківського компонента
  */
 const props = defineProps({
-  vacancies: Array
+  vacancies: {
+    type: Array,
+    default: () => []
+  },
+  emptyListMessage: {
+    type: String,
+    default: 'Вакансій поки не знайдено... Спробуйте додати до збережених, або відгукнутися на вакансію'
+  }
 });
 
 const emit = defineEmits(['select-vacancy']);
@@ -49,5 +59,12 @@ const emit = defineEmits(['select-vacancy']);
 
 .vacancy-list:hover::-webkit-scrollbar-thumb {
   background-color: #888;
+}
+
+.empty-list-message {
+  text-align: center;
+  font-size: 1.1em;
+  color: #777;
+  padding: 20px;
 }
 </style>

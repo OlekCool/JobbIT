@@ -11,8 +11,7 @@
       <FiltersSection v-if="!showProfile && showVacancies && !showSavedVacancies && !showAppliedVacancies
                       && !showNotifications && !selectedVacancyId" @filter-change="applyFilters" />
       <VacanciesLayout
-          v-if="!showProfile && showVacancies && !showSavedVacancies && !showAppliedVacancies && !showNotifications
-                             && !selectedVacancyId"
+          v-if="!showProfile && !showNotifications && !selectedVacancyId"
           :vacancies="filteredVacancies"
           @search="applySearch"
           @select-vacancy="handleSelectVacancy"
@@ -47,20 +46,27 @@ import { computed, onMounted, ref, watch } from "vue";
 const router = useRouter();
 const route = useRoute();
 
+//змінні сану відображення сторінки
 const showProfile = ref(false);
 const showVacancies = ref(true);
 const showSavedVacancies = ref(false);
 const showAppliedVacancies = ref(false);
 const showNotifications = ref(false);
 
+//отримані значення з локального сховища
 const userId = ref(localStorage.getItem('userId'));
 const authToken = localStorage.getItem('authToken');
+
+//змінні для зберігання фото та даних профілю
 const candidateProfileData = ref(null);
 const userPhotoUrl = ref('/files/userPhotos/userDemo.png');
 
+//фільтри, пошуковий запит, видані вакансії для завантаження у списку
 const filters = ref({ remote: "", fulltime: [], level_eng: [], set_salary: null, min_exp: null, });
 const searchQuery = ref("");
 const vacancies = ref([]);
+
+//обрана вакансія для перегляду
 const selectedVacancyId = ref(null);
 const selectedVacancy = ref(null);
 const loadingVacancies = ref(false);
@@ -83,6 +89,7 @@ const loadInitialVacancies = async () => {
       showProfile.value = true;
     } else if (route.path === '/candidate-dash/search') {
       vacancies.value = await VacancyService.getAllVacancies();
+      console.log("Вакансії: " + vacancies.value)
 
       showVacancies.value = true;
       showSavedVacancies.value = false;
@@ -90,7 +97,7 @@ const loadInitialVacancies = async () => {
       showNotifications.value = false;
       showProfile.value = false;
     } else if (route.path === '/candidate-dash/saved') {
-      vacancies.value = null;
+      vacancies.value = await VacancyService.watchSaved(userId.value, authToken);
 
       showVacancies.value = false;
       showSavedVacancies.value = true;
@@ -98,7 +105,7 @@ const loadInitialVacancies = async () => {
       showNotifications.value = false;
       showProfile.value = false;
     } else if (route.path === '/candidate-dash/applied') {
-      vacancies.value = null;
+      vacancies.value = await VacancyService.watchApplied(userId.value, authToken);
 
       showVacancies.value = false;
       showSavedVacancies.value = false;
@@ -112,6 +119,14 @@ const loadInitialVacancies = async () => {
       showSavedVacancies.value = false;
       showAppliedVacancies.value = false;
       showNotifications.value = true;
+      showProfile.value = false;
+    } else {
+      vacancies.value = await VacancyService.getAllVacancies();
+
+      showVacancies.value = true;
+      showSavedVacancies.value = false;
+      showAppliedVacancies.value = false;
+      showNotifications.value = false;
       showProfile.value = false;
     }
   } catch (error) {
@@ -153,7 +168,7 @@ onMounted(async () => {
 });
 
 /**
- * Відстеження зміни адресу сторінки на присутність параметра vac_id, щоб завантажити ідентифікатор  вакансії та  її дані
+ * Відстеження зміни адресу сторінки на присутність параметра vac_id, щоб завантажити ідентифікатор вакансії та її дані
  */
 watch(() => route.path, async (newPath) => {
   await loadInitialVacancies();
@@ -193,7 +208,9 @@ const closeVacancyDetails = () => {
  */
 const getDetailedVacancyComponent = () => {
   if (selectedVacancy.value) {
-    if (route.path === '/candidate-dash/search') {
+    if (route.path === '/candidate-dash/search' ||
+        route.path === '/candidate-dash/saved' ||
+        route.path === '/candidate-dash/applied') {
       return VacancyCardCandidate;
     }
     return null;

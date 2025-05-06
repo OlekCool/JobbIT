@@ -25,6 +25,7 @@
             :is="getDetailedVacancyComponent()"
             :vacancy="selectedVacancy"
             @vacancy-deleted-success="handleVacancyDeletedSuccess"
+            @open-candidate-profile="handleOpenCandidateProfile"
         />
         <button @click="closeVacancyDetails">Назад до списку</button>
       </div>
@@ -37,6 +38,18 @@
           @close="closeVacancyModal"
           @save="saveVacancy"
       />
+
+      <div v-if="selectedCandidateId" class="candidate-profile-container">
+        <h3>Профіль кандидата</h3>
+        <CandidateProfile
+            v-if="candidateProfileData"
+            :candidateProfile="candidateProfileData"
+            :candidateProjects="candidateProjects"
+            :userPhoto="currentCandidatePhotoUrl"
+            :isViewMode="true"
+        />
+        <button @click="closeCandidateProfile">Закрити профіль</button>
+      </div>
     </div>
   </div>
 </template>
@@ -49,32 +62,47 @@ import FiltersSection from "@/components/FiltersSection.vue";
 import VacancyCardCommon from "@/components/VacancyCardCommon.vue";
 import VacancyCardRecruiter from "@/components/VacancyCardRecruiter.vue";
 import VacancyModal from "@/components/VacancyModal.vue";
+import CandidateProfile from "@/components/CandidateProfile.vue";
 import ProfileService from "@/services/ProfileService.ts";
 import VacancyService from "@/services/VacancyService.ts";
-import { useRouter, useRoute  } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { computed, onMounted, ref, watch } from "vue";
 
 const router = useRouter();
 const route = useRoute();
 
+//змінні стану сторінки
 const showProfile = ref(false);
 const showAllVacancies = ref(false);
 const showMyVacancies = ref(true);
 
+//для вікна редагування/додавання вакансії
 const showVacancyModal = ref(false);
 const isEditMode = ref(false);
 
+//з локального сховища дані користувача
 const userId = ref(localStorage.getItem('userId'));
 const authToken = localStorage.getItem('authToken');
+
+//фото та дані профілю рекрутера
 const recruiterProfileData = ref(null);
 const userPhotoUrl = ref('/files/userPhotos/userDemo.png');
 
+//фільтри пошуку та запит пошуку
 const filters = ref({ remote: "", fulltime: [], level_eng: [], set_salary: null, min_exp: null, });
 const searchQuery = ref("");
 const vacancies = ref([]);
+
+//обрана вакансія для детального перегляду
 const selectedVacancyId = ref(null);
 const selectedVacancy = ref(null);
 const loadingVacancies = ref(false);
+
+//для перегляду даних про профіль кандидата
+const selectedCandidateId = ref(null);
+const candidateProfileData = ref(null);
+const currentCandidatePhotoUrl = ref('/files/userPhotos/userDemo.png');
+const candidateProjects = ref([]);
 
 /**
  * Асинхронний метод для загрузки вакансій, залежно від url-адреси сторінки
@@ -193,6 +221,37 @@ const getDetailedVacancyComponent = () => {
 };
 
 /**
+ * Обробник події відкриття профілю кандидата з компонента VacancyCardRecruiter
+ * @param candidateId ідентифікатор кандидата
+ */
+const handleOpenCandidateProfile = async (candidateId) => {
+  selectedCandidateId.value = candidateId;
+  try {
+    const profileResponse = await ProfileService.getProfileCandidate(candidateId, authToken);
+    candidateProfileData.value = profileResponse.data;
+
+    const candPhotoPath = await ProfileService.getCandidateProfilePhoto(candidateId, authToken);
+    if (candPhotoPath) {
+      currentCandidatePhotoUrl.value = `/${candPhotoPath}`;
+    }
+
+    candidateProjects.value = candidateProfileData.value?.projects || [];
+  } catch (error) {
+    console.error('Помилка при завантаженні профілю кандидата:', error);
+  }
+};
+
+/**
+ * Закриття профілю кандидата
+ */
+const closeCandidateProfile = () => {
+  selectedCandidateId.value = null;
+  candidateProfileData.value = null;
+  candidateProjects.value = [];
+  currentCandidatePhotoUrl.value = null;
+};
+
+/**
  * Обробник події відображення профілю рекрутера
  */
 const handleShowProfile = () => {
@@ -245,15 +304,24 @@ const filteredVacancies = computed(() => {
   });
 });
 
+/**
+ * Відкриття модального вікна вакансії
+ */
 const openAddVacancyModal = () => {
   isEditMode.value = false;
   showVacancyModal.value = true;
 };
 
+/**
+ * Закриття модального вікна вакансії
+ */
 const closeVacancyModal = () => {
   showVacancyModal.value = false;
 };
 
+/**
+ * Збереження вакансії, яку додають
+ */
 const saveVacancy = async (vacancyData) => {
   try {
     const recruiterId = JSON.parse(userId.value);
@@ -267,6 +335,9 @@ const saveVacancy = async (vacancyData) => {
   }
 };
 
+/**
+ * Обробка видалення вакансії
+ */
 const handleVacancyDeletedSuccess = () => {
   router.push("/recruiter-dash/my-vacancies");
   loadInitialVacancies();
@@ -286,6 +357,8 @@ const handleVacancyDeletedSuccess = () => {
   display: flex;
   flex: 1;
   border-top: 2px solid #aaa;
+  position: relative;
+  overflow: hidden;
 }
 
 .my-vacancies-sidebar {
@@ -332,5 +405,47 @@ const handleVacancyDeletedSuccess = () => {
 
 .vacancy-details-container button:hover {
   background-color: #393939;
+}
+
+/* Стилі для контейнера профілю кандидата */
+.candidate-profile-container {
+  position: absolute;
+  top: 50%; /* Центрування по вертикалі */
+  left: 50%; /* Центрування по горизонталі */
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* Щоб бути над оверлеєм */
+  max-width: 80vw;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+
+.candidate-profile-container h3 {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  text-align: center;
+  color: #333;
+}
+
+.candidate-profile-container button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  display: block;
+  margin: 20px auto 0;
+}
+
+.candidate-profile-container button:hover {
+  background-color: #0056b3;
 }
 </style>

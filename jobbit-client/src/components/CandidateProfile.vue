@@ -6,7 +6,7 @@
           <div class="profile-photo-container" @mouseover="showUploadHint = true" @mouseleave="showUploadHint = false">
             <div class="profile-photo-inner">
               <img :src="profilePhotoUrl" alt="Фото профілю">
-              <div v-if="showUploadHint && isEditing" class="upload-overlay">
+              <div v-if="showUploadHint && isEditing && !props.isViewMode" class="upload-overlay">
                 <label for="profile-photo-upload" class="upload-label">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="upload-icon">
                     <path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v8.5h8.5a.75.75 0 010 1.5h-8.5v8.5a.75.75 0 01-1.5 0v-8.5H3.75a.75.75 0 010-1.5h8.5V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
@@ -25,22 +25,22 @@
         <div class="info-group">
           <label>Ім’я:</label>
           <span v-if="!isEditing">{{ editableProfile.firstName }}</span>
-          <input v-if="isEditing" v-model="editableProfile.firstName" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.firstName" />
         </div>
         <div class="info-group">
           <label>Прізвище:</label>
           <span v-if="!isEditing">{{ editableProfile.lastName }}</span>
-          <input v-if="isEditing" v-model="editableProfile.lastName" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.lastName" />
         </div>
         <div class="info-group">
           <label>По батькові:</label>
           <span v-if="!isEditing">{{ editableProfile.fatherName }}</span>
-          <input v-if="isEditing" v-model="editableProfile.fatherName" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.fatherName" />
         </div>
         <div class="info-group">
           <label>Вік:</label>
           <span v-if="!isEditing">{{ editableProfile.yearsOld }}</span>
-          <input v-if="isEditing" type="number" v-model="editableProfile.yearsOld" />
+          <input v-if="!props.isViewMode && isEditing" type="number" v-model="editableProfile.yearsOld" />
         </div>
       </div>
 
@@ -49,17 +49,17 @@
         <div class="info-group">
           <label>Telegram:</label>
           <span v-if="!isEditing">{{ editableProfile.tgNick }}</span>
-          <input v-if="isEditing" v-model="editableProfile.tgNick" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.tgNick" />
         </div>
         <div class="info-group">
           <label>Телефон:</label>
           <span v-if="!isEditing">{{ editableProfile.phone }}</span>
-          <input v-if="isEditing" v-model="editableProfile.phone" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.phone" />
         </div>
         <div class="info-group">
           <label>GitHub:</label>
           <span v-if="!isEditing">{{ editableProfile.github }}</span>
-          <input v-if="isEditing" v-model="editableProfile.github" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.github" />
         </div>
       </div>
 
@@ -68,12 +68,12 @@
         <div class="info-group">
           <label>Країна:</label>
           <span v-if="!isEditing">{{ editableProfile.country }}</span>
-          <input v-if="isEditing" v-model="editableProfile.country" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.country" />
         </div>
         <div class="info-group">
           <label>Місто:</label>
           <span v-if="!isEditing">{{ editableProfile.city }}</span>
-          <input v-if="isEditing" v-model="editableProfile.city" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.city" />
         </div>
       </div>
 
@@ -82,12 +82,12 @@
         <div class="info-group">
           <label>Досвід (років):</label>
           <span v-if="!isEditing">{{ editableProfile.experienceYears }}</span>
-          <input v-if="isEditing" type="number" v-model="editableProfile.experienceYears" />
+          <input v-if="!props.isViewMode && isEditing" type="number" v-model="editableProfile.experienceYears" />
         </div>
         <div class="info-group">
           <label>Рівень англійської:</label>
           <span v-if="!isEditing">{{ editableProfile.levelEng }}</span>
-          <input v-if="isEditing" v-model="editableProfile.levelEng" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.levelEng" />
         </div>
       </div>
 
@@ -96,12 +96,12 @@
         <div class="info-group">
           <label>Бажана посада:</label>
           <span v-if="!isEditing">{{ editableProfile.jobWants }}</span>
-          <input v-if="isEditing" v-model="editableProfile.jobWants" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.jobWants" />
         </div>
         <div class="info-group">
           <label>Бажана зарплата (грн.):</label>
           <span v-if="!isEditing">{{ editableProfile.salaryWants }}</span>
-          <input v-if="isEditing" type="number" v-model="editableProfile.salaryWants" />
+          <input v-if="!props.isViewMode && isEditing" type="number" v-model="editableProfile.salaryWants" />
         </div>
       </div>
 
@@ -112,27 +112,27 @@
             Переглянути резюме
           </a>
         </div>
-        <div v-if="isEditing" class="file-upload-container">
+        <div v-if="!props.isViewMode && isEditing" class="file-upload-container">
           <label for="cv-upload-input" class="file-upload-label">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
               <path fill-rule="evenodd" d="M12 2.25c-5.384 0-9.75 4.366-9.75 9.75s4.366 9.75 9.75 9.75 9.75-4.366 9.75-9.75S17.384 2.25 12 2.25zm3 10.25a.75.75 0 01-.75.75H9.75a.75.75 0 010-1.5h4.5a.75.75 0 01.75.75zm-3-4a.75.75 0 01-.75.75h-3a.75.75 0 010-1.5h3a.75.75 0 01.75.75zm3-4a.75.75 0 01-.75.75H9.75a.75.75 0 010-1.5h4.5a.75.75 0 01.75.75z" clip-rule="evenodd" />
             </svg>
             <span>Завантажити резюме</span>
           </label>
-          <input type="file" id="cv-upload-input" @change="handleCvUpload" class="file-upload-input" />
+          <input v-if="!props.isViewMode" type="file" id="cv-upload-input" @change="handleCvUpload" class="file-upload-input" />
         </div>
       </div>
 
       <div class="actions">
-        <button v-if="isEditing" @click="saveChanges" class="primary">Зберегти дані</button>
-        <button v-if="isEditing" @click="cancelEdit" class="secondary">Скасувати редагування</button>
-        <button v-if="!isEditing" @click="isEditing = !isEditing" class="primary">Редагувати дані</button>
+        <button v-if="!props.isViewMode && isEditing" @click="saveChanges" class="primary">Зберегти дані</button>
+        <button v-if="!props.isViewMode && isEditing" @click="cancelEdit" class="secondary">Скасувати редагування</button>
+        <button v-if="!props.isViewMode && !isEditing" @click="isEditing = !isEditing" class="primary">Редагувати дані</button>
       </div>
 
       <div class="profile-info-section projects-section">
         <div class="section-header">
           <h3>Мої проєкти</h3>
-          <button v-if="!isEditingProjects" @click="isEditingProjects = true" class="control-button small">Керувати проєктами</button>
+          <button v-if="!props.isViewMode && !isEditingProjects" @click="isEditingProjects = true" class="control-button small">Керувати проєктами</button>
         </div>
         <div v-if="!isEditingProjects && !isAddingProject">
           <ul v-if="editableProjects">
@@ -152,12 +152,12 @@
           <p v-else class="no-data">Немає доданих проєктів.</p>
         </div>
 
-        <div v-if="isEditingProjects && !isAddingProject && editingProject === null">
+        <div v-if="!props.isViewMode && isEditingProjects && !isAddingProject && editingProject === null">
           <div class="section-header-edit">
             <h4>Керувати проєктами</h4>
             <div>
-              <button @click="addProject" class="control-button primary small">Додати проєкт</button>
-              <button @click="isEditingProjects = false" class="control-button secondary small">Скасувати</button>
+              <button v-if="!props.isViewMode" @click="addProject" class="control-button primary small">Додати проєкт</button>
+              <button v-if="!props.isViewMode" @click="isEditingProjects = false" class="control-button secondary small">Скасувати</button>
             </div>
           </div>
           <ul v-if="editableProjects.length > 0">
@@ -167,15 +167,15 @@
                 <a v-if="project.projGithubLink" :href="project.projGithubLink" target="_blank" class="link">(Посилання)</a>
               </div>
               <div class="project-actions">
-                <button @click="editProject(project)" class="action-button green small">Редагувати</button>
-                <button @click="deleteProject(project.projId)" class="action-button red small">Видалити</button>
+                <button v-if="!props.isViewMode" @click="editProject(project)" class="action-button green small">Редагувати</button>
+                <button v-if="!props.isViewMode" @click="deleteProject(project.projId)" class="action-button red small">Видалити</button>
               </div>
             </li>
           </ul>
           <p v-else class="no-data">Немає доданих проєктів.</p>
         </div>
 
-        <div v-if="isEditingProjects && isAddingProject">
+        <div v-if="!props.isViewMode && isEditingProjects && isAddingProject">
           <h4>Додати проєкт</h4>
           <div class="info-group">
             <label>Назва проєкту:</label>
@@ -196,11 +196,11 @@
               <input type="file" id="project-photo-upload-new" @change="handleProjectPhotoUpload" class="file-input">
             </div>
           </div>
-          <button @click="saveNewProject" class="primary">Зберегти проєкт</button>
-          <button @click="cancelAddProject" class="secondary">Скасувати</button>
+          <button v-if="!props.isViewMode" @click="saveNewProject" class="primary">Зберегти проєкт</button>
+          <button v-if="!props.isViewMode" @click="cancelAddProject" class="secondary">Скасувати</button>
         </div>
 
-        <div v-if="isEditingProjects && editingProject !== null">
+        <div v-if="!props.isViewMode && isEditingProjects && editingProject !== null">
           <h4>Редагувати проєкт</h4>
           <div class="info-group">
             <label>Назва проєкту:</label>
@@ -221,8 +221,8 @@
               <input type="file" id="project-photo-upload-new" @change="handleProjectPhotoUpload" class="file-input">
             </div>
           </div>
-          <button @click="saveEditedProject" class="primary">Зберегти зміни</button>
-          <button @click="cancelEditProject" class="secondary">Скасувати</button>
+          <button v-if="!props.isViewMode" @click="saveEditedProject" class="primary">Зберегти зміни</button>
+          <button v-if="!props.isViewMode" @click="cancelEditProject" class="secondary">Скасувати</button>
         </div>
       </div>
 
@@ -241,17 +241,24 @@ import ProjectService from "../services/ProjectService.ts";
 const props = defineProps({
   candidateProfile: Object,
   candidateProjects: Array,
-  userPhoto: String
+  userPhoto: String,
+  isViewMode: Boolean,
 });
 
+/**
+ * Зміни стану, чи редагується профіль та проєкти кандидата
+ * @type {Ref<UnwrapRef<boolean>, UnwrapRef<boolean> | boolean>}
+ */
 const isEditing = ref(false);
 const isEditingProjects = ref(false);
 const isAddingProject = ref(false);
 const editingProject = ref(null);
 const showUploadHint = ref(false);
 
+// посилання на фото кандидата
 const profilePhotoUrl = ref(props.userPhoto);
 
+// для роботи з проєктами
 const newProject = ref({ projName: '', projDescription: '', projGithubLink: '', photo: null });
 const editableProjects = reactive([]);
 const editableProfile = reactive(props.candidateProfile ? { ...props.candidateProfile } : {});
@@ -259,8 +266,16 @@ const editableProfile = reactive(props.candidateProfile ? { ...props.candidatePr
 const userId = localStorage.getItem("userId");
 const authToken = localStorage.getItem("authToken");
 
+// мультимедійні файли (резюме та фото)
 const cvFile = ref(null);
 const profilePhotoFile = ref(null);
+
+/**
+ * Відстеження зміни подання нового фото у профіль
+ */
+watch(() => props.userPhoto, (newValue) => {
+  profilePhotoUrl.value = newValue;
+});
 
 /**
  * Відстеження зміни даних профілю кандидата для збереження нових даних у редагований профіль
@@ -296,6 +311,7 @@ onMounted(() => {
     editableProjects.push(...props.candidateProjects);
   }
 
+  console.log('Фото кандидата (для перегляду рекрутером): ' + props.userPhoto);
   console.log('Отримані проєкти:', props.candidateProjects);
 });
 
