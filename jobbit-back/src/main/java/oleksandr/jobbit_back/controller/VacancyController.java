@@ -23,7 +23,6 @@ public class VacancyController {
 
     /**
      * Конструктор класу {@code VacancyController}, що ініціалізує необхідні залежності.
-     *
      * @param vacancyService Сервіс для роботи з вакансіями. Автоматично впроваджується Spring.
      */
     @Autowired
@@ -195,6 +194,36 @@ public class VacancyController {
     public ResponseEntity<Void> unapplyVacancy(@PathVariable Integer vacancyId, @RequestParam Integer candidateId) {
         vacancyService.unapplyVacancy(candidateId, vacancyId);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Метод контролера для прийняття та запрошення кандидата на співбесіду
+     * @param candidateId ідентифікатор кандидата
+     * @param vacancyId ідентифікатор вакансії
+     * @param notificationText текст повідомлення
+     * @return {@link ResponseEntity} зі статусом 200 (OK).
+     */
+    @PostMapping("/recr-vacancies/{vacancyId}/accept/{candidateId}")
+    public ResponseEntity<Void> acceptCandidate(@PathVariable Integer candidateId,
+                                                @PathVariable Integer vacancyId,
+                                                @RequestBody String notificationText) {
+        vacancyService.acceptCandidate(candidateId, vacancyId, notificationText);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Метод контролера для відхилення кандидата та надсилання відповідного повідомлення
+     * @param candidateId ідентифікатор кандидата
+     * @param vacancyId ідентифікатор вакансії
+     * @param notificationText текст повідомлення
+     * @return {@link ResponseEntity} зі статусом 200 (OK).
+     */
+    @PostMapping("/recr-vacancies/{vacancyId}/reject/{candidateId}")
+    public ResponseEntity<Void> rejectCandidate(@PathVariable Integer candidateId,
+                                                @PathVariable Integer vacancyId,
+                                                @RequestBody String notificationText) {
+        vacancyService.denyCandidate(candidateId, vacancyId, notificationText);
+        return ResponseEntity.ok().build();
     }
 
 }

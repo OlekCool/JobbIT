@@ -1,7 +1,9 @@
 package oleksandr.jobbit_back.repository;
 
+import jakarta.transaction.Transactional;
 import oleksandr.jobbit_back.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -43,4 +45,26 @@ public interface AppliedVacancyRepository extends JpaRepository<AppliedVacancy, 
      */
     @Query("SELECT av.vacancy FROM AppliedVacancy av WHERE av.candidateProfile.id = :candidateId")
     List<Vacancy> findAppliedVacanciesByCandidateId(@Param("candidateId") Integer candidateId);
+
+    /**
+     * Метод репозиторію для зміни статусу на "прийнято" з запису щодо поданих відгуків на вакансію
+     * @param candidateId ідентифікатор кандидата
+     * @param vacId ідентифікатор вакансії
+     */
+    @Modifying
+    @Transactional
+    @Query("UPDATE AppliedVacancy av SET av.isAccepted = true WHERE av.candidateProfile.id = :candidateId and av.vacancy.vacId = :vacId")
+    void acceptCandidate(@Param("candidateId") Integer candidateId, @Param("vacId") Integer vacId);
+
+
+    /**
+     * Метод репозиторію для зміни статусу на "прийнято" з запису щодо поданих відгуків на вакансію
+     * @param candidateId ідентифікатор кандидата
+     * @param vacId ідентифікатор вакансії
+     */
+    @Modifying
+    @Transactional
+    @Query("UPDATE AppliedVacancy av SET av.isAccepted = false WHERE av.candidateProfile.id = :candidateId and av.vacancy.vacId = :vacId")
+    void denyCandidate(@Param("candidateId") Integer candidateId, @Param("vacId") Integer vacId);
+
 }

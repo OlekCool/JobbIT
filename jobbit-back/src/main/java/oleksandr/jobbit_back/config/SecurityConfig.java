@@ -69,11 +69,15 @@ public class SecurityConfig {
         })).csrf(csrf -> csrf.ignoringRequestMatchers("/api/auth/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/vacancies/all", "/api/candidate-dash/profile/**").permitAll()
+                        .requestMatchers("/api/auth/**",
+                                         "/api/vacancies/all",
+                                         "/api/candidate-dash/profile/**",
+                                         "/api/recruiter-dash/profile/**").permitAll()
                         .requestMatchers("/api/recruiter-dash/**",
                                          "/api/vacancies/recr-vacancies/**").hasRole("RECRUITER")
                         .requestMatchers("/api/candidate-dash/**",
-                                         "/api/vacancies/cand-vacancies/**").hasRole("CANDIDATE")
+                                         "/api/vacancies/cand-vacancies/**",
+                                         "/api/notifications/**").hasRole("CANDIDATE")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

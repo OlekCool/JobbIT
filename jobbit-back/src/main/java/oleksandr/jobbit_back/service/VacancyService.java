@@ -28,20 +28,29 @@ public class VacancyService {
     private final AppliedVacancyRepository appliedVacancyRepository;
     private final RecruiterProfileService recruiterProfileService;
     private final CandidateProfileService candidateProfileService;
+    private final NotificationService notificationService;
 
     /**
      * Конструктор класу {@code VacancyService}, що ініціалізує залежності.
      *
      * @param vacancyRepository репозиторій для роботи з вакансіями.
      * @param recruiterProfileService репозиторій для роботи з профілями рекрутерів.
+     * @param appliedVacancyRepository репозиторій для роботи з кандидатами, які відгукнулися.
+     * @param savedVacancyRepository репозиторій для роботи з вакансіями, які зберіг кандидат.
+     * @param candidateProfileService репозиторій для роботи з профілями кандидатів.
+     * @param notificationService сервіс для роботи зі сповіщеннями для кандидата щодо вакансій.
+     * Автоматично впроваджується Spring.
      */
     @Autowired
-    public VacancyService(VacancyRepository vacancyRepository, SavedVacancyRepository savedVacancyRepository, AppliedVacancyRepository appliedVacancyRepository, RecruiterProfileService recruiterProfileService, CandidateProfileService candidateProfileService) {
+    public VacancyService(VacancyRepository vacancyRepository, SavedVacancyRepository savedVacancyRepository,
+                          AppliedVacancyRepository appliedVacancyRepository, RecruiterProfileService recruiterProfileService,
+                          CandidateProfileService candidateProfileService, NotificationService notificationService) {
         this.vacancyRepository = vacancyRepository;
         this.savedVacancyRepository = savedVacancyRepository;
         this.appliedVacancyRepository = appliedVacancyRepository;
         this.recruiterProfileService = recruiterProfileService;
         this.candidateProfileService = candidateProfileService;
+        this.notificationService = notificationService;
     }
 
     /**
@@ -106,7 +115,16 @@ public class VacancyService {
             existingVacancy.setSetSalary(updatedVacancy.getSetSalary());
             existingVacancy.setPostedDate(LocalDateTime.now());
 
-            return vacancyRepository.save(existingVacancy);
+            Vacancy savedVacancy = vacancyRepository.save(existingVacancy);
+
+            List<CandidateProfile> applicants = appliedVacancyRepository.findCandidatesByVacancyId(vacId);
+
+            String notificationText = "Дані вакансії \"" + savedVacancy.getTitle() + "\", на яку ви відгукнулися, було змінено.";
+            for (CandidateProfile applicant : applicants) {
+                notificationService.createAndSendVacancyChangeMessage(applicant.getId(), vacId);
+            }
+
+            return savedVacancy;
         } else {
             return null;
         }
@@ -222,6 +240,32 @@ public class VacancyService {
      */
     public List<Vacancy> getAppliedVacanciesForCandidate(Integer candidateId) {
         return appliedVacancyRepository.findAppliedVacanciesByCandidateId(candidateId);
+    }
+
+    /**
+     * Метод для прийняття кандидатури вакансії
+     * @param candidateId ідентифікатор кандидата
+     * @param vacId ідентифікатор вакансії
+     * @param notificationText текст повідомлення для сповіщення
+     */
+    @Modifying
+    @Transactional
+    public void acceptCandidate(Integer candidateId, Integer vacId, String notificationText) {
+        appliedVacancyRepository.acceptCandidate(candidateId, vacId);
+        notificationService.createAndSendVacancyNotification(candidateId, vacId, notificationText, true);
+    }
+
+    /**
+     * Метод для відхилення кандидатури вакансії
+     * @param candidateId ідентифікатор кандидата
+     * @param vacId ідентифікатор вакансії
+     * @param notificationText текст повідомлення для сповіщення
+     */
+    @Modifying
+    @Transactional
+    public void denyCandidate(Integer candidateId, Integer vacId, String notificationText) {
+        appliedVacancyRepository.denyCandidate(candidateId, vacId);
+        notificationService.createAndSendVacancyNotification(candidateId, vacId, notificationText, false);
     }
 
 }

@@ -131,6 +131,13 @@ public class CandidateProfile {
     private List<Project> projects = new ArrayList<>();
 
     /**
+     * Сповіщення певного кандидата
+     */
+    @OneToMany(mappedBy = "candidateProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Notification> notifications = new ArrayList<>();
+
+    /**
      * Перевизначений метод {@code toString()} для зручного виведення основної інформації про профіль кандидата.
      * Включає ідентифікатор профілю та email пов'язаного користувача (якщо він існує).
      *
