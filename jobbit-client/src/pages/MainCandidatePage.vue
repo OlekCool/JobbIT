@@ -28,16 +28,18 @@
         />
         <button @click="closeVacancyDetails">Назад до списку</button>
       </div>
+      <NotificationList v-if="showNotifications" :notifications="candidateProfileData?.notifications" />
     </div>
   </div>
 </template>
 
 <script setup>
-import NavbarCandidate from "../components/NavbarCandidate.vue";
-import FiltersSection from "../components/FiltersSection.vue";
-import VacanciesLayout from "../components/VacanciesLayout.vue";
+import NavbarCandidate from "@/components/NavbarCandidate.vue";
+import FiltersSection from "@/components/FiltersSection.vue";
+import VacanciesLayout from "@/components/VacanciesLayout.vue";
 import CandidateProfile from "@/components/CandidateProfile.vue";
 import VacancyCardCandidate from "@/components/VacancyCardCandidate.vue";
+import NotificationList from "@/components/NotificationList.vue";
 import ProfileService from "@/services/ProfileService.ts";
 import VacancyService from "@/services/VacancyService.ts";
 import { useRouter, useRoute  } from "vue-router";

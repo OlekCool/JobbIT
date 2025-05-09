@@ -29,7 +29,6 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-
     /**
      * Метод контролера для отримання всіх сповіщень для конкретного кандидата.\
      * @param candidateId Ідентифікатор кандидата.

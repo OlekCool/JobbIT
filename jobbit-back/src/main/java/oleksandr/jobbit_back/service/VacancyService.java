@@ -117,9 +117,8 @@ public class VacancyService {
 
             Vacancy savedVacancy = vacancyRepository.save(existingVacancy);
 
-            List<CandidateProfile> applicants = appliedVacancyRepository.findCandidatesByVacancyId(vacId);
+            List<CandidateProfile> applicants = appliedVacancyRepository.findCandidatesByVacancyIdAndIsAcceptedIsNull(vacId);
 
-            String notificationText = "Дані вакансії \"" + savedVacancy.getTitle() + "\", на яку ви відгукнулися, було змінено.";
             for (CandidateProfile applicant : applicants) {
                 notificationService.createAndSendVacancyChangeMessage(applicant.getId(), vacId);
             }
@@ -221,7 +220,7 @@ public class VacancyService {
      * @return список кандидатів
      */
     public List<CandidateProfile> getApplicantsByVacancyId(Integer vacancyId) {
-        return appliedVacancyRepository.findCandidatesByVacancyId(vacancyId);
+        return appliedVacancyRepository.findCandidatesByVacancyIdAndIsAcceptedIsNull(vacancyId);
     }
 
     /**
@@ -251,7 +250,7 @@ public class VacancyService {
     @Modifying
     @Transactional
     public void acceptCandidate(Integer candidateId, Integer vacId, String notificationText) {
-        appliedVacancyRepository.acceptCandidate(candidateId, vacId);
+        appliedVacancyRepository.deleteByCandidateProfile_IdAndVacancy_VacId(candidateId, vacId);
         notificationService.createAndSendVacancyNotification(candidateId, vacId, notificationText, true);
     }
 
@@ -264,7 +263,7 @@ public class VacancyService {
     @Modifying
     @Transactional
     public void denyCandidate(Integer candidateId, Integer vacId, String notificationText) {
-        appliedVacancyRepository.denyCandidate(candidateId, vacId);
+        appliedVacancyRepository.deleteByCandidateProfile_IdAndVacancy_VacId(candidateId, vacId);
         notificationService.createAndSendVacancyNotification(candidateId, vacId, notificationText, false);
     }
 

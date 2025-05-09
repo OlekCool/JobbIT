@@ -34,7 +34,7 @@ import { defineEmits } from 'vue';
 
 const router = useRouter();
 const route = useRoute();
-const userId = ref(JSON.parse(localStorage.getItem('userId')));
+const userId = ref(localStorage.getItem('userId'));
 const emit = defineEmits(['show-profile', 'show-vacancies', 'show-saved-vacancies',
   'show-applied-vacancies', 'show-notifications']);
 

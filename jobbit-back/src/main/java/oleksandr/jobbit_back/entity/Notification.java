@@ -45,7 +45,7 @@ public class Notification {
     /**
      * Текст сповіщення щодо вакансії
      */
-    @Column(name = "text")
+    @Column(name = "text", length = 1000)
     private String text;
 
     /**

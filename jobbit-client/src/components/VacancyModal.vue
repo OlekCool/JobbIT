@@ -89,16 +89,18 @@ const vacancyForm = ref({
 /**
  * Реагує на зміну даних редагованої/додаваної вакансії
  */
-watch(props.vacancyToEdit, (newVacancy) => {
-  if (newVacancy) {
-    vacancyForm.value = { ...newVacancy };
-  } else {
-    resetForm();
-  }
-});
+watch(() => props.vacancyToEdit, (newVacancy) => {
+      if (newVacancy) {
+        vacancyForm.value = { ...newVacancy };
+      } else {
+        resetForm();
+      }
+    },
+    { deep: true, immediate: true }
+);
 
 /**
- * Метод, який оновлює форму з даними
+ * Метод, який оновлює форму з даними до початкових значень або до значень vacancyToEdit
  */
 const resetForm = () => {
   vacancyForm.value = {

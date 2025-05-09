@@ -207,6 +207,7 @@ public class VacancyController {
     public ResponseEntity<Void> acceptCandidate(@PathVariable Integer candidateId,
                                                 @PathVariable Integer vacancyId,
                                                 @RequestBody String notificationText) {
+        System.out.println("Отримане повідомлення: " + notificationText);
         vacancyService.acceptCandidate(candidateId, vacancyId, notificationText);
         return ResponseEntity.ok().build();
     }
@@ -222,6 +223,7 @@ public class VacancyController {
     public ResponseEntity<Void> rejectCandidate(@PathVariable Integer candidateId,
                                                 @PathVariable Integer vacancyId,
                                                 @RequestBody String notificationText) {
+        System.out.println("Отримане повідомлення: " + notificationText);
         vacancyService.denyCandidate(candidateId, vacancyId, notificationText);
         return ResponseEntity.ok().build();
     }

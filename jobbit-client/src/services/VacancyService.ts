@@ -37,7 +37,6 @@ class VacancyService {
             const response = await axios.get(`${API_RECR}?recruiterId=${recruiterId}`, {
                 headers: token ? { Authorization: `Bearer ${token}` } : {},
             });
-
             return response.data;
         } catch (error) {
             console.error('Помилка при отриманні вакансій рекрутера:', error.response?.data || error.message);
@@ -75,12 +74,9 @@ class VacancyService {
      */
     async updateVacancy(vacancyId, editedVacancy, token) {
         try {
-            const headers = {
-                ...token ? { Authorization: `Bearer ${token}` } : {},
-            };
-
-            const response = await axios.post(`${API_RECR}/editvacancy/${vacancyId}`,
-                editedVacancy, { headers });
+            const response = await axios.post(`${API_RECR}/editvacancy/${vacancyId}`, editedVacancy, {
+                headers: token ? { Authorization: `Bearer ${token}` } : {},
+            });
             return response.data;
         } catch (error) {
             console.error('Помилка при редагуванні вакансії:', error.response?.data || error.message);
@@ -97,7 +93,7 @@ class VacancyService {
      */
     async deleteVacancy(vacancyId, token) {
         try {
-            await axios.post(`${API_RECR}/${vacancyId}`, {}, {
+            return axios.post(`${API_RECR}/${vacancyId}`, {}, {
                 headers: token ? { Authorization: `Bearer ${token}` } : {},
             });
         } catch (error) {
@@ -263,6 +259,62 @@ class VacancyService {
             return response.data;
         } catch (error) {
             console.error('Помилка при відміні вакансії, чи подана кандидатура:',
+                error.responce?.data || error.message);
+            throw error;
+        }
+    }
+
+    /**
+     * Запрошення кандидата на співбесіду (підтверджуючи, що його кандидатуру розглянуто)
+     * @param vacancyId ідентифікатор вакансії
+     * @param candidateId ідентифікатор кандидата
+     * @param notificationText повідомлення з деталями про запрошення на співбесіду
+     * @param token автентифікаційний токен
+     * @returns {Promise<void>} Проміс без даних у разі успіху.
+     * @throws {Error} Якщо виникає помилка під час запиту.
+     */
+    async acceptCandidate(vacancyId, candidateId, notificationText, token) {
+        try {
+            return axios.post(
+                `${API_RECR}/${vacancyId}/accept/${candidateId}`,
+                notificationText,
+                {
+                    headers: {
+                        'Content-Type': 'text/plain', // Явно вказуємо тип контенту
+                        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                    },
+                }
+            );
+        } catch (error) {
+            console.error('Помилка при запрошенні кандидата на співбесіду: ',
+                error.responce?.data || error.message);
+            throw error;
+        }
+    }
+
+    /**
+     * Відхилення кандидатури користувача на вакансію
+     * @param vacancyId ідентифікатор вакансії
+     * @param candidateId ідентифікатор кандидата
+     * @param notificationText повідомлення про відхилення кандидатури
+     * @param token автентифікаційний токен
+     * @returns {Promise<void>} Проміс без даних у разі успіху.
+     * @throws {Error} Якщо виникає помилка під час запиту.
+     */
+    async rejectCandidate(vacancyId, candidateId, notificationText, token) {
+        try {
+            return axios.post(
+                `${API_RECR}/${vacancyId}/reject/${candidateId}`,
+                notificationText,
+                {
+                    headers: {
+                        'Content-Type': 'text/plain', // Явно вказуємо тип контенту
+                        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                    },
+                }
+            );
+        } catch (error) {
+            console.error('Помилка при відхиленні кандидатури: ',
                 error.responce?.data || error.message);
             throw error;
         }

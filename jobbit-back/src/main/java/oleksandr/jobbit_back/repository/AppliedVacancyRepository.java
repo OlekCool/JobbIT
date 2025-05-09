@@ -35,8 +35,8 @@ public interface AppliedVacancyRepository extends JpaRepository<AppliedVacancy, 
      * @param vacancyId ідентифікатор вакансії
      * @return список профілів кандидатів
      */
-    @Query("SELECT av.candidateProfile FROM AppliedVacancy av WHERE av.vacancy.vacId = :vacancyId")
-    List<CandidateProfile> findCandidatesByVacancyId(@Param("vacancyId") Integer vacancyId);
+    @Query("SELECT av.candidateProfile FROM AppliedVacancy av WHERE av.vacancy.vacId = :vacancyId and av.isAccepted IS NULL")
+    List<CandidateProfile> findCandidatesByVacancyIdAndIsAcceptedIsNull(@Param("vacancyId") Integer vacancyId);
 
     /**
      * Метод репозиторію для знаходження вакансій, на які кандидат відгукнувся
@@ -66,5 +66,12 @@ public interface AppliedVacancyRepository extends JpaRepository<AppliedVacancy, 
     @Transactional
     @Query("UPDATE AppliedVacancy av SET av.isAccepted = false WHERE av.candidateProfile.id = :candidateId and av.vacancy.vacId = :vacId")
     void denyCandidate(@Param("candidateId") Integer candidateId, @Param("vacId") Integer vacId);
+
+    @Modifying
+    @Transactional
+    void deleteByCandidateProfile_IdAndVacancy_VacId(Integer candidateId, Integer vacancyId);
+
+    boolean existsByCandidateProfile_IdAndVacancy_VacId(Integer candidateId, Integer vacancyId);
+
 
 }

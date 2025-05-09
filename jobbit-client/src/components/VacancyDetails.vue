@@ -1,9 +1,6 @@
 <template>
   <div class="vacancy-details">
     <h2 class="vacancy-title">{{ vacancy.title }}</h2>
-    <div class="company-info">
-      <span>{{ vacancy.recruiterProfile?.companyName }}</span>
-    </div>
 
     <div class="details-grid">
       <div class="detail-item">

@@ -20,8 +20,8 @@
             </div>
           </div>
           <div class="applicant-actions">
-            <button class="accept-button">Прийняти</button>
-            <button class="reject-button">Відхилити</button>
+            <button class="accept-button" @click="openSendMessageModal(applicant.id, true)">Прийняти</button>
+            <button class="reject-button" @click="openSendMessageModal(applicant.id, false)">Відхилити</button>
           </div>
         </li>
       </ul>
@@ -36,27 +36,37 @@
         @close="closeVacancyModal"
         @save="saveVacancy"
     />
+
+    <SendMessageModal
+        v-if="showSendMessageModal"
+        :title="isAccepting ? 'Надіслати повідомлення про прийняття' : 'Надіслати повідомлення про відхилення'"
+        @close="showSendMessageModal = false; currentApplicantId = null; isAccepting = false;"
+        @send="sendMessageToApplicant"
+    />
   </div>
 </template>
 
 <script setup>
 import VacancyDetails from './VacancyDetails.vue';
 import VacancyModal from "@/components/VacancyModal.vue";
+import SendMessageModal from './SendMessageModal.vue';
 import VacancyService from '@/services/VacancyService.ts';
-import { defineProps, ref, defineEmits, onMounted} from 'vue';
+import { defineProps, ref, defineEmits, onMounted, watch} from 'vue';
 
 const showVacancyModal = ref(false);
 const isEditMode = ref(false);
 const vacancyToEdit = ref(null);
 
 const userId = ref(localStorage.getItem('userId'));
-const authToken = localStorage.getItem('authToken');
+const authToken = ref(localStorage.getItem('authToken'));
 
 // кандидати, які відгукнулися на вакансію
 const applicants = ref([]);
 
-// отримана вакансія для перегляду
-const vacancy = ref(props.vacancy);
+// дані про повідомлення, кому та чи приймаємо
+const showSendMessageModal = ref(false);
+const currentApplicantId = ref(null);
+const isAccepting = ref(false);
 
 /**
  * Пропс для отримання даних про вакансію з батьківського компонента
@@ -68,7 +78,21 @@ const props = defineProps({
   }
 });
 
+// отримана вакансія для перегляду
+const vacancy = ref(props.vacancy);
+
 const emit = defineEmits(['vacancy-updated', 'vacancy-deleted', 'open-candidate-profile']);
+
+/**
+ * Спостерігання за тим, чи змінилися дані для відображення
+ */
+watch(
+    () => props.vacancy,
+    (newVacancy) => {
+      vacancy.value = newVacancy;
+    },
+    { deep: true }
+);
 
 /**
  * Завантаження списку кандидатів при монтуванні компонента
@@ -82,9 +106,9 @@ onMounted(async () => {
  * @returns {Promise<void>}
  */
 const loadApplicants = async () => {
-  if (authToken && props.vacancy?.vacId) {
+  if (authToken.value && props.vacancy?.vacId) {
     try {
-      applicants.value = await VacancyService.getAppliedCandidates(props.vacancy.vacId, authToken);
+      applicants.value = await VacancyService.getAppliedCandidates(props.vacancy.vacId, authToken.value);
     } catch (error) {
       console.error('Помилка при завантаженні кандидатів:', error);
     }
@@ -108,6 +132,12 @@ const closeVacancyModal = () => {
   vacancyToEdit.value = null;
 };
 
+const openSendMessageModal = (applicantId, accept) => {
+  currentApplicantId.value = applicantId;
+  isAccepting.value = accept;
+  showSendMessageModal.value = true;
+};
+
 /**
  * Метод для збереження вакансії, яку відредаговано
  * @param updatedVacancyData оновлені дані вакансії, які йдуть на сервер
@@ -115,8 +145,8 @@ const closeVacancyModal = () => {
  */
 const saveVacancy = async (updatedVacancyData) => {
   try {
-    if (authToken) {
-      const response = await VacancyService.updateVacancy(props.vacancy.vacId, updatedVacancyData, authToken);
+    if (authToken.value) {
+      const response = await VacancyService.updateVacancy(props.vacancy.vacId, updatedVacancyData, authToken.value);
       emit('vacancy-updated', response);
 
       closeVacancyModal();
@@ -136,15 +166,50 @@ const saveVacancy = async (updatedVacancyData) => {
 const deleteVacancy = async () => {
   if (confirm(`Ви впевнені, що хочете видалити вакансію "${props.vacancy.title}"?`)) {
     try {
-      if (authToken) {
-        await VacancyService.deleteVacancy(props.vacancy.vacId, authToken);
+      if (authToken.value) {
+        await VacancyService.deleteVacancy(props.vacancy.vacId, authToken.value);
         emit('vacancy-deleted-success', props.vacancy.vacId);
+        window.location.reload();
       } else {
         console.error('Токен авторизації відсутній.');
       }
     } catch (error) {
       console.error('Помилка при видаленні вакансії:', error);
     }
+  }
+};
+
+const sendMessageToApplicant = async (message) => {
+  if (authToken.value && currentApplicantId.value && props.vacancy?.vacId) {
+    try {
+      if (isAccepting.value) {
+        await VacancyService.acceptCandidate(
+            props.vacancy.vacId,
+            currentApplicantId.value,
+            message,
+            authToken.value
+        );
+        console.log(`Кандидата з ID ${currentApplicantId.value} прийнято. Повідомлення: ${message}`);
+      } else {
+        await VacancyService.rejectCandidate(
+            props.vacancy.vacId,
+            currentApplicantId.value,
+            message,
+            authToken.value
+        );
+        console.log(`Кандидата з ID ${currentApplicantId.value} відхилено. Повідомлення: ${message}`);
+      }
+
+      await loadApplicants();
+    } catch (error) {
+      console.error('Помилка при оновленні статусу:', error);
+    } finally {
+      showSendMessageModal.value = false;
+      currentApplicantId.value = null;
+      isAccepting.value = false;
+    }
+  } else {
+    console.warn('Відсутній токен, ID кандидата або ID вакансії.');
   }
 };
 </script>
