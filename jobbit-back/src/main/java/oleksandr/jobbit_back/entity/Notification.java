@@ -3,6 +3,8 @@ package oleksandr.jobbit_back.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +20,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "cand_notifications")
 @Data
+@Getter
+@Setter
 public class Notification {
 
     /**
@@ -54,4 +58,25 @@ public class Notification {
     @Column(name = "notif_date")
     private LocalDateTime notifDate;
 
+    public Notification() {
+    }
+
+    public Notification(Integer notId, CandidateProfile candidateProfile, Integer vacId, String text, LocalDateTime notifDate) {
+        this.notId = notId;
+        this.candidateProfile = candidateProfile;
+        this.vacId = vacId;
+        this.text = text;
+        this.notifDate = notifDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "notId=" + notId +
+                ", candidateProfile=" + candidateProfile +
+                ", vacId=" + vacId +
+                ", text='" + text + '\'' +
+                ", notifDate=" + notifDate +
+                '}';
+    }
 }

@@ -123,19 +123,20 @@ const goToAllVacancies = () => {
 }
 
 .profile-photo {
-  width: 80px;
-  height: 80px;
+  width: 6vw;
+  height: 14vh;
   background: #eee;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .profile-photo img {
-  max-height: 60px;
-  max-width: 60px;
-  object-fit: contain;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 /* Секція з кнопками */

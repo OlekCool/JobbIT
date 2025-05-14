@@ -141,7 +141,7 @@ public class NotificationService {
 
         if (candidateProfile != null && vacancy != null) {
             String subject = "JobbIT: Зміна умов вакансії, на яку ви відгукнулися: \"" + vacancy.getTitle() + "\"";
-            String vacancyLink = "http://localhost:8081/candidate-dash/applied";
+            String vacancyLink = "http://54.211.79.181/candidate-dash/applied";
             String emailText = "Шановний(а) " + candidateProfile.getFirstName() + " " + candidateProfile.getLastName() + ",\n\n" +
                     "Повідомляємо про те, що були змінені умови вакансії \"" + vacancy.getTitle() + "\" на платформі JobbIT.\n\n" +
                     "Ви можете знайти деталі вакансії у вакансіях, на які ви відгукнулися: " + vacancyLink + "\n\n" +

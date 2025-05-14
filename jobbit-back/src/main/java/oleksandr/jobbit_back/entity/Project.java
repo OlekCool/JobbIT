@@ -3,6 +3,8 @@ package oleksandr.jobbit_back.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Entity-клас {@code Project} представляє проєкт в базі даних.
@@ -15,6 +17,8 @@ import lombok.Data;
 @Entity
 @Table(name = "projects")
 @Data
+@Getter
+@Setter
 public class Project {
 
     /**
@@ -57,4 +61,27 @@ public class Project {
     @Column(name = "proj_github_link")
     private String projGithubLink;
 
+    public Project() {
+    }
+
+    public Project(Integer projId, CandidateProfile candidateProfile, String projName, String projDescription, String projPictSrc, String projGithubLink) {
+        this.projId = projId;
+        this.candidateProfile = candidateProfile;
+        this.projName = projName;
+        this.projDescription = projDescription;
+        this.projPictSrc = projPictSrc;
+        this.projGithubLink = projGithubLink;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "projId=" + projId +
+                ", candidateProfile=" + candidateProfile +
+                ", projName='" + projName + '\'' +
+                ", projDescription='" + projDescription + '\'' +
+                ", projPictSrc='" + projPictSrc + '\'' +
+                ", projGithubLink='" + projGithubLink + '\'' +
+                '}';
+    }
 }

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,8 @@ import java.util.List;
 @Entity
 @Table(name = "cand_profile")
 @Data
+@Getter
+@Setter
 public class CandidateProfile {
 
     /**
@@ -136,6 +140,33 @@ public class CandidateProfile {
     @OneToMany(mappedBy = "candidateProfile", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Notification> notifications = new ArrayList<>();
+
+    public CandidateProfile() {
+    }
+
+    public CandidateProfile(Integer id, User user, String firstName, String lastName, String fatherName,
+                            Integer yearsOld, String country, String city, Integer experienceYears,
+                            String levelEng, String jobWants, Integer salaryWants, String tgNick, String phone,
+                            String github, String cvPath, List<Project> projects, List<Notification> notifications) {
+        this.id = id;
+        this.user = user;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.fatherName = fatherName;
+        this.yearsOld = yearsOld;
+        this.country = country;
+        this.city = city;
+        this.experienceYears = experienceYears;
+        this.levelEng = levelEng;
+        this.jobWants = jobWants;
+        this.salaryWants = salaryWants;
+        this.tgNick = tgNick;
+        this.phone = phone;
+        this.github = github;
+        this.cvPath = cvPath;
+        this.projects = projects;
+        this.notifications = notifications;
+    }
 
     /**
      * Перевизначений метод {@code toString()} для зручного виведення основної інформації про профіль кандидата.

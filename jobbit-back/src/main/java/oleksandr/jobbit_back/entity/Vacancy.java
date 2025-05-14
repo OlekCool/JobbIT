@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +19,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "vacancies")
 @Data
+@Getter
+@Setter
 @JsonIgnoreProperties("recruiterProfile")
 public class Vacancy {
 
@@ -83,6 +87,23 @@ public class Vacancy {
      */
     @Column(name = "posted_date")
     private LocalDateTime postedDate;
+
+    public Vacancy() {
+    }
+
+    public Vacancy(Integer vacId, RecruiterProfile recruiterProfile, String title, String description, String remote,
+                   Boolean fulltime, String levelEng, Integer minExp, Integer setSalary, LocalDateTime postedDate) {
+        this.vacId = vacId;
+        this.recruiterProfile = recruiterProfile;
+        this.title = title;
+        this.description = description;
+        this.remote = remote;
+        this.fulltime = fulltime;
+        this.levelEng = levelEng;
+        this.minExp = minExp;
+        this.setSalary = setSalary;
+        this.postedDate = postedDate;
+    }
 
     /**
      * Перевизначений метод {@code toString()} для зручного виведення основної інформації про вакансію.

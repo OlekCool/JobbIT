@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,8 @@ import java.util.List;
 @Entity
 @Table(name = "recr_profile")
 @Data
+@Getter
+@Setter
 public class RecruiterProfile {
 
     /**
@@ -105,6 +109,27 @@ public class RecruiterProfile {
     @OneToMany(mappedBy = "recruiterProfile", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Vacancy> vacancies = new ArrayList<>();
+
+    public RecruiterProfile() {
+    }
+
+    public RecruiterProfile(Integer id, User user, String firstName, String lastName, String fatherName,
+                            String companyName, String email, String phone, String instagram, String country,
+                            String city, String description, List<Vacancy> vacancies) {
+        this.id = id;
+        this.user = user;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.fatherName = fatherName;
+        this.companyName = companyName;
+        this.email = email;
+        this.phone = phone;
+        this.instagram = instagram;
+        this.country = country;
+        this.city = city;
+        this.description = description;
+        this.vacancies = vacancies;
+    }
 
     /**
      * Перевизначений метод {@code toString()} для зручного виведення основної інформації про профіль рекрутера.

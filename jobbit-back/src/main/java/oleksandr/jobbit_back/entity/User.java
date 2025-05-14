@@ -12,6 +12,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.CascadeType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Email;
@@ -29,6 +31,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users")
 @Data
+@Getter
+@Setter
 public class User {
 
     /**
@@ -118,6 +122,26 @@ public class User {
     @JsonManagedReference
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private RecruiterProfile recruiterProfile;
+
+    public User() {
+    }
+
+    public User(Integer id, String email, String userPassword, LocalDate registrationDate, Role userRole,
+                LocalDateTime lastPasswordChanged, Boolean verified, String verificationToken, String photoSrc,
+                ForgotPassword forgotPassword, CandidateProfile candidateProfile, RecruiterProfile recruiterProfile) {
+        this.id = id;
+        this.email = email;
+        this.userPassword = userPassword;
+        this.registrationDate = registrationDate;
+        this.userRole = userRole;
+        this.lastPasswordChanged = lastPasswordChanged;
+        this.verified = verified;
+        this.verificationToken = verificationToken;
+        this.photoSrc = photoSrc;
+        this.forgotPassword = forgotPassword;
+        this.candidateProfile = candidateProfile;
+        this.recruiterProfile = recruiterProfile;
+    }
 
     /**
      * Перевизначений метод {@code toString()} для зручного виведення основної інформації про користувача.

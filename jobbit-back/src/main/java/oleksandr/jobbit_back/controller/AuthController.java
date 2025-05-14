@@ -2,8 +2,6 @@ package oleksandr.jobbit_back.controller;
 
 import oleksandr.jobbit_back.dto.LoginRequest;
 import oleksandr.jobbit_back.dto.RegisterRequest;
-import oleksandr.jobbit_back.entity.CandidateProfile;
-import oleksandr.jobbit_back.entity.RecruiterProfile;
 import oleksandr.jobbit_back.entity.User;
 import oleksandr.jobbit_back.service.UserService;
 import oleksandr.jobbit_back.utils.JwtUtil;

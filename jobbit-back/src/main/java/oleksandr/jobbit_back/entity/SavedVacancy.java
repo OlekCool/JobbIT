@@ -2,6 +2,8 @@ package oleksandr.jobbit_back.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +16,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "liked_vacancies")
 @Data
+@Getter
+@Setter
 public class SavedVacancy {
 
     /**
@@ -62,4 +66,13 @@ public class SavedVacancy {
         this.vacancy = vacancy;
     }
 
+    @Override
+    public String toString() {
+        return "SavedVacancy{" +
+                "id=" + id +
+                ", saveDate=" + saveDate +
+                ", candidateProfile=" + candidateProfile +
+                ", vacancy=" + vacancy +
+                '}';
+    }
 }

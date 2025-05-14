@@ -23,7 +23,6 @@ import java.util.Date;
  */
 @Component
 public class JwtUtil {
-    private static final String SECRET_KEY = "yZufvdBO5JRWPeE6H06h+FerQMRiQP369ePu6BFk1SfZE9sdtFYEu2TYy8KMJVYOCSqqUcvMGPPKcgQkcnVy2g==";
     private final SecretKey key;
     private final JwtParser jwtParser;
 
@@ -34,7 +33,7 @@ public class JwtUtil {
      * конфігурації секретного ключа ззовні в майбутньому). Автоматично впроваджується Spring.
      */
     public JwtUtil(Environment environment) {
-        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(environment.getProperty("jobbit.jwt.secret.key")));
         this.jwtParser = Jwts.parser().verifyWith(key).build();
     }
 

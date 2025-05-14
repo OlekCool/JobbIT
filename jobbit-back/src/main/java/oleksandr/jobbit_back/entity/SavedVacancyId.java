@@ -3,6 +3,8 @@ package oleksandr.jobbit_back.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -11,6 +13,8 @@ import java.io.Serializable;
  */
 @Embeddable
 @Data
+@Getter
+@Setter
 public class SavedVacancyId implements Serializable {
 
     /**
@@ -40,5 +44,13 @@ public class SavedVacancyId implements Serializable {
     public SavedVacancyId(Integer whoSaved, Integer vacId) {
         this.whoSaved = whoSaved;
         this.vacId = vacId;
+    }
+
+    @Override
+    public String toString() {
+        return "SavedVacancyId{" +
+                "whoSaved=" + whoSaved +
+                ", vacId=" + vacId +
+                '}';
     }
 }

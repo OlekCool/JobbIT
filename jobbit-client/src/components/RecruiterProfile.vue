@@ -239,8 +239,8 @@ async function saveChanges() {
 }
 
 .profile-photo-container {
-  width: 66px;
-  height: 66px;
+  width: 6vw;
+  height: 13vh;
   border: 1px solid #ccc;
   border-radius: 50%;
   overflow: hidden;
@@ -257,8 +257,8 @@ async function saveChanges() {
 }
 
 .profile-photo-inner img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 

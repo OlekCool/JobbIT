@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.GenerationType;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -23,6 +25,8 @@ import java.util.Date;
 @Entity
 @Table(name = "forgot_password")
 @Data
+@Getter
+@Setter
 public class ForgotPassword {
 
     /**
@@ -55,4 +59,24 @@ public class ForgotPassword {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public ForgotPassword() {
+    }
+
+    public ForgotPassword(Integer fpid, Integer otp, Date expirationDate, User user) {
+        this.fpid = fpid;
+        this.otp = otp;
+        this.expirationDate = expirationDate;
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "ForgotPassword{" +
+                "fpid=" + fpid +
+                ", otp=" + otp +
+                ", expirationDate=" + expirationDate +
+                ", user=" + user +
+                '}';
+    }
 }
