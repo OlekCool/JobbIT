@@ -1,7 +1,5 @@
 package oleksandr.jobbit_back.dto;
 
-import lombok.Data;
-
 /**
  * DTO (Data Transfer Object) для представлення запиту на вхід користувача в систему.
  * Містить email та пароль користувача.
@@ -9,7 +7,6 @@ import lombok.Data;
  *
  * @author Oleksandr Borovyk
  */
-@Data
 public class LoginRequest {
     private String email;
     private String password;

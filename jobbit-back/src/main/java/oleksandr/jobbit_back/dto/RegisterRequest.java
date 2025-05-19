@@ -1,6 +1,5 @@
 package oleksandr.jobbit_back.dto;
 
-import lombok.Data;
 import oleksandr.jobbit_back.entity.Role;
 
 /**
@@ -10,7 +9,6 @@ import oleksandr.jobbit_back.entity.Role;
  *
  * @author Oleksandr Borovyk
  */
-@Data
 public class RegisterRequest {
     private String email;
     private String password;

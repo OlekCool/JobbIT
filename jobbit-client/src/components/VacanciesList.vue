@@ -16,9 +16,7 @@
 import VacancyItem from "../components/VacancyItem.vue";
 import { defineProps, defineEmits } from "vue";
 
-/**
- * Пропс для отримання даних про вакансію з батьківського компонента
- */
+// eslint-disable-next-line
 const props = defineProps({
   vacancies: {
     type: Array,
@@ -30,6 +28,7 @@ const props = defineProps({
   }
 });
 
+// eslint-disable-next-line
 const emit = defineEmits(['select-vacancy']);
 </script>
 

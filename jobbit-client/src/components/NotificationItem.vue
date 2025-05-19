@@ -22,6 +22,7 @@ import {defineProps, defineEmits} from 'vue';
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
 
+// eslint-disable-next-line
 const props = defineProps({
   notification: {
     type: Object,

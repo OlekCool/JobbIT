@@ -1,28 +1,20 @@
 package oleksandr.jobbit_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Entity-клас {@code RecruiterProfile} представляє профіль рекрутера, пов'язаний з обліковим записом
- * користувача ({@link User}). Містить додаткову інформацію, специфічну для рекрутерів. Використовує
- * бібліотеку Lombok для автогенерації конструкторів, гетерів та сетерів.
+ * користувача ({@link User}). Містить додаткову інформацію, специфічну для рекрутерів.
  *
  * @author Oleksandr Borovyk
  */
 @Entity
 @Table(name = "recr_profile")
-@Data
-@Getter
-@Setter
 public class RecruiterProfile {
 
     /**
@@ -131,12 +123,110 @@ public class RecruiterProfile {
         this.vacancies = vacancies;
     }
 
-    /**
-     * Перевизначений метод {@code toString()} для зручного виведення основної інформації про профіль рекрутера.
-     * Включає ідентифікатор профілю та email пов'язаного користувача (якщо він існує).
-     *
-     * @return Рядкова репрезентація об'єкта {@code RecruiterProfile}.
-     */
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFatherName() {
+        return fatherName;
+    }
+
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getInstagram() {
+        return instagram;
+    }
+
+    public void setInstagram(String instagram) {
+        this.instagram = instagram;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<Vacancy> getVacancies() {
+        return vacancies;
+    }
+
+    public void setVacancies(List<Vacancy> vacancies) {
+        this.vacancies = vacancies;
+    }
+
     @Override
     public String toString() {
         return "RecruiterProfile{" +

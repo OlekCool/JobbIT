@@ -9,24 +9,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.GenerationType;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Date;
 
 /**
  * Entity-клас {@code ForgotPassword} представляє інформацію, пов'язану з процесом відновлення забутого пароля користувача.
  * Зберігає одноразовий пароль (OTP), термін його дії та посилання на відповідного користувача ({@link User}).
- * Використовує Lombok.
  *
  * @author Oleksandr Borovyk
  */
 @Entity
 @Table(name = "forgot_password")
-@Data
-@Getter
-@Setter
 public class ForgotPassword {
 
     /**
@@ -67,6 +59,38 @@ public class ForgotPassword {
         this.fpid = fpid;
         this.otp = otp;
         this.expirationDate = expirationDate;
+        this.user = user;
+    }
+
+    public Integer getFpid() {
+        return fpid;
+    }
+
+    public void setFpid(Integer fpid) {
+        this.fpid = fpid;
+    }
+
+    public Integer getOtp() {
+        return otp;
+    }
+
+    public void setOtp(Integer otp) {
+        this.otp = otp;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
         this.user = user;
     }
 

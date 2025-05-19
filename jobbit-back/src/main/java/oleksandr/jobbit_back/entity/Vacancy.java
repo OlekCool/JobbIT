@@ -3,24 +3,17 @@ package oleksandr.jobbit_back.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 /**
  * Entity-клас {@code Vacancy} представляє вакансію, пов'язану з певним профілем рекрутера ({@link RecruiterProfile}),
  * який виставив її. Містить інформацію, необхідну для прийняття рішення про відгук на вакансію.
- * Використовує бібліотеку Lombok для автогенерації конструкторів, гетерів та сетерів.
  *
  * @author Oleksandr Borovyk
  */
 @Entity
 @Table(name = "vacancies")
-@Data
-@Getter
-@Setter
 @JsonIgnoreProperties("recruiterProfile")
 public class Vacancy {
 
@@ -105,12 +98,86 @@ public class Vacancy {
         this.postedDate = postedDate;
     }
 
-    /**
-     * Перевизначений метод {@code toString()} для зручного виведення основної інформації про вакансію.
-     * Включає поля, притаманні вакансії
-     *
-     * @return Рядкова репрезентація об'єкта {@code Vacancy}.
-     */
+    public Integer getVacId() {
+        return vacId;
+    }
+
+    public void setVacId(Integer vacId) {
+        this.vacId = vacId;
+    }
+
+    public RecruiterProfile getRecruiterProfile() {
+        return recruiterProfile;
+    }
+
+    public void setRecruiterProfile(RecruiterProfile recruiterProfile) {
+        this.recruiterProfile = recruiterProfile;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRemote() {
+        return remote;
+    }
+
+    public void setRemote(String remote) {
+        this.remote = remote;
+    }
+
+    public Boolean getFulltime() {
+        return fulltime;
+    }
+
+    public void setFulltime(Boolean fulltime) {
+        this.fulltime = fulltime;
+    }
+
+    public String getLevelEng() {
+        return levelEng;
+    }
+
+    public void setLevelEng(String levelEng) {
+        this.levelEng = levelEng;
+    }
+
+    public Integer getMinExp() {
+        return minExp;
+    }
+
+    public void setMinExp(Integer minExp) {
+        this.minExp = minExp;
+    }
+
+    public Integer getSetSalary() {
+        return setSalary;
+    }
+
+    public void setSetSalary(Integer setSalary) {
+        this.setSalary = setSalary;
+    }
+
+    public LocalDateTime getPostedDate() {
+        return postedDate;
+    }
+
+    public void setPostedDate(LocalDateTime postedDate) {
+        this.postedDate = postedDate;
+    }
+
     @Override
     public String toString() {
         return "Vacancy{" +

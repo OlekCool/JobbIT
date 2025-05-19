@@ -11,9 +11,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.CascadeType;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Email;
@@ -24,15 +21,12 @@ import java.time.LocalDateTime;
  * Entity-клас {@code User} представляє користувача в базі даних.
  * Містить основну інформацію про користувача, таку як email, пароль, роль, дату реєстрації,
  * статус верифікації та токен верифікації. Також має зв'язки з іншими entity ({@link ForgotPassword},
- * {@link CandidateProfile}, {@link RecruiterProfile}). Використовує Lombok.
+ * {@link CandidateProfile}, {@link RecruiterProfile}).
  *
  * @author Oleksadnr Borovyk
  */
 @Entity
 @Table(name = "users")
-@Data
-@Getter
-@Setter
 public class User {
 
     /**
@@ -143,12 +137,102 @@ public class User {
         this.recruiterProfile = recruiterProfile;
     }
 
-    /**
-     * Перевизначений метод {@code toString()} для зручного виведення основної інформації про користувача.
-     * Включає email, дату реєстрації, роль та статус верифікації.
-     *
-     * @return Рядкова репрезентація об'єкта {@code User}.
-     */
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public Role getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(Role userRole) {
+        this.userRole = userRole;
+    }
+
+    public LocalDateTime getLastPasswordChanged() {
+        return lastPasswordChanged;
+    }
+
+    public void setLastPasswordChanged(LocalDateTime lastPasswordChanged) {
+        this.lastPasswordChanged = lastPasswordChanged;
+    }
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
+    }
+
+    public String getPhotoSrc() {
+        return photoSrc;
+    }
+
+    public void setPhotoSrc(String photoSrc) {
+        this.photoSrc = photoSrc;
+    }
+
+    public ForgotPassword getForgotPassword() {
+        return forgotPassword;
+    }
+
+    public void setForgotPassword(ForgotPassword forgotPassword) {
+        this.forgotPassword = forgotPassword;
+    }
+
+    public CandidateProfile getCandidateProfile() {
+        return candidateProfile;
+    }
+
+    public void setCandidateProfile(CandidateProfile candidateProfile) {
+        this.candidateProfile = candidateProfile;
+    }
+
+    public RecruiterProfile getRecruiterProfile() {
+        return recruiterProfile;
+    }
+
+    public void setRecruiterProfile(RecruiterProfile recruiterProfile) {
+        this.recruiterProfile = recruiterProfile;
+    }
+
     @Override
     public String toString() {
         return "User{"

@@ -1,23 +1,16 @@
 package oleksandr.jobbit_back.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 /**
- * Entity-клас {@code AppliedVacancy} представляє запис того, який кандидат на яку вакансію відгукнувся
- * Використовує бібліотеку Lombok для автогенерації конструкторів, гетерів та сетерів.
+ * Entity-клас {@code AppliedVacancy} представляє запис того, який кандидат на яку вакансію відгукнувся.
  *
  * @author Oleksandr Borovyk
  */
 @Entity
 @Table(name = "liked_vacancies")
-@Data
-@Getter
-@Setter
 public class SavedVacancy {
 
     /**
@@ -48,21 +41,45 @@ public class SavedVacancy {
     @JoinColumn(name = "vac_id")
     private Vacancy vacancy;
 
-    /**
-     * Пустий конструктор
-     */
     public SavedVacancy() {
 
     }
 
-    /**
-     * Конструктор з записуванням інформації, хто на яку вакансію відгукнувся
-     * @param candidateProfile профіль кандидата
-     * @param vacancy вакансія
-     */
     public SavedVacancy(CandidateProfile candidateProfile, Vacancy vacancy) {
         this.id = new SavedVacancyId(candidateProfile.getId(), vacancy.getVacId());
         this.candidateProfile = candidateProfile;
+        this.vacancy = vacancy;
+    }
+
+    public SavedVacancyId getId() {
+        return id;
+    }
+
+    public void setId(SavedVacancyId id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getSaveDate() {
+        return saveDate;
+    }
+
+    public void setSaveDate(LocalDateTime saveDate) {
+        this.saveDate = saveDate;
+    }
+
+    public CandidateProfile getCandidateProfile() {
+        return candidateProfile;
+    }
+
+    public void setCandidateProfile(CandidateProfile candidateProfile) {
+        this.candidateProfile = candidateProfile;
+    }
+
+    public Vacancy getVacancy() {
+        return vacancy;
+    }
+
+    public void setVacancy(Vacancy vacancy) {
         this.vacancy = vacancy;
     }
 

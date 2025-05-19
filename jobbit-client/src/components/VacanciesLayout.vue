@@ -12,9 +12,7 @@ import SearchVacancy from "../components/SearchVacancy.vue";
 import VacanciesList from "../components/VacanciesList.vue";
 import { defineProps, defineEmits } from "vue";
 
-/**
- * Пропс для отримання даних про вхідні вакансії в компонент з батьківського
- */
+// eslint-disable-next-line
 const props = defineProps({
   vacancies: Array
 });

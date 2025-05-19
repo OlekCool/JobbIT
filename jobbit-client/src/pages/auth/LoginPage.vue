@@ -18,7 +18,7 @@
       <button class="login-button" type="submit">АВТОРИЗАЦІЯ</button>
 
       <div class="buttons">
-        <button class="forgot-button" type="button">Забули пароль?</button>
+        <router-link to="/auth/forgotpassword" class="forgot-button" type="button">Забули пароль?</router-link>
         <router-link to="/" class="back-button" type="button">На головну</router-link>
       </div>
     </form>

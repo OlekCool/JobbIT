@@ -32,7 +32,7 @@ import { defineEmits } from 'vue';
 
 const router = useRouter();
 const route = useRoute();
-const userId = ref(JSON.parse(localStorage.getItem('userId')));
+const userId = ref(localStorage.getItem('userId'));
 const emit = defineEmits(['show-profile', 'show-my-vacancies', 'show-all-vacancies']);
 
 /**
@@ -71,7 +71,7 @@ const logout = () => {
  */
 const goToRecruiterProfile = async () => {
   try {
-    const response = await recrProfileService.getProfileRecruiter(localStorage.getItem('userId'),
+    const response = await recrProfileService.getProfileRecruiter(userId.value,
         localStorage.getItem('authToken'));
 
     if (response.status === HttpStatusCode.Ok) {

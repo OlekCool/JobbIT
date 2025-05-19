@@ -74,8 +74,7 @@ const logout = () => {
  */
 const goToCandidateProfile = async () => {
   try {
-    const response = await candProfileService.getProfileCandidate(localStorage.getItem('userId'),
-        localStorage.getItem('authToken'));
+    const response = await candProfileService.getProfileCandidate(userId.value, localStorage.getItem('authToken'));
 
     if (response.status === HttpStatusCode.Ok) {
       console.log("Відображення успішне", response.data);

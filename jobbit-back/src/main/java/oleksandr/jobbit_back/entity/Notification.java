@@ -2,9 +2,6 @@ package oleksandr.jobbit_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -13,15 +10,11 @@ import java.time.LocalDateTime;
  * Entity-клас {@code Notification} представляє сповіщення щодо вакансій, на які кандидат відгукнувся в базі даних.
  * Містить інформацію про те, якому кандидату надійшло сповіщення, щодо якої вакансії це сповіщення, текст сповіщення
  * Також має зв'язок з entity {@link CandidateProfile}, щоб призначити сповіщення для певного кандидата).
- * Використовує Lombok.
  *
  * @author Oleksadnr Borovyk
  */
 @Entity
 @Table(name = "cand_notifications")
-@Data
-@Getter
-@Setter
 public class Notification {
 
     /**
@@ -66,6 +59,46 @@ public class Notification {
         this.candidateProfile = candidateProfile;
         this.vacId = vacId;
         this.text = text;
+        this.notifDate = notifDate;
+    }
+
+    public Integer getNotId() {
+        return notId;
+    }
+
+    public void setNotId(Integer notId) {
+        this.notId = notId;
+    }
+
+    public CandidateProfile getCandidateProfile() {
+        return candidateProfile;
+    }
+
+    public void setCandidateProfile(CandidateProfile candidateProfile) {
+        this.candidateProfile = candidateProfile;
+    }
+
+    public Integer getVacId() {
+        return vacId;
+    }
+
+    public void setVacId(Integer vacId) {
+        this.vacId = vacId;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public LocalDateTime getNotifDate() {
+        return notifDate;
+    }
+
+    public void setNotifDate(LocalDateTime notifDate) {
         this.notifDate = notifDate;
     }
 

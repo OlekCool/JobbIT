@@ -143,7 +143,7 @@ const loadInitialVacancies = async () => {
  * параметр vac_id в адресі (щоб отримати інформацію про вакансію)
  */
 onMounted(async () => {
-  if (!userId || !authToken) {
+  if (!userId.value || !authToken) {
     await router.push('/login');
     return;
   }
@@ -201,7 +201,7 @@ const handleSelectVacancy = (vacancy) => {
 const closeVacancyDetails = () => {
   selectedVacancyId.value = null;
   selectedVacancy.value = null;
-  const { vac_id, ...newQuery } = route.query;
+  const { ...newQuery } = route.query;
   router.push({ path: route.path, query: newQuery });
 };
 

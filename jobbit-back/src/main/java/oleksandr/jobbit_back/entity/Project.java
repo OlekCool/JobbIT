@@ -2,23 +2,16 @@ package oleksandr.jobbit_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Entity-клас {@code Project} представляє проєкт в базі даних.
  * Містить основну інформацію про проєкт, таку як назва, опис, посилання на github та картинку.
  * Також має зв'язок з entity {@link CandidateProfile}, щоб призначити проєкт на певного кандидата).
- * Використовує Lombok.
  *
  * @author Oleksadnr Borovyk
  */
 @Entity
 @Table(name = "projects")
-@Data
-@Getter
-@Setter
 public class Project {
 
     /**
@@ -70,6 +63,54 @@ public class Project {
         this.projName = projName;
         this.projDescription = projDescription;
         this.projPictSrc = projPictSrc;
+        this.projGithubLink = projGithubLink;
+    }
+
+    public Integer getProjId() {
+        return projId;
+    }
+
+    public void setProjId(Integer projId) {
+        this.projId = projId;
+    }
+
+    public CandidateProfile getCandidateProfile() {
+        return candidateProfile;
+    }
+
+    public void setCandidateProfile(CandidateProfile candidateProfile) {
+        this.candidateProfile = candidateProfile;
+    }
+
+    public String getProjName() {
+        return projName;
+    }
+
+    public void setProjName(String projName) {
+        this.projName = projName;
+    }
+
+    public String getProjDescription() {
+        return projDescription;
+    }
+
+    public void setProjDescription(String projDescription) {
+        this.projDescription = projDescription;
+    }
+
+    public String getProjPictSrc() {
+        return projPictSrc;
+    }
+
+    public void setProjPictSrc(String projPictSrc) {
+        this.projPictSrc = projPictSrc;
+    }
+
+    public String getProjGithubLink() {
+        return projGithubLink;
+    }
+
+    public void setProjGithubLink(String projGithubLink) {
         this.projGithubLink = projGithubLink;
     }
 

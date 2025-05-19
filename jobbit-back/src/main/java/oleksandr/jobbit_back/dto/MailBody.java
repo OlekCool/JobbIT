@@ -1,7 +1,5 @@
 package oleksandr.jobbit_back.dto;
 
-import lombok.Data;
-
 /**
  * DTO (Data Transfer Object) для представлення тіла електронного листа.
  * Містить інформацію про отримувача, тему та вміст листа.
@@ -9,9 +7,7 @@ import lombok.Data;
  *
  * @author Oleksandr Borovyk
  */
-@Data
 public class MailBody {
-
     private String to;
     private String subject;
     private String text;

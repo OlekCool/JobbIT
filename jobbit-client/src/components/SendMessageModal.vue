@@ -15,10 +15,12 @@
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue';
 
+// eslint-disable-next-line
 const props = defineProps({
   title: String,
 });
 
+// eslint-disable-next-line
 const emit = defineEmits(['close', 'send']);
 
 const message = ref('');

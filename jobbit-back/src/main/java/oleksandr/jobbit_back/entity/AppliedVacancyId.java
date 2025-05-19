@@ -2,9 +2,6 @@ package oleksandr.jobbit_back.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -12,9 +9,6 @@ import java.io.Serializable;
  * Клас для збереження складеного первинного ключа в БД
  */
 @Embeddable
-@Data
-@Getter
-@Setter
 public class AppliedVacancyId implements Serializable {
 
     /**
@@ -29,21 +23,28 @@ public class AppliedVacancyId implements Serializable {
     @Column(name = "vac_id")
     private Integer vacId;
 
-    /**
-     * Пустий конструктор
-     */
     public AppliedVacancyId() {
 
     }
 
-    /**
-     * Конструктор з даними ідентифікаторів
-     * @param whoApplied id, хто відгукнувся
-     * @param vacId id вакансії
-     */
     public AppliedVacancyId(Integer whoApplied, Integer vacId) {
         this.whoApplied = whoApplied;
         this.vacId = vacId;
     }
 
+    public Integer getWhoApplied() {
+        return whoApplied;
+    }
+
+    public void setWhoApplied(Integer whoApplied) {
+        this.whoApplied = whoApplied;
+    }
+
+    public Integer getVacId() {
+        return vacId;
+    }
+
+    public void setVacId(Integer vacId) {
+        this.vacId = vacId;
+    }
 }

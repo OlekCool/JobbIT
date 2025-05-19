@@ -57,7 +57,6 @@ const showVacancyModal = ref(false);
 const isEditMode = ref(false);
 const vacancyToEdit = ref(null);
 
-const userId = ref(localStorage.getItem('userId'));
 const authToken = ref(localStorage.getItem('authToken'));
 
 // кандидати, які відгукнулися на вакансію

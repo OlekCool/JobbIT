@@ -144,7 +144,7 @@ const loadInitialVacancies = async () => {
  * параметр vac_id в адресі (щоб отримати інформацію про вакансію)
  */
 onMounted(async () => {
-  if (!userId || !authToken) {
+  if (!userId.value || !authToken) {
     await router.push('/login');
     return;
   }
@@ -202,7 +202,7 @@ const handleSelectVacancy = (vacancy) => {
 const closeVacancyDetails = () => {
   selectedVacancyId.value = null;
   selectedVacancy.value = null;
-  const { vac_id, ...newQuery } = route.query;
+  const { ...newQuery } = route.query;
   router.push({ path: route.path, query: newQuery });
 };
 
@@ -325,9 +325,8 @@ const closeVacancyModal = () => {
 const saveVacancy = async (vacancyData) => {
   try {
     const recruiterId = JSON.parse(userId.value);
-    if (isEditMode.value) {
-    } else {
-      const response = await VacancyService.addNewVacancy(recruiterId, vacancyData, authToken);
+    if (!isEditMode.value) {
+      await VacancyService.addNewVacancy(recruiterId, vacancyData, authToken);
       await loadInitialVacancies();
     }
   } catch (error) {

@@ -3,11 +3,11 @@
     <h2>Фільтри</h2>
 
     <div class="filter-group">
-      <p class="filter-label">Розташування:</p>
-      <label><input type="radio" value="" v-model="filters.remote" /> Будь-який </label>
-      <label><input type="radio" value="Віддалено" v-model="filters.remote" /> Віддалено </label>
-      <label><input type="radio" value="Офіс" v-model="filters.remote" /> Офіс </label>
-      <label><input type="radio" value="Частково" v-model="filters.remote" /> Частково віддалено </label>
+      <p class="filter-label">Віддалена робота:</p>
+      <label><input type="radio" value="" v-model="filters.remote" /> Будь-яка </label>
+      <label><input type="radio" value="Так" v-model="filters.remote" /> Так </label>
+      <label><input type="radio" value="Ні" v-model="filters.remote" /> Ні </label>
+      <label><input type="radio" value="Частково віддалено" v-model="filters.remote" /> Частково </label>
     </div>
 
     <div class="filter-group">
@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, defineEmits } from "vue";
 
 /**
  * Збереження значень фільтрів у реактивну змінну

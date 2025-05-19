@@ -4,25 +4,17 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Entity-клас {@code CandidateProfile} представляє профіль кандидата, пов'язаний з обліковим записом
- * користувача ({@link User}). Містить додаткову інформацію, специфічну для кандидатів. Використовує
- * бібліотеку Lombok для автогенерації конструкторів, гетерів та сетерів.
+ * користувача ({@link User}). Містить додаткову інформацію, специфічну для кандидатів.
  *
  * @author Oleksandr Borovyk
  */
 @Entity
 @Table(name = "cand_profile")
-@Data
-@Getter
-@Setter
 public class CandidateProfile {
 
     /**
@@ -168,12 +160,150 @@ public class CandidateProfile {
         this.notifications = notifications;
     }
 
-    /**
-     * Перевизначений метод {@code toString()} для зручного виведення основної інформації про профіль кандидата.
-     * Включає ідентифікатор профілю та email пов'язаного користувача (якщо він існує).
-     *
-     * @return Рядкова репрезентація об'єкта {@code CandidateProfile}.
-     */
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFatherName() {
+        return fatherName;
+    }
+
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
+    }
+
+    public Integer getYearsOld() {
+        return yearsOld;
+    }
+
+    public void setYearsOld(Integer yearsOld) {
+        this.yearsOld = yearsOld;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Integer getExperienceYears() {
+        return experienceYears;
+    }
+
+    public void setExperienceYears(Integer experienceYears) {
+        this.experienceYears = experienceYears;
+    }
+
+    public String getLevelEng() {
+        return levelEng;
+    }
+
+    public void setLevelEng(String levelEng) {
+        this.levelEng = levelEng;
+    }
+
+    public String getJobWants() {
+        return jobWants;
+    }
+
+    public void setJobWants(String jobWants) {
+        this.jobWants = jobWants;
+    }
+
+    public Integer getSalaryWants() {
+        return salaryWants;
+    }
+
+    public void setSalaryWants(Integer salaryWants) {
+        this.salaryWants = salaryWants;
+    }
+
+    public String getTgNick() {
+        return tgNick;
+    }
+
+    public void setTgNick(String tgNick) {
+        this.tgNick = tgNick;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getGithub() {
+        return github;
+    }
+
+    public void setGithub(String github) {
+        this.github = github;
+    }
+
+    public String getCvPath() {
+        return cvPath;
+    }
+
+    public void setCvPath(String cvPath) {
+        this.cvPath = cvPath;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
     @Override
     public String toString() {
         return "CandidateProfile{" +
