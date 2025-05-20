@@ -1,39 +1,41 @@
 <template>
-  <aside role="search" class="filters">
-    <h2>Фільтри</h2>
+  <aside role="complementary" class="filters" aria-labelledby="filters-heading">
+    <h2 id="filters-heading">Фільтри</h2>
 
-    <div class="filter-group">
-      <p class="filter-label">Віддалена робота:</p>
-      <label><input type="radio" value="" v-model="filters.remote" /> Будь-яка </label>
-      <label><input type="radio" value="Так" v-model="filters.remote" /> Так </label>
-      <label><input type="radio" value="Ні" v-model="filters.remote" /> Ні </label>
-      <label><input type="radio" value="Частково віддалено" v-model="filters.remote" /> Частково </label>
-    </div>
+    <fieldset class="filter-group" role="radiogroup" aria-labelledby="remote-filter-label">
+      <legend class="filter-label" id="remote-filter-label">Віддалена робота:</legend>
+      <label><input type="radio" value="" v-model="filters.remote" name="remote-option" /> Будь-яка </label>
+      <label><input type="radio" value="Так" v-model="filters.remote" name="remote-option" /> Так </label>
+      <label><input type="radio" value="Ні" v-model="filters.remote" name="remote-option" /> Ні </label>
+      <label><input type="radio" value="Частково віддалено" v-model="filters.remote" name="remote-option" /> Частково </label>
+    </fieldset>
 
-    <div class="filter-group">
-      <p class="filter-label">Тип зайнятості:</p>
+    <fieldset class="filter-group" role="group" aria-labelledby="fulltime-filter-label">
+      <legend class="filter-label" id="fulltime-filter-label">Тип зайнятості:</legend>
       <label><input type="checkbox" v-model="filters.fulltime" :value="true" /> Повна </label>
       <label><input type="checkbox" v-model="filters.fulltime" :value="false" /> Часткова </label>
-    </div>
+    </fieldset>
 
-    <div class="filter-group">
-      <p class="filter-label">Рівень англійської:</p>
+    <fieldset class="filter-group" role="group" aria-labelledby="english-filter-label">
+      <legend class="filter-label" id="english-filter-label">Рівень англійської:</legend>
       <label><input type="checkbox" v-model="filters.level_eng" value="A1" /> A1</label>
       <label><input type="checkbox" v-model="filters.level_eng" value="A2" /> A2</label>
       <label><input type="checkbox" v-model="filters.level_eng" value="B1" /> B1</label>
       <label><input type="checkbox" v-model="filters.level_eng" value="B2" /> B2</label>
       <label><input type="checkbox" v-model="filters.level_eng" value="C1" /> C1</label>
       <label><input type="checkbox" v-model="filters.level_eng" value="C2" /> C2</label>
-    </div>
+    </fieldset>
 
     <div class="filter-group">
       <label class="filter-label" for="salary">Зарплата від:</label>
-      <input id="salary" type="number" v-model.number="filters.set_salary" placeholder="Наприклад, 25000" />
+      <input id="salary" type="number" v-model.number="filters.set_salary" placeholder="Наприклад, 25000"
+             aria-label="Мінімальна заробітна плата" />
     </div>
 
     <div class="filter-group">
       <label class="filter-label" for="experience">Мінімальний досвід (роки):</label>
-      <input id="experience" type="number" min="0" max="50" v-model.number="filters.min_exp" placeholder="0" />
+      <input id="experience" type="number" min="0" max="50" v-model.number="filters.min_exp" placeholder="0"
+             aria-label="Мінімальний досвід роботи у роках" />
     </div>
   </aside>
 </template>

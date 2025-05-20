@@ -1,18 +1,19 @@
 <template>
   <div class="login-container">
-    <form @submit.prevent="handleSubmit" class="login-box">
-      <h2 class="login-title">Введіть 6-значний код, який прийшов на {{ email }}</h2>
+    <form @submit.prevent="handleSubmit" class="login-box" aria-labelledby="otp-title-heading">
+      <h2 class="login-title" id="otp-title-heading">Введіть 6-значний код, який прийшов на {{ email }}</h2>
 
       <div class="form-group">
-        <label for="email">Код:</label>
-        <input type="text" id="email" v-model="otpCode" />
+        <label for="otpCode">Код:</label>
+        <input type="text" id="otpCode" v-model="otpCode" maxlength="6" aria-required="true"
+               aria-describedby="error-otp-message" aria-label="Введіть 6-значний код підтвердження" />
       </div>
 
-      <p class="error">{{ errorOtp }}</p>
+      <p class="error" role="alert" aria-live="assertive" id="error-otp-message"> {{ errorOtp }}</p>
 
       <div class="buttons">
         <button to="/auth/newpassword" class="check-button" type="submit">Перевірити</button>
-        <router-link to="/auth/forgotpassword" class="back-button" type="button">Назад</router-link>
+        <router-link to="/auth/forgotpassword" class="back-button" type="button" role="button">Назад</router-link>
       </div>
     </form>
   </div>
@@ -78,58 +79,58 @@ const handleSubmit = async () => {
 
 .login-box {
   background-color: white;
-  padding: 40px 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  width: 40%;
+  padding: 6vw 6vh;
+  border: 0.3vh solid #ccc;
+  border-radius: 4vh;
+  width: 40vw;
 }
 
 .login-title {
   text-align: center;
-  margin-bottom: 40px;
-  font-size: 20px;
+  margin: 6vh auto;
+  max-width: 80%;
+  font-size: 1vw;
 }
 
 .form-group {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-}
-
-.form-group-last {
-  margin-bottom: 40px;
+  max-width: 80%;
+  margin: 0 auto;
 }
 
 label {
-  width: 120px;
-  margin-right: 20px;
+  width: 10vw;
+  margin-right: 4vw;
   text-align: left;
 }
 
 input {
   flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+  padding: 1vh;
+  border: 0.4vh solid #ccc;
+  border-radius: 1vh;
 }
 
 .buttons {
-  margin-top: 10px;
+  margin-top: 4vh;
   display: flex;
   justify-content: space-around;
   text-decoration: none;
 }
 
 .check-button {
-  margin: 25px;
-  width: 20%;
-  padding: 10px;
-  border: none;
-  border-radius: 3px;
+  margin-top: 5vh;
+  width: 10vw;
+  padding: 2vh;
   background-color: #4caf50;
   color: rgb(0, 0, 0);
   cursor: pointer;
+  border-radius: 0.8vh;
+  border: 0.2vh solid rgb(48, 48, 48);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   text-decoration: none;
+  font-size: 1vw;
 }
 
 .check-button:hover {
@@ -138,11 +139,13 @@ input {
 }
 
 .back-button {
+  margin-top: 2vw;
   background-color: #fff;
   border: none;
   cursor: pointer;
   text-decoration: none;
   color: #000;
+  text-align: center;
   align-content: center;
 }
 
@@ -152,6 +155,7 @@ input {
 
 .error {
   color: red;
-  font-size: 14px;
+  margin-top: 8vh;
+  font-size: 3vh;
 }
 </style>

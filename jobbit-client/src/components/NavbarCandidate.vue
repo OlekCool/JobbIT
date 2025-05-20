@@ -1,7 +1,9 @@
 <template>
-  <nav role="navigation" class="navbar">
-    <div class="profile-section" @click="goToCandidateProfile" style="cursor: pointer">
+  <nav role="navigation" class="navbar" aria-label="Головна навігація кандидата">
+    <div class="profile-section" @click="goToCandidateProfile" style="cursor: pointer"
+         aria-label="Перейти до профілю кандидата">
       <h1 class="candName">
+        <span class="visually-hidden">Профіль: </span>
         {{ props.candidateProfile?.firstName && props.candidateProfile?.lastName
           ? `${props.candidateProfile.firstName} ${props.candidateProfile.lastName}`
           : 'Ім\'я Прізвище' }}
@@ -12,15 +14,19 @@
       </div>
     </div>
 
-    <div class="nav-buttons-section">
-      <button @click="goToVacancies" :class="{ 'active': isActive('/candidate-dash/search') }">Пошук</button>
-      <button @click="goToSaved" :class="{ 'active': isActive('/candidate-dash/saved') }">Збережене</button>
-      <button @click="goToApplied" :class="{ 'active': isActive('/candidate-dash/applied') }">Відгуки</button>
-      <button @click="goToNotifications" :class="{ 'active': isActive('/candidate-dash/notifications') }">Повідомлення</button>
+    <div class="nav-buttons-section" role="group" aria-label="Основні розділи">
+      <button @click="goToVacancies" :class="{ 'active': isActive('/candidate-dash/search') }"
+              aria-current="{{ isActive('/candidate-dash/search') ? 'page' : null }}">Пошук</button>
+      <button @click="goToSaved" :class="{ 'active': isActive('/candidate-dash/saved') }"
+              aria-current="{{ isActive('/candidate-dash/saved') ? 'page' : null }}">Збережене</button>
+      <button @click="goToApplied" :class="{ 'active': isActive('/candidate-dash/applied') }"
+              aria-current="{{ isActive('/candidate-dash/applied') ? 'page' : null }}">Відгуки</button>
+      <button @click="goToNotifications" :class="{ 'active': isActive('/candidate-dash/notifications') }"
+              aria-current="{{ isActive('/candidate-dash/notifications') ? 'page' : null }}">Повідомлення</button>
     </div>
 
-    <div class="logout-section">
-      <button @click="logout">Вийти</button>
+    <div class="logout-section" role="group" aria-label="Дії з акаунтом">
+      <button @click="logout" aria-label="Вийти з акаунту">Вийти</button>
     </div>
   </nav>
 </template>
@@ -204,5 +210,16 @@ const goToNotifications = () => {
 
 .logout-section button:hover {
   background-color: #ffbbbb;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 </style>

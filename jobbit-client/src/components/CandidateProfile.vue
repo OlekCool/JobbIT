@@ -1,230 +1,250 @@
 <template>
   <div class="profile-page">
     <div class="profile-container">
-      <div class="profile-header">
+      <header class="profile-header">
         <div class="profile-photo">
-          <div class="profile-photo-container" @mouseover="showUploadHint = true" @mouseleave="showUploadHint = false">
+          <div class="profile-photo-container" @mouseover="showUploadHint = true" @mouseleave="showUploadHint = false"
+               aria-live="polite" aria-atomic="true">
             <div class="profile-photo-inner">
               <img :src="profilePhotoUrl" alt="Фото профілю">
-              <div v-if="showUploadHint && isEditing && !props.isViewMode" class="upload-overlay">
+              <div v-if="showUploadHint && isEditing && !props.isViewMode" class="upload-overlay" role="group"
+                   aria-label="Завантажити фото профілю">
                 <label for="profile-photo-upload" class="upload-label">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="upload-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="upload-icon"
+                       aria-hidden="true" focusable="false">
                     <path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v8.5h8.5a.75.75 0 010 1.5h-8.5v8.5a.75.75 0 01-1.5 0v-8.5H3.75a.75.75 0 010-1.5h8.5V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
                   </svg>
                   <span class="upload-text">Завантажити фото</span>
                 </label>
-                <input type="file" id="profile-photo-upload" @change="handleProfilePhotoChange" class="upload-input">
+                <input type="file" id="profile-photo-upload" @change="handleProfilePhotoChange" class="upload-input"
+                       aria-label="Виберіть файл для завантаження фото профілю">
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div class="profile-info-section personal-info">
-        <h3>Особиста інформація</h3>
+      <section class="profile-info-section personal-info" aria-labelledby="personal-info-heading">
+        <h3 id="personal-info-heading">Особиста інформація</h3>
         <div class="info-group">
-          <label>Ім’я:</label>
+          <label for="firstName">Ім’я:</label>
           <span v-if="!isEditing">{{ editableProfile.firstName }}</span>
-          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.firstName" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.firstName" id="firstName" />
         </div>
         <div class="info-group">
-          <label>Прізвище:</label>
+          <label for="lastName">Прізвище:</label>
           <span v-if="!isEditing">{{ editableProfile.lastName }}</span>
-          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.lastName" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.lastName" id="lastName" />
         </div>
         <div class="info-group">
-          <label>По батькові:</label>
+          <label for="fatherName">По батькові:</label>
           <span v-if="!isEditing">{{ editableProfile.fatherName }}</span>
-          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.fatherName" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.fatherName" id="fatherName" />
         </div>
         <div class="info-group">
-          <label>Вік:</label>
+          <label for="yearsOld">Вік:</label>
           <span v-if="!isEditing">{{ editableProfile.yearsOld }}</span>
-          <input v-if="!props.isViewMode && isEditing" type="number" v-model="editableProfile.yearsOld" />
+          <input v-if="!props.isViewMode && isEditing" type="number" v-model="editableProfile.yearsOld" id="yearsOld" />
         </div>
-      </div>
+      </section>
 
-      <div class="profile-info-section contact-info">
-        <h3>Контакти</h3>
+      <section class="profile-info-section contact-info" aria-labelledby="contact-info-heading">
+        <h3 id="contact-info-heading">Контакти</h3>
         <div class="info-group">
-          <label>Telegram:</label>
+          <label for="tgNick">Telegram:</label>
           <span v-if="!isEditing">{{ editableProfile.tgNick }}</span>
-          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.tgNick" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.tgNick" id="tgNick" />
         </div>
         <div class="info-group">
-          <label>Телефон:</label>
+          <label for="phone">Телефон:</label>
           <span v-if="!isEditing">{{ editableProfile.phone }}</span>
-          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.phone" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.phone" id="phone" />
         </div>
         <div class="info-group">
-          <label>GitHub:</label>
+          <label for="github">GitHub:</label>
           <span v-if="!isEditing">{{ editableProfile.github }}</span>
-          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.github" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.github" id="github" />
         </div>
-      </div>
+      </section>
 
-      <div class="profile-info-section location-info">
-        <h3>Місцезнаходження</h3>
+      <section class="profile-info-section location-info" aria-labelledby="location-info-heading">
+        <h3 id="location-info-heading">Місцезнаходження</h3>
         <div class="info-group">
-          <label>Країна:</label>
+          <label for="country">Країна:</label>
           <span v-if="!isEditing">{{ editableProfile.country }}</span>
-          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.country" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.country" id="country" />
         </div>
         <div class="info-group">
-          <label>Місто:</label>
+          <label for="city">Місто:</label>
           <span v-if="!isEditing">{{ editableProfile.city }}</span>
-          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.city" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.city" id="city" />
         </div>
-      </div>
+      </section>
 
-      <div class="profile-info-section experience-level">
-        <h3>Досвід та рівень англійської</h3>
+      <section class="profile-info-section experience-level" aria-labelledby="experience-heading">
+        <h3 id="experience-heading">Досвід та рівень англійської</h3>
         <div class="info-group">
-          <label>Досвід (років):</label>
+          <label for="experienceYears">Досвід (років):</label>
           <span v-if="!isEditing">{{ editableProfile.experienceYears }}</span>
-          <input v-if="!props.isViewMode && isEditing" type="number" v-model="editableProfile.experienceYears" />
+          <input v-if="!props.isViewMode && isEditing" type="number" v-model="editableProfile.experienceYears"
+                 id="experienceYears"/>
         </div>
         <div class="info-group">
-          <label>Рівень англійської:</label>
+          <label for="levelEng">Рівень англійської:</label>
           <span v-if="!isEditing">{{ editableProfile.levelEng }}</span>
-          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.levelEng" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.levelEng" id="levelEng" />
         </div>
-      </div>
+      </section>
 
-      <div class="profile-info-section desired-info">
-        <h3>Бажана робота</h3>
+      <section class="profile-info-section desired-info" aria-labelledby="desired-job-heading">
+        <h3 id="desired-job-heading">Бажана робота</h3>
         <div class="info-group">
-          <label>Бажана посада:</label>
+          <label for="jobWants">Бажана посада:</label>
           <span v-if="!isEditing">{{ editableProfile.jobWants }}</span>
-          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.jobWants" />
+          <input v-if="!props.isViewMode && isEditing" v-model="editableProfile.jobWants" id="jobWants" />
         </div>
         <div class="info-group">
-          <label>Бажана зарплата (грн.):</label>
+          <label for="salaryWants">Бажана зарплата (грн.):</label>
           <span v-if="!isEditing">{{ editableProfile.salaryWants }}</span>
-          <input v-if="!props.isViewMode && isEditing" type="number" v-model="editableProfile.salaryWants" />
+          <input v-if="!props.isViewMode && isEditing" type="number" v-model="editableProfile.salaryWants" id="salaryWants" />
         </div>
-      </div>
+      </section>
 
-      <div class="profile-info-section cv-upload">
-        <h3>Резюме</h3>
+      <section class="profile-info-section cv-upload" aria-labelledby="cv-heading">
+        <h3 id="cv-heading">Резюме</h3>
         <div v-if="editableProfile.cvPath" class="cv-link-container">
-          <a :href="'/' + editableProfile.cvPath" target="_blank" class="cv-link">
+          <a :href="'/' + editableProfile.cvPath" target="_blank" class="cv-link" aria-label="Переглянути завантажене резюме">
             Переглянути резюме
           </a>
         </div>
         <div v-if="!props.isViewMode && isEditing" class="file-upload-container">
           <label for="cv-upload-input" class="file-upload-label">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon" aria-hidden="true">
               <path fill-rule="evenodd" d="M12 2.25c-5.384 0-9.75 4.366-9.75 9.75s4.366 9.75 9.75 9.75 9.75-4.366 9.75-9.75S17.384 2.25 12 2.25zm3 10.25a.75.75 0 01-.75.75H9.75a.75.75 0 010-1.5h4.5a.75.75 0 01.75.75zm-3-4a.75.75 0 01-.75.75h-3a.75.75 0 010-1.5h3a.75.75 0 01.75.75zm3-4a.75.75 0 01-.75.75H9.75a.75.75 0 010-1.5h4.5a.75.75 0 01.75.75z" clip-rule="evenodd" />
             </svg>
             <span>Завантажити резюме</span>
           </label>
-          <input v-if="!props.isViewMode" type="file" id="cv-upload-input" @change="handleCvUpload" class="file-upload-input" />
+          <input v-if="!props.isViewMode" type="file" id="cv-upload-input" @change="handleCvUpload" class="file-upload-input" aria-label="Виберіть файл резюме для завантаження" />
         </div>
-      </div>
+      </section>
 
       <div class="actions">
-        <button v-if="!props.isViewMode && isEditing" @click="saveChanges" class="primary">Зберегти дані</button>
-        <button v-if="!props.isViewMode && isEditing" @click="cancelEdit" class="secondary">Скасувати редагування</button>
-        <button v-if="!props.isViewMode && !isEditing" @click="isEditing = !isEditing" class="primary">Редагувати дані</button>
+        <button v-if="!props.isViewMode && isEditing" @click="saveChanges" class="primary"
+                aria-label="Зберегти всі зміни у профілі">Зберегти дані</button>
+        <button v-if="!props.isViewMode && isEditing" @click="cancelEdit" class="secondary"
+                aria-label="Скасувати редагування даних профілю">Скасувати редагування</button>
+        <button v-if="!props.isViewMode && !isEditing" @click="isEditing = !isEditing" class="primary"
+                aria-label="Перейти до режиму редагування профілю">Редагувати дані</button>
       </div>
 
-      <div class="profile-info-section projects-section">
+      <section class="profile-info-section projects-section" aria-labelledby="projects-heading">
         <div class="section-header">
-          <h3>Мої проєкти</h3>
-          <button v-if="!props.isViewMode && !isEditingProjects" @click="isEditingProjects = true" class="control-button small">Керувати проєктами</button>
+          <h3 id="projects-heading">Мої проєкти</h3>
+          <button v-if="!props.isViewMode && !isEditingProjects" @click="isEditingProjects = true"
+                  class="control-button small" aria-label="Керувати проєктами">Керувати проєктами</button>
         </div>
         <div v-if="!isEditingProjects && !isAddingProject">
-          <ul v-if="editableProjects">
-            <li v-for="(project, index) in editableProjects" :key="index" class="project-item">
+          <ul v-if="editableProjects" role="list">
+            <li v-for="(project, index) in editableProjects" :key="index" class="project-item" role="listitem">
               <div class="project-details">
                 <h4>{{ project.projName }}</h4>
                 <p v-if="project.projDescription ">
                   <strong>Опис:</strong> {{ project.projDescription }}
                 </p>
                 <p v-if="project.projGithubLink">
-                  <strong>Посилання:</strong> <a :href="project.projGithubLink" target="_blank" class="link">{{ project.projGithubLink }}</a>
+                  <strong>Посилання:</strong>
+                  <a :href="project.projGithubLink" target="_blank" class="link"
+                     aria-label="Переглянути проєкт на GitHub">{{ project.projGithubLink }}</a>
                 </p>
               </div>
               <img v-if="project.projPictSrc" :src="'/' + project.projPictSrc" alt="Фото проєкту" class="project-image" />
             </li>
           </ul>
-          <p v-else class="no-data">Немає доданих проєктів.</p>
+          <p v-else class="no-data" role="status" aria-live="polite">Немає доданих проєктів.</p>
         </div>
 
         <div v-if="!props.isViewMode && isEditingProjects && !isAddingProject && editingProject === null">
           <div class="section-header-edit">
             <h4>Керувати проєктами</h4>
-            <div>
-              <button v-if="!props.isViewMode" @click="addProject" class="control-button primary small">Додати проєкт</button>
-              <button v-if="!props.isViewMode" @click="isEditingProjects = false" class="control-button secondary small">Скасувати</button>
+            <div role="group" aria-label="Дії керування проєктами">
+              <button v-if="!props.isViewMode" @click="addProject" class="control-button primary small"
+                      aria-label="Додати новий проєкт">Додати проєкт</button>
+              <button v-if="!props.isViewMode" @click="isEditingProjects = false" class="control-button secondary small"
+                      aria-label="Скасувати режим керування проєктами">Скасувати</button>
             </div>
           </div>
-          <ul v-if="editableProjects.length > 0">
-            <li v-for="project in editableProjects" :key="project.projId" class="project-item-edit">
+          <ul v-if="editableProjects.length > 0" role="list">
+            <li v-for="project in editableProjects" :key="project.projId" class="project-item-edit" role="listitem">
               <div class="project-info">
                 <span>{{ project.projName }}</span>
-                <a v-if="project.projGithubLink" :href="project.projGithubLink" target="_blank" class="link">(Посилання)</a>
+                <a v-if="project.projGithubLink" :href="project.projGithubLink" target="_blank" class="link"
+                   aria-label="Посилання на GitHub проєкт">(Посилання)</a>
               </div>
-              <div class="project-actions">
-                <button v-if="!props.isViewMode" @click="editProject(project)" class="action-button green small">Редагувати</button>
-                <button v-if="!props.isViewMode" @click="deleteProject(project.projId)" class="action-button red small">Видалити</button>
+              <div class="project-actions" role="group" aria-label="Дії з проєктом">
+                <button v-if="!props.isViewMode" @click="editProject(project)" class="action-button green small"
+                        aria-label="Редагувати проєкт">Редагувати</button>
+                <button v-if="!props.isViewMode" @click="deleteProject(project.projId)" class="action-button red small"
+                        aria-label="Видалити проєкт">Видалити</button>
               </div>
             </li>
           </ul>
-          <p v-else class="no-data">Немає доданих проєктів.</p>
+          <p v-else class="no-data" role="status" aria-live="polite">Немає доданих проєктів.</p>
         </div>
 
-        <div v-if="!props.isViewMode && isEditingProjects && isAddingProject">
-          <h4>Додати проєкт</h4>
+        <div v-if="!props.isViewMode && isEditingProjects && isAddingProject" role="form" aria-labelledby="add-project-heading">
+          <h4 id="add-project-heading">Додати проєкт</h4>
           <div class="info-group">
-            <label>Назва проєкту:</label>
-            <input v-model="newProject.name" />
+            <label for="newProjectName">Назва проєкту:</label>
+            <input v-model="newProject.name" id="newProjectName" aria-required="true" />
           </div>
           <div class="info-group">
-            <label>Опис проєкту:</label>
-            <textarea v-model="newProject.description"></textarea>
+            <label for="newProjectDescription">Опис проєкту:</label>
+            <textarea v-model="newProject.description" id="newProjectDescription"></textarea>
           </div>
           <div class="info-group">
-            <label>Посилання:</label>
-            <input v-model="newProject.link" />
+            <label for="newProjectLink">Посилання:</label>
+            <input v-model="newProject.link" id="newProjectLink" />
           </div>
           <div class="info-group">
             <label>Фотографія:</label>
             <div class="file-upload-wrapper">
               <label for="project-photo-upload-new" class="file-upload-label small">Вибрати файл</label>
-              <input type="file" id="project-photo-upload-new" @change="handleProjectPhotoUpload" class="file-input">
+              <input type="file" id="project-photo-upload-new" @change="handleProjectPhotoUpload" class="file-input"
+                     aria-label="Вибрати файл фотографії для проєкту">
             </div>
           </div>
-          <button v-if="!props.isViewMode" @click="saveNewProject" class="primary">Зберегти проєкт</button>
-          <button v-if="!props.isViewMode" @click="cancelAddProject" class="secondary">Скасувати</button>
+          <button v-if="!props.isViewMode" @click="saveNewProject" class="primary"
+                  aria-label="Зберегти новий проєкт">Зберегти проєкт</button>
+          <button v-if="!props.isViewMode" @click="cancelAddProject" class="secondary"
+                  aria-label="Скасувати додавання нового проєкту">Скасувати</button>
         </div>
 
-        <div v-if="!props.isViewMode && isEditingProjects && editingProject !== null">
-          <h4>Редагувати проєкт</h4>
+        <div v-if="!props.isViewMode && isEditingProjects && editingProject !== null" aria-labelledby="edit-project-heading">
+          <h4 id="edit-project-heading">Редагувати проєкт</h4>
           <div class="info-group">
-            <label>Назва проєкту:</label>
-            <input v-model="editingProject.projName" />
+            <label for="editProjectName">Назва проєкту:</label>
+            <input v-model="editingProject.projName" id="editProjectName" aria-required="true" />
           </div>
           <div class="info-group">
-            <label>Опис проєкту:</label>
-            <textarea v-model="editingProject.projDescription"></textarea>
+            <label for="editProjectDescription">Опис проєкту:</label>
+            <textarea v-model="editingProject.projDescription" id="editProjectDescription"></textarea>
           </div>
           <div class="info-group">
-            <label>Посилання:</label>
-            <input v-model="editingProject.projGithubLink" />
+            <label for="editProjectLink">Посилання:</label>
+            <input v-model="editingProject.projGithubLink" id="editProjectLink" />
           </div>
           <div class="info-group">
             <label>Фотографія:</label>
             <div class="file-upload-wrapper">
               <label for="project-photo-upload-new" class="file-upload-label small">Вибрати файл</label>
-              <input type="file" id="project-photo-upload-new" @change="handleProjectPhotoUpload" class="file-input">
+              <input type="file" id="project-photo-upload-new" @change="handleProjectPhotoUpload" class="file-input"
+                     aria-label="Вибрати файл фотографії для редагування проєкту">
             </div>
           </div>
-          <button v-if="!props.isViewMode" @click="saveEditedProject" class="primary">Зберегти зміни</button>
-          <button v-if="!props.isViewMode" @click="cancelEditProject" class="secondary">Скасувати</button>
+          <button v-if="!props.isViewMode" @click="saveEditedProject" class="primary" aria-label="Зберегти зміни у проєкті">Зберегти зміни</button>
+          <button v-if="!props.isViewMode" @click="cancelEditProject" class="secondary" aria-label="Скасувати редагування проєкту">Скасувати</button>
         </div>
-      </div>
+      </section>
 
     </div>
   </div>
@@ -904,5 +924,16 @@ async function deleteProject(projectId) {
   width: 100%;
   height: 100%;
   cursor: pointer;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 </style>

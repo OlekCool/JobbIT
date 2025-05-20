@@ -1,7 +1,7 @@
 <template>
-  <nav role="navigation" class="navbar">
-    <div class="profile-section" @click="goToRecruiterProfile" style="cursor: pointer">
-      <h1 class="candName">
+  <nav role="navigation" class="navbar" aria-label="Головна навігація рекрутера">
+    <div class="profile-section" @click="goToRecruiterProfile" style="cursor: pointer" aria-label="Перейти до профілю рекрутера">
+      <h1 class="recrName">
         {{ props.recruiterProfile?.firstName && props.recruiterProfile?.lastName
           ? `${props.recruiterProfile.firstName} ${props.recruiterProfile.lastName}`
           : 'Ім\'я Прізвище' }}
@@ -12,13 +12,15 @@
       </div>
     </div>
 
-    <div class="nav-buttons-section">
-      <button @click="goToMyVacancies" :class="{ 'active': isActive('/recruiter-dash/my-vacancies') }">Мої вакансії</button>
-      <button @click="goToAllVacancies" :class="{ 'active': isActive('/recruiter-dash/all-vacancies') }">Всі вакансії</button>
+    <div class="nav-buttons-section" role="group" aria-label="Основні розділи рекрутера">
+      <button @click="goToMyVacancies" :class="{ 'active': isActive('/recruiter-dash/my-vacancies') }"
+              aria-current="{{ isActive('/recruiter-dash/my-vacancies') ? 'page' : null }}">Мої вакансії</button>
+      <button @click="goToAllVacancies" :class="{ 'active': isActive('/recruiter-dash/all-vacancies') }"
+              aria-current="{{ isActive('/recruiter-dash/all-vacancies') ? 'page' : null }}">Всі вакансії</button>
     </div>
 
-    <div class="logout-section">
-      <button @click="logout">Вийти</button>
+    <div class="logout-section" role="group" aria-label="Дії з акаунтом">
+      <button @click="logout" aria-label="Вийти з акаунту">Вийти</button>
     </div>
   </nav>
 </template>
@@ -100,7 +102,7 @@ const goToAllVacancies = () => {
 </script>
 
 <style scoped>
-.candName {
+.recrName {
   margin-right: 10px;
   font-size: 14px;
 }

@@ -1,12 +1,12 @@
 <template>
-  <div class="modal-overlay" @click.self="$emit('close')">
+  <div class="modal-overlay" @click.self="$emit('close')" role="dialog" aria-modal="true" tabindex="-1">
     <div class="modal-content">
       <h2>{{ title }}</h2>
-      <textarea v-model="message" placeholder="Введіть повідомлення"></textarea>
-      <div class="character-counter">{{ message.length }} / 1000 символів</div>
+      <textarea v-model="message" placeholder="Введіть повідомлення" aria-required="true"></textarea>
+      <div class="character-counter" aria-live="polite">{{ message.length }} / 1000 символів</div>
       <div class="modal-actions">
-        <button @click="$emit('close')">Скасувати</button>
-        <button @click="$emit('send', message)" :disabled="!message">Надіслати</button>
+        <button @click="$emit('close')" aria-label="Скасувати відправку повідомлення">Скасувати</button>
+        <button @click="$emit('send', message)" :disabled="!message" aria-label="Надіслати повідомлення">Надіслати</button>
       </div>
     </div>
   </div>

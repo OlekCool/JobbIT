@@ -1,14 +1,15 @@
 <template>
-  <div class="notification-list">
-    <div class="notification-header">
-      <h2>Ваші сповіщення</h2>
-      <button class="delete-all-button" @click="deleteAllNotifications" v-if="notifications.length > 0">
+  <div class="notification-list" role="main">
+    <header class="notification-header">
+      <h2 id="notifications-heading">Ваші сповіщення</h2>
+      <button class="delete-all-button" @click="deleteAllNotifications" v-if="notifications.length > 0"
+              aria-label="Видалити всі наявні сповіщення">
         Видалити всі сповіщення
       </button>
-    </div>
-    <div v-if="loading" class="loading-message">Завантаження сповіщень...</div>
-    <div v-else-if="notifications.length === 0" class="empty-message">У вас немає нових сповіщень.</div>
-    <div v-else class="notifications">
+    </header>
+    <div v-if="loading" class="loading-message" role="status" aria-live="polite">Завантаження сповіщень...</div>
+    <div v-else-if="notifications.length === 0" class="empty-message" role="status" aria-live="polite">У вас немає нових сповіщень.</div>
+    <div v-else class="notifications" aria-labelledby="notifications-heading">>
       <NotificationItem
           v-for="notification in sortedNotifications"
           :key="notification.notifId"

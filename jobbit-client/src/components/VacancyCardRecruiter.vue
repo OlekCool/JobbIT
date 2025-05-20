@@ -1,16 +1,18 @@
 <template>
-  <div class="vacancy-card-recruiter">
+  <article class="vacancy-card-recruiter" aria-labelledby="vacancy-heading">
+    <h2 id="vacancy-heading" class="visually-hidden">Деталі вакансії: {{ vacancy.title }}</h2>
     <VacancyDetails :vacancy="vacancy" />
-    <div class="actions">
+    <div class="actions" role="group" aria-label="Дії з вакансією">
       <button class="edit-button" @click="openEditVacancyModal">Редагувати</button>
       <button class="delete-button" @click="deleteVacancy">Видалити</button>
     </div>
 
-    <div class="applicants-list">
-      <h3>Кандидати, які відгукнулися:</h3>
-      <ul v-if="applicants.length > 0">
-        <li v-for="applicant in applicants" :key="applicant.id" class="applicant-item">
-          <div class="applicant-info" @click="$emit('open-candidate-profile', applicant.id)">
+    <div class="applicants-list" aria-labelledby="applicants-heading">
+      <h3 id="applicants-heading">Кандидати, які відгукнулися:</h3>
+      <ul v-if="applicants.length > 0" role="list">
+        <li v-for="applicant in applicants" :key="applicant.id" class="applicant-item" role="listitem">
+          <div class="applicant-info" @click="$emit('open-candidate-profile', applicant.id)"
+               tabindex="0" role="link" aria-label="`Переглянути профіль кандидата">
             <div class="applicant-photo" v-if="applicant.photo">
               <img :src="'/' + applicant.photo" alt="Фото кандидата">
             </div>
@@ -19,13 +21,15 @@
               <span class="applicant-email">{{ applicant.email }}</span>
             </div>
           </div>
-          <div class="applicant-actions">
-            <button class="accept-button" @click="openSendMessageModal(applicant.id, true)">Прийняти</button>
-            <button class="reject-button" @click="openSendMessageModal(applicant.id, false)">Відхилити</button>
+          <div class="applicant-actions" role="group" aria-label="Дії для кандидата">
+            <button class="accept-button" @click="openSendMessageModal(applicant.id, true)"
+                    aria-label="Надіслати повідомлення про запрошення на співбесіду">Прийняти</button>
+            <button class="reject-button" @click="openSendMessageModal(applicant.id, false)"
+                    aria-label="Надіслати повідомлення про відхилення кандидата">Відхилити</button>
           </div>
         </li>
       </ul>
-      <p v-else>Поки що немає кандидатів, які відгукнулися.</p>
+      <p v-else role="status" aria-live="polite">Поки що немає кандидатів, які відгукнулися.</p>
     </div>
 
     <VacancyModal
@@ -43,7 +47,7 @@
         @close="showSendMessageModal = false; currentApplicantId = null; isAccepting = false;"
         @send="sendMessageToApplicant"
     />
-  </div>
+  </article>
 </template>
 
 <script setup>
@@ -355,5 +359,16 @@ const sendMessageToApplicant = async (message) => {
 
 .reject-button:hover {
   background-color: #d32f2f;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 </style>

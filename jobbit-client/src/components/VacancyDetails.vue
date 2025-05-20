@@ -1,36 +1,37 @@
 <template>
   <div class="vacancy-details">
-    <h2 class="vacancy-title">{{ vacancy.title }}</h2>
+    <h2 class="vacancy-title" id="vacancy-details-title">{{ vacancy.title }}</h2>
 
-    <div class="details-grid">
+    <div class="details-grid" role="group" aria-labelledby="vacancy-info-heading">
+      <h3 id="vacancy-info-heading" class="visually-hidden">Детальна інформація про вакансію</h3>
       <div class="detail-item">
-        <span class="label">Зарплата:</span>
-        <span class="value">{{ vacancy.setSalary }} грн</span>
+        <span class="label" id="salary-label">Зарплата:</span>
+        <span class="value" aria-labelledby="salary-label">{{ vacancy.setSalary }} грн</span>
       </div>
       <div class="detail-item">
-        <span class="label">Досвід:</span>
-        <span class="value">{{ vacancy.minExp }} років</span>
+        <span class="label" id="experience-label">Досвід:</span>
+        <span class="value" aria-labelledby="experience-label">{{ vacancy.minExp }} років</span>
       </div>
       <div class="detail-item">
-        <span class="label">Тип зайнятості:</span>
-        <span class="value">{{ vacancy.fulltime ? 'Повний робочий день' : 'Часткова зайнятість' }}</span>
+        <span class="label" id="employment-label">Тип зайнятості:</span>
+        <span class="value" aria-labelledby="employment-label">{{ vacancy.fulltime ? 'Повний робочий день' : 'Часткова зайнятість' }}</span>
       </div>
       <div class="detail-item">
-        <span class="label">Віддаленість:</span>
-        <span class="value">{{ vacancy.remote }}</span>
+        <span class="label" id="remote-label">Віддаленість:</span>
+        <span class="value" aria-labelledby="remote-label">{{ vacancy.remote }}</span>
       </div>
       <div class="detail-item">
-        <span class="label">Рівень англійської:</span>
-        <span class="value">{{ vacancy.levelEng }}</span>
+        <span class="label" id="english-label">Рівень англійської:</span>
+        <span class="value" aria-labelledby="english-label">{{ vacancy.levelEng }}</span>
       </div>
       <div class="detail-item">
-        <span class="label">Дата публікації:</span>
-        <span class="value">{{ formatDate(vacancy.postedDate) }}</span>
+        <span class="label" id="posted-date-label">Дата публікації:</span>
+        <span class="value" aria-labelledby="posted-date-label">{{ formatDate(vacancy.postedDate) }}</span>
       </div>
     </div>
 
-    <div class="vacancy-description">
-      <h3>Опис вакансії</h3>
+    <div class="vacancy-description" role="article" aria-labelledby="description-heading">
+      <h3 id="description-heading">Опис вакансії</h3>
       <p>{{ vacancy.description }}</p>
     </div>
   </div>
@@ -79,10 +80,15 @@ const formatDate = (dateString) => {
   color: #333;
 }
 
-.company-info {
-  font-size: 16px;
-  color: #777;
-  margin-bottom: 15px;
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 
 .details-grid {

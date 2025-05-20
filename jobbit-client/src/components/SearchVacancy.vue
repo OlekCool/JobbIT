@@ -1,5 +1,6 @@
 <template>
   <div role="search" class="search-container">
+    <label for="search" class="visually-hidden">Пошуковий запит</label>
     <input
         id="search"
         type="text"
@@ -7,9 +8,10 @@
         placeholder="Введіть пошуковий запит"
         v-model="search"
         @keyup.enter="handleSearch"
+        aria-label="Введіть пошуковий запит для пошуку вакансій"
     />
     <label for="search" class="searchBtn">
-      <button class="search-button" @click="handleSearch" >
+      <button class="search-button" @click="handleSearch" aria-label="Знайти вакансії">
         🔍
       </button>
     </label>
@@ -61,5 +63,16 @@ function handleSearch() {
 
 .search-button:hover {
   background-color: #29752d;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 </style>

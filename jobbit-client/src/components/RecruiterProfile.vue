@@ -1,95 +1,100 @@
 <template>
   <div class="profile-page">
     <div class="profile-container">
-      <div class="profile-header">
+      <header class="profile-header">
         <div class="profile-photo">
-          <div class="profile-photo-container" @mouseover="showUploadHint = true" @mouseleave="showUploadHint = false">
+          <div class="profile-photo-container" @mouseover="showUploadHint = true" @mouseleave="showUploadHint = false"
+               aria-live="polite" aria-atomic="true">
             <div class="profile-photo-inner">
               <img :src="profilePhotoUrl" alt="Фото профілю">
-              <div v-if="showUploadHint && isEditing" class="upload-overlay">
+              <div v-if="showUploadHint && isEditing" class="upload-overlay" role="group" aria-label="Завантажити фото профілю рекрутера">
                 <label for="profile-photo-upload" class="upload-label">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="upload-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="upload-icon" aria-hidden="true">
                     <path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v8.5h8.5a.75.75 0 010 1.5h-8.5v8.5a.75.75 0 01-1.5 0v-8.5H3.75a.75.75 0 010-1.5h8.5V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
                   </svg>
                   <span class="upload-text">Завантажити фото</span>
                 </label>
-                <input type="file" id="profile-photo-upload" @change="handleProfilePhotoChange" class="upload-input">
+                <input type="file" id="profile-photo-upload" @change="handleProfilePhotoChange" class="upload-input"
+                       aria-label="Виберіть файл для завантаження фото профілю">
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div class="profile-info-section personal-info">
-        <h3>Особиста інформація</h3>
+      <section class="profile-info-section personal-info" aria-labelledby="personal-info-heading">
+        <h3 id="personal-info-heading">Особиста інформація</h3>
         <div class="info-group">
-          <label>Ім’я:</label>
+          <label for="recruiterFirstName">Ім’я:</label>
           <span v-if="!isEditing">{{ editableProfile.firstName }}</span>
-          <input v-if="isEditing" v-model="editableProfile.firstName" />
+          <input v-if="isEditing" v-model="editableProfile.firstName" id="recruiterFirstName" />
         </div>
         <div class="info-group">
-          <label>Прізвище:</label>
+          <label for="recruiterLastName">Прізвище:</label>
           <span v-if="!isEditing">{{ editableProfile.lastName }}</span>
-          <input v-if="isEditing" v-model="editableProfile.lastName" />
+          <input v-if="isEditing" v-model="editableProfile.lastName" id="recruiterLastName" />
         </div>
         <div class="info-group">
-          <label>По батькові:</label>
+          <label for="recruiterFatherName">По батькові:</label>
           <span v-if="!isEditing">{{ editableProfile.fatherName }}</span>
-          <input v-if="isEditing" v-model="editableProfile.fatherName" />
+          <input v-if="isEditing" v-model="editableProfile.fatherName" id="recruiterFatherName" />
         </div>
         <div class="info-group">
-          <label>ІТ-компанія:</label>
+          <label for="recruiterCompanyName">ІТ-компанія:</label>
           <span v-if="!isEditing">{{ editableProfile.companyName }}</span>
-          <input v-if="isEditing" v-model="editableProfile.companyName" />
+          <input v-if="isEditing" v-model="editableProfile.companyName" id="recruiterCompanyName" />
         </div>
-      </div>
+      </section>
 
-      <div class="profile-info-section contact-info">
-        <h3>Контакти</h3>
+      <section class="profile-info-section contact-info" aria-labelledby="contact-info-heading">
+        <h3 id="contact-info-heading">Контакти</h3>
         <div class="info-group">
-          <label>Email:</label>
+          <label for="recruiterEmail">Email:</label>
           <span v-if="!isEditing">{{ editableProfile.email }}</span>
-          <input v-if="isEditing" v-model="editableProfile.email" />
+          <input v-if="isEditing" v-model="editableProfile.email" id="recruiterEmail" />
         </div>
         <div class="info-group">
-          <label>Телефон:</label>
+          <label for="recruiterPhone">Телефон:</label>
           <span v-if="!isEditing">{{ editableProfile.phone }}</span>
-          <input v-if="isEditing" v-model="editableProfile.phone" />
+          <input v-if="isEditing" v-model="editableProfile.phone" id="recruiterPhone" />
         </div>
         <div class="info-group">
-          <label>Instagram:</label>
+          <label for="recruiterInstagram">Instagram:</label>
           <span v-if="!isEditing">{{ editableProfile.instagram }}</span>
-          <input v-if="isEditing" v-model="editableProfile.instagram" />
+          <input v-if="isEditing" v-model="editableProfile.instagram" id="recruiterInstagram" />
         </div>
-      </div>
+      </section>
 
-      <div class="profile-info-section location-info">
-        <h3>Місцезнаходження</h3>
+      <section class="profile-info-section location-info" aria-labelledby="location-info-heading">
+        <h3 id="location-info-heading">Місцезнаходження</h3>
         <div class="info-group">
-          <label>Країна:</label>
+          <label for="recruiterCountry">Країна:</label>
           <span v-if="!isEditing">{{ editableProfile.country }}</span>
-          <input v-if="isEditing" v-model="editableProfile.country" />
+          <input v-if="isEditing" v-model="editableProfile.country" id="recruiterCountry" />
         </div>
         <div class="info-group">
-          <label>Місто:</label>
+          <label for="recruiterCity">Місто:</label>
           <span v-if="!isEditing">{{ editableProfile.city }}</span>
-          <input v-if="isEditing" v-model="editableProfile.city" />
+          <input v-if="isEditing" v-model="editableProfile.city" id="recruiterCity" />
         </div>
-      </div>
+      </section>
 
-      <div class="profile-info-section description">
-        <h3>Про вас</h3>
+      <section class="profile-info-section description" aria-labelledby="description-heading">
+        <h3 id="description-heading">Про вас</h3>
         <div class="info-group">
           <label>Опишіть компанію:</label>
-          <textarea v-if="isEditing" v-model="editableProfile.description"></textarea>
+          <textarea v-if="isEditing" v-model="editableProfile.description" id="companyDescription" rows="5"></textarea>
           <span v-else>{{ editableProfile.description }}</span>
         </div>
-      </div>
+      </section>
 
       <div class="actions">
-        <button v-if="isEditing" @click="saveChanges" class="primary">Зберегти дані</button>
-        <button v-if="isEditing" @click="cancelEdit" class="secondary">Скасувати редагування</button>
-        <button v-if="!isEditing" @click="isEditing = !isEditing" class="primary">Редагувати дані</button>
+        <button v-if="isEditing" @click="saveChanges" class="primary"
+                aria-label="Зберегти всі зміни у профілі рекрутера">Зберегти дані</button>
+        <button v-if="isEditing" @click="cancelEdit" class="secondary"
+                aria-label="Скасувати редагування профілю рекрутера">Скасувати редагування</button>
+        <button v-if="!isEditing" @click="isEditing = !isEditing" class="primary"
+                aria-label="Перейти до редагування профілю рекрутера">Редагувати дані</button>
       </div>
     </div>
   </div>
@@ -392,5 +397,16 @@ async function saveChanges() {
 
 .secondary:hover {
   background-color: #545b62;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 </style>

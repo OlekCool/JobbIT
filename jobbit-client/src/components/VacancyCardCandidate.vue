@@ -1,11 +1,11 @@
 <template>
   <div class="vacancy-card-candidate">
     <VacancyDetails :vacancy="vacancy" />
-    <div class="actions">
-      <button class="save-button" @click="toggleSave" :class="{ 'saved': isSaved }">
+    <div class="actions" role="group" aria-label="Дії з вакансією">
+      <button class="save-button" @click="toggleSave" :class="{ 'saved': isSaved }" aria-label="Збереження вакансії">
         {{ isSaved ? 'Відмінити збереження' : 'Зберегти' }}
       </button>
-      <button class="apply-button" @click="applyToVacancy" :class="{ 'applied': isApplied }">
+      <button class="apply-button" @click="applyToVacancy" :class="{ 'applied': isApplied }" aria-label="Відгук на вакансію">
         {{ isApplied ? 'Відмінити відгук' : 'Відгукнутися' }}
       </button>
     </div>

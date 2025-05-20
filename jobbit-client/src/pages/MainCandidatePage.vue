@@ -7,29 +7,34 @@
                      @show-saved-vacancies="handleShowSavedVacancies"
                      @show-applied-vacancies="handleShowAppliedVacancies"
                      @show-notifications="handleShowNotifications" />
-    <div class="dashboard-body">
+    <main class="dashboard-body" aria-live="polite">
       <FiltersSection v-if="!showProfile && showVacancies && !showSavedVacancies && !showAppliedVacancies
-                      && !showNotifications && !selectedVacancyId" @filter-change="applyFilters" />
+                      && !showNotifications && !selectedVacancyId" @filter-change="applyFilters"
+                      aria-label="Фільтри вакансій"/>
       <VacanciesLayout
           v-if="!showProfile && !showNotifications && !selectedVacancyId"
           :vacancies="filteredVacancies"
           @search="applySearch"
           @select-vacancy="handleSelectVacancy"
+          aria-label="Список вакансій"
       />
       <CandidateProfile v-if="showProfile && !showVacancies && !showSavedVacancies && !showAppliedVacancies
                         && !showNotifications && !selectedVacancyId"
                         :candidateProfile="candidateProfileData"
                         :candidateProjects="candidateProfileData.projects"
-                        :userPhoto="userPhotoUrl"/>
-      <div v-if="selectedVacancyId" class="vacancy-details-container">
+                        :userPhoto="userPhotoUrl"
+                        aria-label="Профіль кандидата"/>
+      <section v-if="selectedVacancyId" class="vacancy-details-container" aria-labelledby="vacancy-details-heading">
+        <h2 id="vacancy-details-heading" class="visually-hidden">Деталі обраної вакансії</h2>
         <component
             :is="getDetailedVacancyComponent()"
             :vacancy="selectedVacancy"
         />
-        <button @click="closeVacancyDetails">Назад до списку</button>
-      </div>
-      <NotificationList v-if="showNotifications" :notifications="candidateProfileData?.notifications" />
-    </div>
+        <button @click="closeVacancyDetails" aria-label="Повернутися до списку вакансій">Назад до списку</button>
+      </section>
+      <NotificationList v-if="showNotifications" :notifications="candidateProfileData?.notifications"
+                        aria-label="Список ваших сповіщень"/>
+    </main>
   </div>
 </template>
 
@@ -303,5 +308,16 @@ const filteredVacancies = computed(() => {
 .vacancy-details-container {
   margin: 0 auto;
   padding: 20px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 </style>

@@ -1,10 +1,11 @@
 <template>
-  <div class="vacancy-card">
-    <div class="vacancy-title">{{ vacancy.title }}</div>
-    <div class="vacancy-salary">{{ vacancy.setSalary }} грн.</div>
-    <div class="vacancy-remote">{{ vacancy.remote }}</div>
-    <div class="vacancy-experience">Досвід: {{ vacancy.minExp }}+ років</div>
-    <button class="view-details-btn" @click="$emit('select-vacancy', vacancy)">Переглянути детальніше</button>
+  <div class="vacancy-card" role="region" aria-labelledby="vacancy-title">
+    <h3 class="vacancy-title" id="vacancy-title">{{ vacancy.title }}</h3>
+    <div class="vacancy-salary" aria-label="Заробітна плата">{{ vacancy.setSalary }} грн.</div>
+    <div class="vacancy-remote" aria-label="Формат роботи">{{ vacancy.remote }}</div>
+    <div class="vacancy-experience" aria-label="Необхідний досвід">Досвід: {{ vacancy.minExp }}+ років</div>
+    <button class="view-details-btn" @click="$emit('select-vacancy', vacancy)"
+            aria-label="Переглянути деталі вакансії: {{ vacancy.title }}">Переглянути детальніше</button>
   </div>
 </template>
 
@@ -49,6 +50,7 @@ const emit = defineEmits(['select-vacancy']);
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
+  font-size: 1vw;
 }
 
 .vacancy-salary,

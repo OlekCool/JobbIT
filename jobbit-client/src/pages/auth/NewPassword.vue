@@ -1,19 +1,21 @@
 <template>
   <div class="login-container">
-    <form @submit.prevent="handleSubmit" class="login-box">
-      <h2 class="login-title">Введіть новий пароль для {{ email }}:</h2>
+    <form @submit.prevent="handleSubmit" class="login-box" aria-labelledby="new-password-title">
+      <h2 class="login-title" id="new-password-title">Введіть новий пароль для {{ email }}:</h2>
 
       <div class="your-password">
         <label for="password">Ваш пароль</label>
-        <input type="password" id="password" v-model="newPassword" />
+        <input type="password" id="password" v-model="newPassword" aria-required="true"
+               aria-describedby="error-change-message" />
       </div>
 
       <div class="your-password repeat">
         <label for="password">Повтор вашого паролю</label>
-        <input type="password" id="repeat-password" v-model="repeatPassword" />
+        <input type="password" id="repeat-password" v-model="repeatPassword" aria-required="true"
+               aria-describedby="error-change-message" />
       </div>
 
-      <p class="error">{{ errorChange }}</p>
+      <p class="error" role="alert" aria-live="assertive" id="error-change-message">{{ errorChange }}</p>
 
       <div class="buttons">
         <button class="change-button" type="submit">Змінити пароль</button>
@@ -91,58 +93,61 @@ const handleSubmit = async () => {
 
 .login-box {
   background-color: white;
-  padding: 40px 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  width: 40%;
+  padding: 6vw 6vh;
+  border: 0.3vh solid #ccc;
+  border-radius: 4vh;
+  width: 40vw;
 }
 
 .login-title {
   text-align: center;
-  margin-bottom: 40px;
-  font-size: 20px;
+  margin-bottom: 6vh;
+  font-size: 1.2vw;
 }
 
 .your-password {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 2vh;
 }
 
 .repeat {
-  margin-bottom: 40px;
+  margin-bottom: 6vh;
 }
 
 label {
-  width: 120px;
-  margin-right: 20px;
+  width: 10vw;
+  margin-right: 4vw;
   text-align: left;
+  font-size: 1vw;
 }
 
 input[type="password"] {
   flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+  padding: 1vh;
+  border: 0.4vh solid #ccc;
+  border-radius: 1vh;
 }
 
 .buttons {
-  margin-top: 10px;
+  margin-top: 4vh;
   display: flex;
   justify-content: space-around;
   text-decoration: none;
 }
 
 .change-button {
-  margin: 25px;
-  width: 20%;
-  padding: 10px;
-  border: none;
-  border-radius: 3px;
+  margin-top: 5vh;
+  width: 10vw;
+  padding: 2vh;
   background-color: #4caf50;
   color: rgb(0, 0, 0);
   cursor: pointer;
+  border-radius: 0.8vh;
+  border: 0.2vh solid rgb(48, 48, 48);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   text-decoration: none;
+  font-size: 1vw;
 }
 
 .change-button:hover {
@@ -152,6 +157,7 @@ input[type="password"] {
 
 .error {
   color: red;
-  font-size: 14px;
+  margin-top: 8vh;
+  font-size: 3vh;
 }
 </style>

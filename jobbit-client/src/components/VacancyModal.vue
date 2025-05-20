@@ -1,16 +1,18 @@
 <template>
-  <div class="modal-overlay" @click.self="closeModal">
+  <div class="modal-overlay" @click.self="closeModal" role="dialog"
+       aria-modal="true" tabindex="-1">
     <div class="modal-content">
       <h2>{{ isEditMode ? 'Редагувати вакансію' : 'Додати нову вакансію' }}</h2>
       <form @submit.prevent="submitForm">
         <div class="form-group">
-          <label for="title">Назва вакансії:</label>
-          <input type="text" id="title" v-model="vacancyForm.title" required>
+          <label for="title">Назва вакансії:<span class="required-indicator">*</span></label>
+          <input type="text" id="title" v-model="vacancyForm.title" required aria-required="true">
         </div>
 
         <div class="form-group">
           <label for="description">Опис вакансії:</label>
-          <textarea id="description" v-model="vacancyForm.description" rows="5"></textarea>
+          <textarea id="description" v-model="vacancyForm.description" rows="5"
+                    placeholder="Опишіть вимоги, обов'язки та умови"></textarea>
         </div>
 
         <div class="form-group">
@@ -22,11 +24,11 @@
           </select>
         </div>
 
-        <div class="form-group radio-group">
-          <label>Зайнятість:</label>
+        <fieldset class="form-group radio-group">
+          <legend>Зайнятість:</legend>
           <input type="radio" id="fulltime" value="true" v-model="vacancyForm.fulltime"> <label for="fulltime">Повна</label>
           <input type="radio" id="parttime" value="false" v-model="vacancyForm.fulltime"> <label for="parttime">Часткова</label>
-        </div>
+        </fieldset>
 
         <div class="form-group">
           <label for="levelEng">Рівень англійської:</label>
@@ -51,7 +53,7 @@
         </div>
 
         <div class="modal-actions">
-          <button type="button" @click="closeModal">Скасувати</button>
+          <button type="button" @click="closeModal" aria-label="Скасувати додавання або редагування вакансії">Скасувати</button>
           <button type="submit">{{ isEditMode ? 'Зберегти зміни' : 'Додати вакансію' }}</button>
         </div>
       </form>
@@ -243,5 +245,10 @@ input[type="checkbox"] {
 
 .modal-actions button:last-child:hover {
   background-color: #2e7d32;
+}
+
+.required-indicator {
+  color: red;
+  margin-left: 2px;
 }
 </style>

@@ -1,17 +1,18 @@
 <template>
-  <div class="notification-item">
+  <div class="notification-item" role="region" aria-labelledby="notification-title">
     <div class="notification-header">
-      <span class="vacancy-title" v-if="vacancyTitle">
+      <span class="vacancy-title" v-if="vacancyTitle" id="notification-title">
         {{ vacancyTitle }}
       </span>
-      <span class="notification-date">
+      <span class="notification-date" aria-label="Дата повідомлення">
         {{ formatDate(notification.notifDate) }}
       </span>
     </div>
     <div class="notification-body">
       <p class="notification-text">{{ notification.text }}</p>
     </div>
-    <button class="delete-button" @click="emit('delete-notification', notification.notId)">
+    <button class="delete-button" @click="emit('delete-notification', notification.notId)"
+            aria-label="Видалити повідомлення про вакансію">
       Видалити
     </button>
   </div>

@@ -5,30 +5,34 @@
                      @show-profile="handleShowProfile"
                      @show-all-vacancies="handleShowAllVacancies"
                      @show-my-vacancies="handleShowMyVacancies"/>
-    <div class="dashboard-body">
-      <div v-if="showMyVacancies && !selectedVacancyId" class="my-vacancies-sidebar">
-        <button @click="openAddVacancyModal">Додати вакансію</button>
-      </div>
+    <main class="dashboard-body" aria-live="polite">
+      <aside v-if="showMyVacancies && !selectedVacancyId" class="my-vacancies-sidebar">
+        <button @click="openAddVacancyModal" aria-label="Додати нову вакансію">Додати вакансію</button>
+      </aside>
       <FiltersSection v-if="!showProfile && !showMyVacancies && showAllVacancies && !selectedVacancyId"
-                      @filter-change="applyFilters" />
+                      @filter-change="applyFilters" aria-label="Фільтри вакансій" />
       <VacanciesLayout
           v-if="!showProfile && !selectedVacancyId"
           :vacancies="filteredVacancies"
           @search="applySearch"
           @select-vacancy="handleSelectVacancy"
+          aria-label="Список вакансій"
       />
       <RecruiterProfile v-if="showProfile && !showAllVacancies && !showMyVacancies && !selectedVacancyId"
                         :recruiterProfile="recruiterProfileData"
-                        :userPhoto="userPhotoUrl" />
-      <div v-if="selectedVacancyId" class="vacancy-details-container">
+                        :userPhoto="userPhotoUrl"
+                        aria-label="Профіль рекрутера"/>
+      <section v-if="selectedVacancyId" class="vacancy-details-container" aria-labelledby="detailed-vacancy-heading">
+        <h2 id="detailed-vacancy-heading" class="visually-hidden">Деталі обраної вакансії</h2>
         <component
             :is="getDetailedVacancyComponent()"
             :vacancy="selectedVacancy"
             @vacancy-deleted-success="handleVacancyDeletedSuccess"
             @open-candidate-profile="handleOpenCandidateProfile"
+            aria-label="Деталі вакансії"
         />
-        <button @click="closeVacancyDetails">Назад до списку</button>
-      </div>
+        <button @click="closeVacancyDetails" aria-label="Повернутися до списку вакансій">Назад до списку</button>
+      </section>
 
       <VacancyModal
           v-if="showVacancyModal"
@@ -39,18 +43,19 @@
           @save="saveVacancy"
       />
 
-      <div v-if="selectedCandidateId" class="candidate-profile-container">
-        <h3>Профіль кандидата</h3>
+      <section v-if="selectedCandidateId" class="candidate-profile-container" aria-labelledby="candidate-profile-heading">
+        <h3 id="candidate-profile-heading">Профіль кандидата</h3>
         <CandidateProfile
             v-if="candidateProfileData"
             :candidateProfile="candidateProfileData"
             :candidateProjects="candidateProjects"
             :userPhoto="currentCandidatePhotoUrl"
             :isViewMode="true"
+            aria-label="Профіль переглянутого кандидата"
         />
-        <button @click="closeCandidateProfile">Закрити профіль</button>
-      </div>
-    </div>
+        <button @click="closeCandidateProfile" aria-label="Закрити профіль кандидата">Закрити профіль</button>
+      </section>
+    </main>
   </div>
 </template>
 
@@ -446,5 +451,16 @@ const handleVacancyDeletedSuccess = () => {
 
 .candidate-profile-container button:hover {
   background-color: #0056b3;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 </style>

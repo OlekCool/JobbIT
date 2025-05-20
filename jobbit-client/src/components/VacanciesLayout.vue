@@ -1,8 +1,9 @@
 <template>
   <div class="vacancies-holder">
-    <div class="search-container">
+    <section class="search-container" aria-labelledby="search-heading">
+      <h2 id="search-heading" class="visually-hidden">Пошук вакансій</h2>
       <SearchVacancy @search="handleSearch" />
-    </div>
+    </section>
     <VacanciesList :vacancies="vacancies" @select-vacancy="$emit('select-vacancy', $event)" />
   </div>
 </template>
@@ -43,5 +44,16 @@ function handleSearch(query) {
   flex: 0 0 auto;
   height: 60px;
   margin-bottom: 10px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 </style>

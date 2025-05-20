@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div role="status" aria-live="polite">
     <h2>Підтвердження акаунта</h2>
     <p v-if="loading">Перевіряємо ваш акаунт...</p>
-    <p v-if="error">{{ errorMessage }}</p>
+    <p v-if="error" role="alert" aria-live="assertive">{{ errorMessage }}</p>
     <p v-if="verified">Акаунт успішно підтверджено!</p>
   </div>
 </template>

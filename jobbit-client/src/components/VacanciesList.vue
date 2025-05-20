@@ -1,12 +1,12 @@
 <template>
-  <div class="vacancy-list">
+  <div class="vacancy-list" role="list">
     <VacancyItem class="vacancy-item"
         v-for="vacancy in vacancies"
         :key="vacancy.id"
         :vacancy="vacancy"
         @select-vacancy="$emit('select-vacancy', vacancy)"
     />
-    <div v-if="vacancies && vacancies.length === 0" class="empty-list-message">
+    <div v-if="vacancies && vacancies.length === 0" class="empty-list-message" role="status" aria-live="polite">
       {{ emptyListMessage }}
     </div>
   </div>
